@@ -15,8 +15,12 @@ export const routes: Routes = [
     },
     children: [
       {
-        path: 'dashboard',
+        path: 'dashboard-ui',
         loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes)
+      },
+      {
+        path: 'dashboard',
+        loadChildren: () => import('./views/dashboard-admin/routes').then((m) => m.routes)
       },
       {
         path: 'theme',
@@ -84,5 +88,5 @@ export const routes: Routes = [
       title: 'Register Page'
     }
   },
-  { path: '**', redirectTo: 'dashboard' }
+  { path: '**', redirectTo: '404' }
 ];
