@@ -4,9 +4,8 @@
 
 export const environment = {
   production: true,
-  baseUrlAdmin: 'http://localhost:8077/',
-  baseUrlTenant: 'http://localhost:8009/',
-  baseUrlCustomer: 'http://localhost:8007/'
+  baseUrlAdmin: 'http://localhost:8077',
+  baseUrlTenant: 'http://localhost:8009/'
 };
 
 /*

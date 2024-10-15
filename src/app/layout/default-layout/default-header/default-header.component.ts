@@ -1,11 +1,12 @@
 import { NgStyle, NgTemplateOutlet } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, ViewChild } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import {
   AvatarComponent,
   BadgeComponent,
   BreadcrumbRouterComponent,
+  ButtonDirective,
   ColorModeService,
   ContainerComponent,
   DropdownComponent,
@@ -23,7 +24,10 @@ import {
   ProgressComponent,
   SidebarToggleDirective,
   TextColorDirective,
-  ThemeDirective
+  ThemeDirective,
+  ToastComponent,
+  ToasterComponent,
+  ToastModule
 } from '@coreui/angular';
 
 import { IconDirective } from '@coreui/icons-angular';
@@ -32,9 +36,11 @@ import { IconDirective } from '@coreui/icons-angular';
   selector: 'app-default-header',
   templateUrl: './default-header.component.html',
   standalone: true,
-  imports: [ContainerComponent, HeaderTogglerDirective, SidebarToggleDirective, IconDirective, HeaderNavComponent, NavItemComponent, NavLinkDirective, RouterLink, RouterLinkActive, NgTemplateOutlet, BreadcrumbRouterComponent, ThemeDirective, DropdownComponent, DropdownToggleDirective, TextColorDirective, AvatarComponent, DropdownMenuDirective, DropdownHeaderDirective, DropdownItemDirective, BadgeComponent, DropdownDividerDirective, ProgressBarDirective, ProgressComponent, NgStyle]
+  imports: [ContainerComponent, HeaderTogglerDirective, SidebarToggleDirective, IconDirective, HeaderNavComponent, NavItemComponent, NavLinkDirective, RouterLink, RouterLinkActive, NgTemplateOutlet, BreadcrumbRouterComponent, ThemeDirective, DropdownComponent, DropdownToggleDirective, TextColorDirective, AvatarComponent, DropdownMenuDirective, DropdownHeaderDirective, DropdownItemDirective, BadgeComponent, DropdownDividerDirective, ProgressBarDirective, ProgressComponent, NgStyle, ToasterComponent, ButtonDirective]
 })
 export class DefaultHeaderComponent extends HeaderComponent {
+
+  @ViewChild(ToasterComponent) toaster!: ToasterComponent;
 
   readonly #colorModeService = inject(ColorModeService);
   readonly colorMode = this.#colorModeService.colorMode;

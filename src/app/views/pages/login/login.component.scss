@@ -1,0 +1,19 @@
+select {
+    // Styles for the select element
+    background-color: transparent;
+    border: 1px solid #ccc;
+    color: rgba(0, 0, 0, 0.6); // Faded text color for the select options
+  
+    // Faded placeholder style
+    option {
+      color: rgba(0, 0, 0, 1); // Faded color for options
+    }
+  
+    // Styles for the placeholder
+    &::placeholder {
+      color: rgba(0, 0, 0, 1); // Adjust the faded color here
+    }
+    
+    
+  }
+  

@@ -16,7 +16,8 @@ import {
 } from '@coreui/angular';
 
 import { DefaultFooterComponent, DefaultHeaderComponent } from './';
-import { navItems } from './_nav';
+import { navItems, adminNavItems, tenantManagerNavItems, tenantAdminNavItems } from './_nav';
+import { StorageService } from 'src/app/service/storage.service';
 
 function isOverflown(element: HTMLElement) {
   return (
@@ -50,6 +51,12 @@ function isOverflown(element: HTMLElement) {
 })
 export class DefaultLayoutComponent {
   public navItems = navItems;
+
+  constructor(
+    private storageService: StorageService
+  ) {
+    this.navItems = this.storageService.isAdmin() ? adminNavItems : this.storageService.isTenantManager() ? tenantManagerNavItems : tenantAdminNavItems;
+  }
 
   onScrollbarUpdate($event: any) {
     // if ($event.verticalUsed) {

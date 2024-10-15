@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Injectable({
   providedIn: 'root',
@@ -10,7 +9,6 @@ export class Utils {
   dialogRef: any;
 
   constructor(
-    private loader: NgxUiLoaderService,
   ) {
   }
 
@@ -23,14 +21,6 @@ export class Utils {
 
   clearAllLocalstorage(): void {
     localStorage.clear();
-  }
-
-  showLoading(): void {
-    this.loader.start();
-  }
-
-  hideLoading(): void {
-    this.loader.stop();
   }
 
   currencyFormat(num: any): string {

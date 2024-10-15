@@ -290,3 +290,170 @@ export const navItems: INavData[] = [
     attributes: { target: '_blank' }
   }
 ];
+
+export const adminNavItems: INavData[] = [
+  {
+    name: 'Dashboard',
+    url: '/dashboard',
+    iconComponent: { name: 'cil-speedometer' },
+    badge: {
+      color: 'info',
+      text: 'NEW'
+    }
+  },
+  {
+    title: true,
+    name: 'User'
+  },
+  {
+    name: 'Tenant',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Customer',
+    url: '/theme/typography',
+    linkProps: { fragment: 'headings' },
+    iconComponent: { name: 'cil-pencil' }
+  },
+  {
+    name: 'Apps',
+    title: true
+  },
+  {
+    name: 'Fee Configuration',
+    url: '/base/accordion',
+    iconComponent: { name: 'cil-cursor' }
+  },
+];
+
+export const tenantManagerNavItems: INavData[] = [
+  {
+    name: 'Dashboard',
+    url: '/dashboard',
+    iconComponent: { name: 'cil-speedometer' },
+    badge: {
+      color: 'info',
+      text: 'NEW'
+    }
+  },
+  {
+    title: true,
+    name: 'Managerial'
+  },
+  {
+    name: 'Company',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Admin',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Customer',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Product',
+    title: true
+  },
+  {
+    name: 'Listing',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Vehicle',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Booking Order',
+    title: true
+  },
+  {
+    name: 'Booking',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Order',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Finance',
+    title: true
+  },
+  {
+    name: 'Balance',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Billing',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+];
+
+export const tenantAdminNavItems: INavData[] = [
+  {
+    name: 'Dashboard',
+    url: '/dashboard',
+    iconComponent: { name: 'cil-speedometer' },
+    badge: {
+      color: 'info',
+      text: 'NEW'
+    }
+  },
+  {
+    title: true,
+    name: 'Managerial'
+  },
+  {
+    name: 'Customer',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Product',
+    title: true
+  },
+  {
+    name: 'Listing',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Vehicle',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Booking Order',
+    title: true
+  },
+  {
+    name: 'Booking',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Order',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+  {
+    name: 'Finance',
+    title: true
+  },
+  {
+    name: 'Billing',
+    url: '/theme/colors',
+    iconComponent: { name: 'cil-drop' }
+  },
+];

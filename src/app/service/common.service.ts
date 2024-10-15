@@ -20,6 +20,14 @@ export class CommonService {
     private utils: Utils) {
   }
 
+  getBaseUrl(): string {
+    if (this.storageService.isAdmin()) {
+      return environment.baseUrlAdmin
+    } else {
+      return environment.baseUrlTenant
+    }
+  }
+
   getHeaders(headers?: any): HttpHeaders {
 
     const headerObj: any = {
@@ -93,11 +101,10 @@ export class CommonService {
 
       reqOpts.withCredentials = true;
 
-      return this.http.get<any>(url, reqOpts)
+      return this.http.get<any>(this.getBaseUrl() + url, reqOpts)
         .pipe(
           catchError(
             (error: any, caught: Observable<HttpEvent<any>>) => {
-              this.utils.hideLoading();
               this.handlerResponseService.failedResponse(error);
               throw error;
             }
@@ -131,13 +138,12 @@ export class CommonService {
         body = body ? body.concat(bodyUrl) : bodyUrl;
       }
 
-      return this.http.post<any>(url, body, reqOpts)
+      return this.http.post<any>(this.getBaseUrl() + url, body, reqOpts)
         .pipe(
           timeout(reqTimeout ? reqTimeout : 300000),
           retry(maxRetry ? maxRetry : 0),
           catchError(
             (error: any, caught: Observable<HttpEvent<any>>) => {
-              this.utils.hideLoading();
               this.handlerResponseService.failedResponse(error);
               if (isNeedError) {
                 return of(error);
@@ -178,13 +184,12 @@ export class CommonService {
         }
       }
 
-      return this.http.patch<any>(url, body, reqOpts)
+      return this.http.patch<any>(this.getBaseUrl() + url, body, reqOpts)
         .pipe(
           timeout(reqTimeout ? reqTimeout : 300000),
           retry(maxRetry ? maxRetry : 0),
           catchError(
             (error: any, caught: Observable<HttpEvent<any>>) => {
-              this.utils.hideLoading();
               this.handlerResponseService.failedResponse(error);
               if (isNeedError) {
                 return of(error);
@@ -215,7 +220,7 @@ export class CommonService {
         reqOpts.headers = this.getHeaders();
       }
 
-      return this.http.put<any>(url, body, reqOpts)
+      return this.http.put<any>(this.getBaseUrl() + url, body, reqOpts)
         .pipe(
           catchError(
             (error: any, caught: Observable<HttpEvent<any>>) => {
@@ -248,11 +253,10 @@ export class CommonService {
         reqOpts.headers = this.getHeaders();
       }
 
-      return this.http.delete<any>(url, reqOpts)
+      return this.http.delete<any>(this.getBaseUrl() + url, reqOpts)
         .pipe(
           catchError(
             (error: any, caught: Observable<HttpEvent<any>>) => {
-              this.utils.hideLoading();
               this.handlerResponseService.failedResponse(error);
               throw error;
             }

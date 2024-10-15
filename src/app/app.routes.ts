@@ -1,5 +1,7 @@
 import { Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './layout';
+import { DashboardGuardService } from './guard/dashboard.guard'
+import { LoginGuardService } from './guard/login.guard';
 
 export const routes: Routes = [
   {
@@ -13,14 +15,15 @@ export const routes: Routes = [
     data: {
       title: 'Home'
     },
+    canActivate: [DashboardGuardService],
     children: [
       {
         path: 'dashboard-ui',
-        loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/dashboard-ui/routes').then((m) => m.routes)
       },
       {
         path: 'dashboard',
-        loadChildren: () => import('./views/dashboard-admin/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes),
       },
       {
         path: 'theme',
@@ -79,7 +82,8 @@ export const routes: Routes = [
     loadComponent: () => import('./views/pages/login/login.component').then(m => m.LoginComponent),
     data: {
       title: 'Login Page'
-    }
+    },
+    canActivate: [LoginGuardService]
   },
   {
     path: 'register',
