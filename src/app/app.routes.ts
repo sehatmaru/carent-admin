@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './layout';
 import { DashboardGuardService } from './guard/dashboard.guard'
 import { LoginGuardService } from './guard/login.guard';
+import { AdminManagerGuardService } from './guard/admin-manager.guard';
 
 export const routes: Routes = [
   {
@@ -18,48 +19,53 @@ export const routes: Routes = [
     canActivate: [DashboardGuardService],
     children: [
       {
-        path: 'dashboard-ui',
-        loadChildren: () => import('./views/dashboard-ui/routes').then((m) => m.routes)
-      },
-      {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes),
       },
       {
         path: 'theme',
-        loadChildren: () => import('./views/theme/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/theme/routes').then((m) => m.routes),
+        canActivate: [AdminManagerGuardService]
       },
       {
         path: 'base',
-        loadChildren: () => import('./views/base/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/base/routes').then((m) => m.routes),
+        canActivate: [AdminManagerGuardService]
       },
       {
         path: 'buttons',
-        loadChildren: () => import('./views/buttons/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/buttons/routes').then((m) => m.routes),
+        canActivate: [AdminManagerGuardService]
       },
       {
         path: 'forms',
-        loadChildren: () => import('./views/forms/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/forms/routes').then((m) => m.routes),
+        canActivate: [AdminManagerGuardService]
       },
       {
         path: 'icons',
-        loadChildren: () => import('./views/icons/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/icons/routes').then((m) => m.routes),
+        canActivate: [AdminManagerGuardService]
       },
       {
         path: 'notifications',
-        loadChildren: () => import('./views/notifications/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/notifications/routes').then((m) => m.routes),
+        canActivate: [AdminManagerGuardService]
       },
       {
         path: 'widgets',
-        loadChildren: () => import('./views/widgets/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/widgets/routes').then((m) => m.routes),
+        canActivate: [AdminManagerGuardService]
       },
       {
         path: 'charts',
-        loadChildren: () => import('./views/charts/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/charts/routes').then((m) => m.routes),
+        canActivate: [AdminManagerGuardService]
       },
       {
         path: 'pages',
-        loadChildren: () => import('./views/pages/routes').then((m) => m.routes)
+        loadChildren: () => import('./views/pages/routes').then((m) => m.routes),
+        canActivate: [AdminManagerGuardService]
       }
     ]
   },
@@ -88,6 +94,7 @@ export const routes: Routes = [
   {
     path: 'register',
     loadComponent: () => import('./views/pages/register/register.component').then(m => m.RegisterComponent),
+    canActivate: [LoginGuardService, AdminManagerGuardService],
     data: {
       title: 'Register Page'
     }
