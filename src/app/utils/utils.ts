@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { ToasterComponent, ToasterPlacement } from '@coreui/angular';
+import { DefaultToasterComponent } from '../layout';
+import { ToastType } from '../enum/toast-type.enum'
 
 @Injectable({
   providedIn: 'root',
@@ -7,6 +10,7 @@ export class Utils {
   constant: any;
   base64File: any;
   dialogRef: any;
+  toaster!: ToasterComponent;
 
   constructor(
   ) {
@@ -219,4 +223,40 @@ export class Utils {
     return dealerData;
   }
 
+  setToaster(toaster: ToasterComponent) {
+    this.toaster = toaster;
+  }
+
+  sendSuccessToast(message: string, title: string) {
+    if (this.toaster) {
+      const options = {
+        title: title,
+        message: message,
+        type: ToastType.SUCCESS,
+        delay: 3000,
+        placement: ToasterPlacement.TopEnd,
+        autohide: true,
+      };
+      this.toaster.addToast(DefaultToasterComponent, { ...options });
+    } else {
+      console.error('ToasterComponent reference is not set.');
+    }
+  }
+
+  sendErrorToast(message: string, title?: string) {
+    if (this.toaster) {
+      const options = {
+        title: 'Error ' + title,
+        message: message,
+        type: ToastType.ERROR,
+        delay: 3000,
+        placement: ToasterPlacement.TopEnd,
+        autohide: true,
+        color: 'warning'
+      };
+      this.toaster.addToast(DefaultToasterComponent, { ...options });
+    } else {
+      console.error('ToasterComponent reference is not set.');
+    }
+  }
 }

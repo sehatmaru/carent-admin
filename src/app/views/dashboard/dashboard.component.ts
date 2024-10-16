@@ -12,8 +12,6 @@ import { DefaultToasterComponent } from 'src/app/layout';
 })
 export class DashboardComponent implements OnInit {
 
-  @ViewChild('c-toaster') toaster!: ToasterComponent;
-
   constructor(
     private utils: Utils
   ) { }
@@ -25,15 +23,4 @@ export class DashboardComponent implements OnInit {
   getTournamentList() {
   }
 
-
-  addToast() {
-    const options = {
-      title: `CoreUI for Angular Toast`,
-      delay: 5000,
-      placement: ToasterPlacement.TopEnd,
-      color: 'info',
-      autohide: true
-    };
-    const componentRef = this.toaster.addToast(DefaultToasterComponent, { ...options });
-  }
 }

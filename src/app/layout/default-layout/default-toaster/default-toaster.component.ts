@@ -1,6 +1,8 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, forwardRef, Input, Renderer2 } from '@angular/core';
 
 import {
+  ButtonDirective,
   ProgressBarComponent,
   ProgressBarDirective,
   ProgressComponent,
@@ -8,8 +10,12 @@ import {
   ToastCloseDirective,
   ToastComponent,
   ToasterService,
-  ToastHeaderComponent
+  ToastHeaderComponent,
+  ToastModule
 } from '@coreui/angular';
+import { cilUser, cilLockLocked, cilTouchApp } from '@coreui/icons';
+import { IconModule } from '@coreui/icons-angular';
+import { ToastType } from 'src/app/enum/toast-type.enum';
 
 @Component({
   selector: 'app-deafult-toaster',
@@ -17,12 +23,17 @@ import {
   styleUrls: ['./default-toaster.component.scss'],
   providers: [{ provide: ToastComponent, useExisting: forwardRef(() => DefaultToasterComponent) }],
   standalone: true,
-  imports: [ToastHeaderComponent, ToastBodyComponent, ToastCloseDirective, ProgressBarDirective, ProgressComponent, ProgressBarComponent]
+  imports: [ToastHeaderComponent, ToastBodyComponent, ToastCloseDirective, ProgressBarDirective, ProgressComponent, ProgressBarComponent, IconModule, ToastModule, ButtonDirective, CommonModule]
 })
 export class DefaultToasterComponent extends ToastComponent {
 
-  @Input() closeButton = true;
+  @Input() type !: ToastType;
   @Input() title = '';
+  @Input() message = '';
+
+  percentage = 0
+
+  public icons = { cilUser, cilLockLocked, cilTouchApp };
 
   constructor(
     public override hostElement: ElementRef,
@@ -31,5 +42,22 @@ export class DefaultToasterComponent extends ToastComponent {
     public override changeDetectorRef: ChangeDetectorRef
   ) {
     super(hostElement, renderer, toasterService, changeDetectorRef);
+  }
+
+  onVisibleChange($event: boolean) {
+    this.visible = $event;
+    this.percentage = !this.visible ? 0 : this.percentage;
+  }
+
+  onTimerChange($event: number) {
+    this.percentage = $event * 25;
+  }
+
+  isSuccess() {
+    return this.type === ToastType.SUCCESS;
+  }
+
+  isError() {
+    return this.type === ToastType.ERROR;
   }
 }
