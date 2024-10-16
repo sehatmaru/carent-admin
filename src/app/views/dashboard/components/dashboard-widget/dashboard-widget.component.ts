@@ -4,12 +4,16 @@ import {
   ChangeDetectorRef,
   Component,
   Input,
-  OnInit} from '@angular/core';
+  OnChanges,
+  OnInit,
+  SimpleChanges} from '@angular/core';
 import { getStyle } from '@coreui/utils';
 import { ChartjsComponent } from '@coreui/angular-chartjs';
 import { RouterLink } from '@angular/router';
 import { IconDirective } from '@coreui/icons-angular';
-import { RowComponent, ColComponent, WidgetStatAComponent, TemplateIdDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, DropdownDividerDirective } from '@coreui/angular';
+import { RowComponent, ColComponent, WidgetStatAComponent, TemplateIdDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, DropdownDividerDirective, SpinnerModule, CardModule } from '@coreui/angular';
+import { CommonModule } from '@angular/common';
+import { BalanceReportResponseModel } from 'src/app/model/finance-model';
 
 @Component({
     selector: 'app-dashboard-widget',
@@ -17,11 +21,13 @@ import { RowComponent, ColComponent, WidgetStatAComponent, TemplateIdDirective, 
     styleUrls: ['./dashboard-widget.component.scss'],
     changeDetection: ChangeDetectionStrategy.Default,
     standalone: true,
-    imports: [RowComponent, ColComponent, WidgetStatAComponent, TemplateIdDirective, IconDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, RouterLink, DropdownDividerDirective, ChartjsComponent]
+    imports: [RowComponent, ColComponent, WidgetStatAComponent, TemplateIdDirective, IconDirective, ThemeDirective, DropdownComponent, ButtonDirective, DropdownToggleDirective, DropdownMenuDirective, DropdownItemDirective, RouterLink, DropdownDividerDirective, ChartjsComponent, SpinnerModule, CardModule, CommonModule]
 })
-export class DashboardWidgetComponent implements OnInit, AfterContentInit {
+export class DashboardWidgetComponent implements OnInit, OnChanges, AfterContentInit {
 
   @Input() title = '';
+  @Input() reportData !: BalanceReportResponseModel
+  @Input() isLoading = true
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef
@@ -29,44 +35,48 @@ export class DashboardWidgetComponent implements OnInit, AfterContentInit {
 
   data: any[] = [];
   options: any[] = [];
-  labels = [
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October'
-  ];
+  
   datasets = [
-    [{
-      label: 'Income',
-      backgroundColor: 'transparent',
-      borderColor: 'rgba(255,255,255,.55)',
-      pointBackgroundColor: getStyle('--cui-primary'),
-      pointHoverBorderColor: getStyle('--cui-primary'),
-      data: [78, 81, 80, 45, 34, 12],
-    }], [{
-      label: 'Revenue',
-      backgroundColor: 'transparent',
-      borderColor: 'rgba(255,255,255,.55)',
-      pointBackgroundColor: getStyle('--cui-info'),
-      pointHoverBorderColor: getStyle('--cui-info'),
-      data: [78, 81, 80, 45, 34, 12],
-    }], [{
-      label: 'Orders',
-      backgroundColor: 'rgba(255,255,255,.2)',
-      borderColor: 'rgba(255,255,255,.55)',
-      pointBackgroundColor: getStyle('--cui-warning'),
-      pointHoverBorderColor: getStyle('--cui-warning'),
-      data: [78, 81, 80, 45, 34, 12],
-      fill: true
-    }], [{
-      label: 'Customers',
-      backgroundColor: 'rgba(255,255,255,.2)',
-      borderColor: 'rgba(255,255,255,.55)',
-      data: [78, 81, 80, 45, 34, 12],
-      barPercentage: 0.7
-    }]
+    [
+      {
+        label: 'Income',
+        backgroundColor: 'transparent',
+        borderColor: 'rgba(255,255,255,.55)',
+        pointBackgroundColor: getStyle('--cui-primary'),
+        pointHoverBorderColor: getStyle('--cui-primary'),
+        data: [0],
+      }
+    ],
+    [
+      {
+        label: 'Revenue',
+        backgroundColor: 'transparent',
+        borderColor: 'rgba(255,255,255,.55)',
+        pointBackgroundColor: getStyle('--cui-info'),
+        pointHoverBorderColor: getStyle('--cui-info'),
+        data: [],
+      }
+    ],
+    [
+      {
+        label: 'Orders',
+        backgroundColor: 'rgba(255,255,255,.2)',
+        borderColor: 'rgba(255,255,255,.55)',
+        pointBackgroundColor: getStyle('--cui-warning'),
+        pointHoverBorderColor: getStyle('--cui-warning'),
+        data: [],
+        fill: true
+      }
+    ],
+    [
+      {
+        label: 'Customers',
+        backgroundColor: 'rgba(255,255,255,.2)',
+        borderColor: 'rgba(255,255,255,.55)',
+        data: [],
+        barPercentage: 0.7
+      }
+    ]
   ];
   optionsDefault = {
     plugins: {
@@ -114,20 +124,51 @@ export class DashboardWidgetComponent implements OnInit, AfterContentInit {
   };
 
   ngOnInit(): void {
-    this.setData();
+    // this.setData()
   }
 
   ngAfterContentInit(): void {
     this.changeDetectorRef.detectChanges();
   }
 
-  setData() {
-    for (let idx = 0; idx < 4; idx++) {
-      this.data[idx] = {
-        labels: this.labels,
-        datasets: this.datasets[idx]
-      };
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['reportData']) {
+      const currentValue: BalanceReportResponseModel = changes['reportData'].currentValue;
+
+      if (currentValue.customerHistory.length != 0) {
+        this.setData()
+      }
     }
+  }
+
+  setData() {
+    const labels = this.reportData.customerHistory.map(item => item.month);
+
+    this.datasets[0][0].data = this.reportData.incomeHistory.map(item => item.value)
+    this.datasets[1][0  ].data = this.reportData.revenueHistory.map(item => item.value)
+    this.datasets[2][0].data = this.reportData.orderHistory.map(item => item.value)
+    this.datasets[3][0].data = this.reportData.customerHistory.map(item => item.value)
+
+    this.data[0] = {
+      labels: labels,
+      datasets: this.datasets[0]
+    }
+
+    this.data[1] = {
+      labels: labels,
+      datasets: this.datasets[1]
+    }
+
+    this.data[2] = {
+      labels: labels,
+      datasets: this.datasets[2]
+    }
+
+    this.data[3] = {
+      labels: labels,
+      datasets: this.datasets[3]
+    }
+
     this.setOptions();
   }
 
