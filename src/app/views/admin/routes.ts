@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'admin',
+    path: '',
     loadComponent: () => import('./admin.component').then(m => m.AdminComponent),
     data: {
       title: `Admin`

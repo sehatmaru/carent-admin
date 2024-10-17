@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'tenant',
+    path: '',
     loadComponent: () => import('./tenant.component').then(m => m.TenantComponent),
     data: {
       title: `Tenant`
