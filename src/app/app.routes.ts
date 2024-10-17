@@ -23,6 +23,51 @@ export const routes: Routes = [
         loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes),
       },
       {
+        path: 'admin',
+        loadChildren: () => import('./views/admin/routes').then((m) => m.routes),
+      },
+      {
+        path: 'balance',
+        loadChildren: () => import('./views/balance/routes').then((m) => m.routes),
+      },
+      {
+        path: 'billing',
+        loadChildren: () => import('./views/billing/routes').then((m) => m.routes),
+      },
+      {
+        path: 'booking',
+        loadChildren: () => import('./views/booking/routes').then((m) => m.routes),
+      },
+      {
+        path: 'company',
+        loadChildren: () => import('./views/company/routes').then((m) => m.routes),
+      },
+      {
+        path: 'customer',
+        loadChildren: () => import('./views/customer/routes').then((m) => m.routes),
+      },
+      {
+        path: 'fee',
+        loadChildren: () => import('./views/fee/routes').then((m) => m.routes),
+      },
+      {
+        path: 'listing',
+        loadChildren: () => import('./views/listing/routes').then((m) => m.routes),
+      },
+      {
+        path: 'order',
+        loadChildren: () => import('./views/order/routes').then((m) => m.routes),
+      },
+      {
+        path: 'tenant',
+        loadChildren: () => import('./views/tenant/routes').then((m) => m.routes),
+      },
+      {
+        path: 'vehicle',
+        loadChildren: () => import('./views/vehicle/routes').then((m) => m.routes),
+
+      },
+      {
         path: 'theme',
         loadChildren: () => import('./views/theme/routes').then((m) => m.routes),
         canActivate: [AdminManagerGuardService]

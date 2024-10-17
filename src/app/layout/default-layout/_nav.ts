@@ -307,14 +307,14 @@ export const adminNavItems: INavData[] = [
   },
   {
     name: 'Tenant',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/tenant',
+    iconComponent: { name: 'cil-tennis-ball' }
   },
   {
     name: 'Customer',
-    url: '/theme/typography',
+    url: '/customer',
     linkProps: { fragment: 'headings' },
-    iconComponent: { name: 'cil-pencil' }
+    iconComponent: { name: 'cil-smile' }
   },
   {
     name: 'Apps',
@@ -322,8 +322,8 @@ export const adminNavItems: INavData[] = [
   },
   {
     name: 'Fee Configuration',
-    url: '/base/accordion',
-    iconComponent: { name: 'cil-cursor' }
+    url: '/fee',
+    iconComponent: { name: 'cil-money' }
   },
 ];
 
@@ -343,18 +343,18 @@ export const tenantManagerNavItems: INavData[] = [
   },
   {
     name: 'Company',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/company',
+    iconComponent: { name: 'cil-factory' }
   },
   {
     name: 'Admin',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/admin',
+    iconComponent: { name: 'cil-at' }
   },
   {
     name: 'Customer',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/customer',
+    iconComponent: { name: 'cil-smile' }
   },
   {
     name: 'Product',
@@ -362,13 +362,13 @@ export const tenantManagerNavItems: INavData[] = [
   },
   {
     name: 'Listing',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/listing',
+    iconComponent: { name: 'cil-lightbulb' }
   },
   {
     name: 'Vehicle',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/vehicle',
+    iconComponent: { name: 'cil-car-alt' }
   },
   {
     name: 'Booking Order',
@@ -376,13 +376,13 @@ export const tenantManagerNavItems: INavData[] = [
   },
   {
     name: 'Booking',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/booking',
+    iconComponent: { name: 'cil-clipboard' }
   },
   {
     name: 'Order',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/order',
+    iconComponent: { name: 'cil-basket' }
   },
   {
     name: 'Finance',
@@ -390,13 +390,13 @@ export const tenantManagerNavItems: INavData[] = [
   },
   {
     name: 'Balance',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/balance',
+    iconComponent: { name: 'cil-chart-line' }
   },
   {
     name: 'Billing',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/billing',
+    iconComponent: { name: 'cil-credit-card' }
   },
 ];
 
@@ -416,8 +416,8 @@ export const tenantAdminNavItems: INavData[] = [
   },
   {
     name: 'Customer',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/customer',
+    iconComponent: { name: 'cil-smile' }
   },
   {
     name: 'Product',
@@ -425,13 +425,13 @@ export const tenantAdminNavItems: INavData[] = [
   },
   {
     name: 'Listing',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/listing',
+    iconComponent: { name: 'cil-lightbulb' }
   },
   {
     name: 'Vehicle',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/vehicle',
+    iconComponent: { name: 'cil-car-alt' }
   },
   {
     name: 'Booking Order',
@@ -439,13 +439,13 @@ export const tenantAdminNavItems: INavData[] = [
   },
   {
     name: 'Booking',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/booking',
+    iconComponent: { name: 'cil-clipboard' }
   },
   {
     name: 'Order',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/order',
+    iconComponent: { name: 'cil-basket' }
   },
   {
     name: 'Finance',
@@ -453,7 +453,7 @@ export const tenantAdminNavItems: INavData[] = [
   },
   {
     name: 'Billing',
-    url: '/theme/colors',
-    iconComponent: { name: 'cil-drop' }
+    url: '/billing',
+    iconComponent: { name: 'cil-credit-card' }
   },
 ];
