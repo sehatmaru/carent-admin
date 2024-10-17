@@ -18,14 +18,14 @@ import { IconModule } from '@coreui/icons-angular';
 import { ToastType } from 'src/app/enum/toast-type.enum';
 
 @Component({
-  selector: 'app-deafult-toaster',
-  templateUrl: './default-toaster.component.html',
-  styleUrls: ['./default-toaster.component.scss'],
-  providers: [{ provide: ToastComponent, useExisting: forwardRef(() => DefaultToasterComponent) }],
+  selector: 'app-x-toaster',
+  templateUrl: './x-toaster.component.html',
+  styleUrls: ['./x-toaster.component.scss'],
+  providers: [{ provide: ToastComponent, useExisting: forwardRef(() => XToasterComponent) }],
   standalone: true,
   imports: [ToastHeaderComponent, ToastBodyComponent, ToastCloseDirective, ProgressBarDirective, ProgressComponent, ProgressBarComponent, IconModule, ToastModule, ButtonDirective, CommonModule]
 })
-export class DefaultToasterComponent extends ToastComponent {
+export class XToasterComponent extends ToastComponent {
 
   @Input() type !: ToastType;
   @Input() title = '';

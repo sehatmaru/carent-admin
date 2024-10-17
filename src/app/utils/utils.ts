@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToasterComponent, ToasterPlacement } from '@coreui/angular';
-import { DefaultToasterComponent } from '../layout';
+import { XToasterComponent } from '../component/x-toaster/x-toaster.component';
 import { ToastType } from '../enum/toast-type.enum'
 
 @Injectable({
@@ -237,7 +237,7 @@ export class Utils {
         placement: ToasterPlacement.TopEnd,
         autohide: true,
       };
-      this.toaster.addToast(DefaultToasterComponent, { ...options });
+      this.toaster.addToast(XToasterComponent, { ...options });
     } else {
       console.error('ToasterComponent reference is not set.');
     }
@@ -254,7 +254,7 @@ export class Utils {
         autohide: true,
         color: 'warning'
       };
-      this.toaster.addToast(DefaultToasterComponent, { ...options });
+      this.toaster.addToast(XToasterComponent, { ...options });
     } else {
       console.error('ToasterComponent reference is not set.');
     }

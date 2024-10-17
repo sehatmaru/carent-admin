@@ -28,6 +28,7 @@ import { FinanceService } from '../../service/tenant/finance.service'
 import { StatusCode } from 'src/app/enum/status-code.enum';
 import { Utils } from 'src/app/utils/utils';
 import { BalanceReportResponseModel } from 'src/app/model/finance-model';
+import { XSpinnerComponent } from '../../component/x-spinner/x-spinner.component';
 
 interface IUser {
   name: string;
@@ -47,7 +48,7 @@ interface IUser {
   templateUrl: 'dashboard.component.html',
   styleUrls: ['dashboard.component.scss'],
   standalone: true,
-  imports: [DashboardWidgetComponent, WidgetsEComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ReactiveFormsModule, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, NgStyle, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent, CommonModule]
+  imports: [DashboardWidgetComponent, XSpinnerComponent, TextColorDirective, CardComponent, CardBodyComponent, RowComponent, ColComponent, ButtonDirective, IconDirective, ReactiveFormsModule, ButtonGroupComponent, FormCheckLabelDirective, ChartjsComponent, NgStyle, CardFooterComponent, GutterDirective, ProgressBarDirective, ProgressComponent, WidgetsBrandComponent, CardHeaderComponent, TableDirective, AvatarComponent, CommonModule]
 })
 export class DashboardComponent implements OnInit {
 

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DefaultToasterComponent } from './default-toaster.component';
+import { XSpinnerComponent } from './x-spinner.component';
 
-describe('DefaultToasterComponent', () => {
-  let component: DefaultToasterComponent;
-  let fixture: ComponentFixture<DefaultToasterComponent>;
+describe('XSpinnerComponent', () => {
+  let component: XSpinnerComponent;
+  let fixture: ComponentFixture<XSpinnerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DefaultToasterComponent]
+      imports: [XSpinnerComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DefaultToasterComponent);
+    fixture = TestBed.createComponent(XSpinnerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

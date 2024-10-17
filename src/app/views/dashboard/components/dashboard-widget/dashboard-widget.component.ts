@@ -134,7 +134,6 @@ export class DashboardWidgetComponent implements OnInit, OnChanges, AfterContent
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['reportData']) {
       const currentValue: BalanceReportResponseModel = changes['reportData'].currentValue;
-
       if (currentValue.customerHistory.length != 0) {
         this.setData()
       }
