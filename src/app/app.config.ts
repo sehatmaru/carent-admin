@@ -9,11 +9,12 @@ import {
   withViewTransitions
 } from '@angular/router';
 
-import { DropdownModule, SidebarModule, ToasterComponent } from '@coreui/angular';
+import { DropdownModule, SidebarModule } from '@coreui/angular';
 import { IconSetService } from '@coreui/icons-angular';
 import { routes } from './app.routes';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { CommonInterceptor } from './interceptor/common.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -32,6 +33,9 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(SidebarModule, DropdownModule, CommonModule),
     IconSetService,
     provideAnimations(),
-    provideHttpClient()
+    provideHttpClient(),
+    provideHttpClient(
+      withInterceptors([CommonInterceptor])
+    )
   ]
 };
