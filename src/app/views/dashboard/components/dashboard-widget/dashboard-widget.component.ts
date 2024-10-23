@@ -25,9 +25,7 @@ import { BalanceReportResponseModel } from 'src/app/model/finance-model';
 })
 export class DashboardWidgetComponent implements OnInit, OnChanges, AfterContentInit {
 
-  @Input() title = '';
   @Input() reportData !: BalanceReportResponseModel
-  @Input() isLoading = true
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef
@@ -206,6 +204,16 @@ export class DashboardWidgetComponent implements OnInit, OnChanges, AfterContent
           break;
         }
       }
+    }
+  }
+
+  public getSvgIcon(value: number): string {
+    if (value > 0) {
+        return 'cilArrowTop'
+    } else if (value < 0) {
+        return 'cilArrowBottom'
+    } else {
+        return 'cilMinus'
     }
   }
 }

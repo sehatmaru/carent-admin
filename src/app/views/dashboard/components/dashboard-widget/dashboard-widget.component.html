@@ -6,9 +6,9 @@
         [title]="'Income'"
         >
         <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
-            <span>{{ reportData.currentIncome }}</span>
+            <span>{{ reportData.currentIncome | currency: 'IDR' : 'symbol' : '1.0-0' : 'id' }}</span>
             <span class="fw-normal" style="font-size: 12px;">
-            (-12.4% <svg cIcon name="cilArrowBottom" size="sm"></svg>)
+            ({{ reportData.incomeChangeInValue }}% <svg cIcon [name]="getSvgIcon(reportData.incomeChangeInValue)" size="sm"></svg>)
             </span>
         </ng-template>
         <ng-template cTemplateId="widgetChartTemplate">
@@ -22,9 +22,9 @@
         color="success"
         >
         <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
-            <span>{{ reportData.currentRevenue }}</span>
+            <span>{{ reportData.currentRevenue | currency: 'IDR' : 'symbol' : '1.0-0' : 'id' }}</span>
             <span class="fw-normal" style="font-size: 12px;">
-            (40.9%<svg cIcon name="cilArrowTop" size="sm"></svg>)
+            ({{ reportData.revenueChangeInValue }}%<svg cIcon [name]="getSvgIcon(reportData.revenueChangeInValue)" size="sm"></svg>)
             </span>
         </ng-template>
         <ng-template cTemplateId="widgetChartTemplate">
@@ -40,7 +40,7 @@
         <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
             <span>{{ reportData.currentOrder }}</span>
             <span class="fw-normal" style="font-size: 12px;">
-            (84.7% <svg cIcon name="cilArrowTop" size="sm"></svg>)
+            ({{ reportData.orderChangeInValue }}% <svg cIcon [name]="getSvgIcon(reportData.orderChangeInValue)" size="sm"></svg>)
             </span>
         </ng-template>
         <ng-template cTemplateId="widgetChartTemplate">
@@ -56,7 +56,7 @@
             <ng-template cTemplateId="widgetValueTemplate" ngPreserveWhitespaces>
                 <span>{{ reportData.currentCustomer }}</span>
                 <span class="fw-normal" style="font-size: 12px;">
-                    (-23.6% <svg cIcon name="cilArrowBottom" size="sm"></svg>)
+                    ({{ reportData.customerChangeInValue }}% <svg cIcon [name]="getSvgIcon(reportData.customerChangeInValue)" size="sm"></svg>)
                 </span>
             </ng-template>
             <ng-template cTemplateId="widgetChartTemplate">

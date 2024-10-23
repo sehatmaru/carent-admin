@@ -14,6 +14,10 @@ export class BalanceReportResponseModel {
     public revenueHistory: BalanceReportHistoryModel[] = []
     public currentCustomer = 0
     public customerHistory: BalanceReportHistoryModel[] = []
+    public orderChangeInValue = 0
+    public incomeChangeInValue = 0
+    public revenueChangeInValue = 0
+    public customerChangeInValue = 0
 }
 
 export class BalanceReportHistoryModel {

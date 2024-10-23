@@ -1,81 +1,74 @@
-<ng-container *ngIf="!isWidgetLoading; else spinner">
-  <app-dashboard-widget [title]="'a'" [reportData]="reportData"></app-dashboard-widget>
+<ng-container *ngIf="!loadings.balance; else spinner">
+  <app-dashboard-widget [reportData]="balanceReportData"></app-dashboard-widget>
 </ng-container>
-<c-row class="mt-4">
-  <c-col xs>
-    <c-card class="mb-4">
-      <c-card-body>
-        <table
-          [hover]="true"
-          [responsive]="true"
-          [striped]="true"
-          align="middle"
-          cTable
-          class="mb-0 border"
-        >
-          <thead class="text-nowrap text-truncate">
-          <tr>
-            <th class="bg-body-tertiary text-center ">
-              <svg cIcon name="cilPeople"></svg>
-            </th>
-            <th class="bg-body-tertiary">User</th>
-            <th class="bg-body-tertiary text-center">Country</th>
-            <th class="bg-body-tertiary">Usage</th>
-            <th class="bg-body-tertiary text-center">Payment Method</th>
-            <th class="bg-body-tertiary">Activity</th>
-          </tr>
-          </thead>
-          <tbody>
-            @for (user of users; track user.name; let i = $index) {
-              <tr>
-                <td class="text-center">
-                  <c-avatar [size]="'md'" [src]="user.avatar" [status]="user.status" />
-                </td>
-                <td>
-                  <div>{{ user.name }}</div>
-                  <div class="small text-body-secondary text-nowrap">
-                  <span>
-                    {{ user.state }} | Registered: {{ user.registered }}
-                  </span>
-                  </div>
-                </td>
-                <td class="text-center">
-                  <svg
-                    cIcon
-                    id="{{ user.country + user.name }}"
-                    name="cif{{ user.country }}"
-                    size="xl"
-                    title="{{ user.country }}"
-                  ></svg>
-                </td>
-                <td>
-                  <div class="d-flex justify-content-between">
-                    <div class="float-start">
-                      <strong>{{ user.usage }}%</strong>
+<ng-container *ngIf="!loadings.orderHistory; else spinner">
+  <c-row class="mt-4">
+    <c-col xs>
+      <c-card class="mb-4">
+        <c-card-body>
+          <table
+            [hover]="true"
+            [responsive]="true"
+            [striped]="true"
+            align="middle"
+            cTable
+            class="mb-0 border"
+          >
+            <thead class="text-nowrap text-truncate">
+            <tr>
+              <th class="bg-body-tertiary text-center ">
+                <svg cIcon name="cilPeople"></svg>
+              </th>
+              <th class="bg-body-tertiary">Customer</th>
+              <th class="bg-body-tertiary text-center">Product</th>
+              <th class="bg-body-tertiary text-center">Type</th>
+              <th class="bg-body-tertiary text-center">Order Status</th>
+              <th class="bg-body-tertiary text-center">Payment Status</th>
+              <th class="bg-body-tertiary text-center">Total Payment</th>
+              <th class="bg-body-tertiary text-center">Order Date</th>
+            </tr>
+            </thead>
+            <tbody>
+              @for (order of orderHistoryListData; track order.id; let i = $index) {
+                <tr>
+                  <td class="text-center">
+                    <c-avatar [size]="'md'" color="primary" textColor="white">{{ order.customerName }}</c-avatar>
+                  </td>
+                  <td class="text-center">
+                    <div class="small text-nowrap">{{ order.customerName }}</div>
+                  </td>
+                  <td class="text-center">
+                    <div class="small text-nowrap"><b>{{ order.productName }}</b></div>
+                    <div class="small text-body-secondary text-nowrap">
+                      <span>
+                        <c-badge color="secondary">{{ order.duration }}</c-badge> | {{ order.startAt | date : 'MMM dd, yy' }} - {{ order.endAt | date : 'MMM dd, yy' }}
+                      </span>
                     </div>
-                    <div class="float-end ms-1 text-nowrap">
-                      <small class="text-body-secondary">
-                        {{ user.period }}
-                      </small>
-                    </div>
-                  </div>
-                  <c-progress thin [value]="user.usage" color="{{ user.color }}" aria-label="Usage" />
-                </td>
-                <td class="text-center">
-                  <svg cIcon name="cibCc{{ user.payment }}" size="xl"></svg>
-                </td>
-                <td>
-                  <div class="small text-body-secondary">Last login</div>
-                  <div class="fw-semibold text-nowrap">{{ user.activity }}</div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </c-card-body>
-    </c-card>
-  </c-col>
-</c-row>
+                  </td>
+                  <td class="text-center">
+                    <svg cIcon [name]="getSvgIcon(order.vehicleType)" size="xl"></svg>
+                  </td>
+                  <td class="text-center">
+                    <c-badge [color]="getOrderStatusColor(order.orderStatus)">{{ order.orderStatus }}</c-badge>
+                  </td>
+                  <td class="text-center">
+                    <c-badge [color]="getPaymentStatusColor(order.paymentStatus)">{{ order.paymentStatus }}</c-badge>
+                  </td>
+                  <td class="text-center">
+                    <div class="small text-body-secondary text-nowrap">{{ order.totalPayment | currency: 'IDR' : 'symbol' : '1.0-0' : 'id' }}</div>
+                  </td>
+                  <td class="text-center">
+                    <div class="small text-body-secondary text-nowrap">{{ order.orderedAt | date : 'MMMM dd, yyyy' }}</div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </c-card-body>
+      </c-card>
+    </c-col>
+  </c-row>
+</ng-container>
 
 <ng-template #spinner>
   <app-x-spinner></app-x-spinner>

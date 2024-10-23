@@ -1,0 +1,8 @@
+export enum OrderStatus {
+  WAITING_PAYMENT,
+  WAITING_APPROVAL,
+  IN_PROGRESS,
+  COMPLETED,
+  CANCELED,
+}
+  
