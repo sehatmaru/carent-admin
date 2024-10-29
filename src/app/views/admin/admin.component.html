@@ -32,8 +32,8 @@
                         <button cButton class="me-1" color="secondary" type="reset" (click)="resetFilter()">
                             Reset
                         </button>
-                        <button cButton color="primary" [disabled]="loadings.customer" (click)="doGetAdminList()">
-                            <c-spinner *ngIf="loadings.customer" aria-hidden="true" size="sm" variant="grow"></c-spinner>
+                        <button cButton color="primary" [disabled]="loadings.admin" (click)="doGetAdminList()">
+                            <c-spinner *ngIf="loadings.admin" aria-hidden="true" size="sm" variant="grow"></c-spinner>
                             Filter
                         </button>
                     </c-col>
@@ -43,7 +43,7 @@
     </c-col>
 </c-row>
 
-<ng-container *ngIf="!loadings.customer; else spinner">
+<ng-container *ngIf="!loadings.admin; else spinner">
     <c-row class="mt-4">
       <c-col xs>
         <table

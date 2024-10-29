@@ -7,7 +7,7 @@ import { IconDirective } from '@coreui/icons-angular';
 import { XSpinnerComponent } from 'src/app/component/x-spinner/x-spinner.component';
 import { StatusCode } from 'src/app/enum/status-code.enum';
 import { AdminResponse } from 'src/app/model/admin-model';
-import { CustomerFilterRequest } from 'src/app/model/customer-model';
+import { CustomerFilterRequest } from 'src/app/model/admin-model';
 import { ManagerService } from 'src/app/service/tenant/manager.service';
 import { Utils } from 'src/app/utils/utils';
 
@@ -22,7 +22,7 @@ export class AdminComponent {
 
   public icons = { cilAddressBook, cilUser };
 
-  public loadings = { customer: false }
+  public loadings = { admin: false }
 
   public adminFilter = new CustomerFilterRequest()
 
@@ -40,7 +40,7 @@ export class AdminComponent {
   }
 
   doGetAdminList() {
-    this.loadings.customer = true
+    this.loadings.admin = true
   
     this.managerService.getAdminList(this.adminFilter).subscribe({
       next: (resp) => {
@@ -50,11 +50,11 @@ export class AdminComponent {
           this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
         }
 
-        this.loadings.customer = false
+        this.loadings.admin = false
       },
       error: (error) => {
         this.utils.sendErrorToast(error.message)
-        this.loadings.customer = false
+        this.loadings.admin = false
       }
     });
   }
