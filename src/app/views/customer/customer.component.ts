@@ -57,4 +57,10 @@ export class CustomerComponent implements OnInit {
       }
     });
   }
+
+  resetFilter() {
+    this.customerFilter = new CustomerFilterRequest()
+
+    this.doGetCustomerList()
+  }
 }

@@ -29,7 +29,7 @@
                     </c-col>
                     
                     <c-col [md]="12" class="text-end">
-                        <button cButton class="me-1" color="secondary" type="reset">
+                        <button cButton class="me-1" color="secondary" type="reset" (click)="resetFilter()">
                             Reset
                         </button>
                         <button cButton color="primary" [disabled]="loadings.customer" (click)="doGetCustomerList()">
