@@ -5,6 +5,9 @@ export enum VehicleBrand {
   SUZUKI,
   YAMAHA,
   HYUNDAI,
+  MITSUBISHI,
+  DAIHATSU,
+  NISSAN,
   BYD,
   OTHER,
 }
