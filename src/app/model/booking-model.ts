@@ -1,3 +1,4 @@
+import { OrderStatus } from "../enum/order-status.enum"
 import { PickupType } from "../enum/pickup-type.enum"
 
 export class BookingFilterRequestModel {
@@ -18,6 +19,8 @@ export class BookingListResponseModel {
     public orderId = 0
     public billId = 0
     public duration = 0
+    public rating = 0
+    public orderStatus = OrderStatus.IN_PROGRESS
     public invoiceNumber = ''
     public pickupType = PickupType.DELIVERY
     public startDate = new Date()

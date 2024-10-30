@@ -10,6 +10,7 @@ import { StatusCode } from 'src/app/enum/status-code.enum';
 import { Utils } from 'src/app/utils/utils';
 import { BookingFilterRequestModel, BookingListResponseModel } from 'src/app/model/booking-model';
 import { PickupType } from 'src/app/enum/pickup-type.enum';
+import { OrderStatus } from 'src/app/enum/order-status.enum';
 
 @Component({
   selector: 'app-booking',
@@ -65,5 +66,19 @@ export class BookingComponent implements OnInit {
     this.bookingFilter = new BookingFilterRequestModel()
 
     this.doGetBookingList()
+  }
+
+  getOrderStatusColor(value: any): string {
+    if (value == OrderStatus[OrderStatus.COMPLETED]) {
+        return 'success'
+    } else if (value === OrderStatus[OrderStatus.CANCELED]) {
+        return 'danger'
+    } else if (value === OrderStatus[OrderStatus.WAITING_APPROVAL]) {
+        return 'warning'
+    } else if (value === OrderStatus[OrderStatus.IN_PROGRESS]) {
+        return 'info'
+    }
+
+    return 'secondary'
   }
 }

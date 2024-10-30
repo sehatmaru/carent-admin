@@ -75,6 +75,7 @@
             <th class="bg-body-tertiary">Customer ID</th>
             <th class="bg-body-tertiary">Customer</th>
             <th class="bg-body-tertiary text-center">Product</th>
+            <th class="bg-body-tertiary text-center">Status</th>
             <th class="bg-body-tertiary">Invoice</th>
             <th class="bg-body-tertiary text-center">Pickup</th>
           </tr>
@@ -104,6 +105,9 @@
                         <c-badge color="secondary">{{ data.duration }}</c-badge> | {{ data.startDate | date : 'MMM dd, yy' }} - {{ data.endDate | date : 'MMM dd, yy' }}
                     </span>
                     </div>
+                </td>
+                <td class="text-center">
+                  <c-badge [color]="getOrderStatusColor(data.orderStatus)">{{ data.orderStatus }}</c-badge>
                 </td>
                 <td>
                     <div class="small text-body-secondary text-nowrap">{{ data.invoiceNumber }}</div>
