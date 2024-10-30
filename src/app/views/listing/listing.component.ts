@@ -10,7 +10,6 @@ import { ProductStatus } from 'src/app/enum/product-status.enum';
 import { StatusCode } from 'src/app/enum/status-code.enum';
 import { Transmission } from 'src/app/enum/transmission.enum';
 import { VehicleBrand } from 'src/app/enum/vehicle-brand.enum';
-import { VehicleType } from 'src/app/enum/vehicle-type.enum';
 import { ProductSearchRequestModel, TenantProductListResponseModel } from 'src/app/model/product-model';
 import { ProductService } from 'src/app/service/tenant/product.service';
 import { Utils } from 'src/app/utils/utils';
@@ -32,7 +31,6 @@ export class ListingComponent {
 
   public productList: TenantProductListResponseModel[] = []
 
-  public vehicleTypeEnumList = Object.values(VehicleType).filter(value => typeof value === 'string')
   public engineTypeEnumList = Object.values(EngineType).filter(value => typeof value === 'string')
   public vehicleBrandEnumList = Object.values(VehicleBrand).filter(value => typeof value === 'string')
   public transmissionEnumList = Object.values(Transmission).filter(value => typeof value === 'string')

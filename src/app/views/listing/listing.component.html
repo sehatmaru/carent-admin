@@ -34,19 +34,6 @@
                     <c-col [md]="3">
                         <c-input-group>
                             <span cInputGroupText>
-                                <svg [cIcon]="icons.cilSearch"></svg>
-                            </span>
-                            <select [(ngModel)]="productFilter.vehicleType" name="vehicleType" cFormControl cSelect placeholder="Vehicle">
-                                <option [value]="null" [defaultSelected]="true">Vehicle</option>
-                                @for (item of vehicleTypeEnumList; track $index) {
-                                    <option [value]="item">{{ item }}</option>
-                                }
-                            </select>
-                        </c-input-group>
-                    </c-col>
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
                                 <svg [cIcon]="icons.cilCog"></svg>
                             </span>
                             <select [(ngModel)]="productFilter.transmission" name="transmission" cFormControl cSelect placeholder="Transmission">
@@ -128,7 +115,6 @@
             <th class="bg-body-tertiary">ID</th>
             <th class="bg-body-tertiary">Name</th>
             <th class="bg-body-tertiary">Price</th>
-            <th class="bg-body-tertiary text-center">Vehicle</th>
             <th class="bg-body-tertiary text-center">Transmission</th>
             <th class="bg-body-tertiary text-center">Seat</th>
             <th class="bg-body-tertiary text-center">Deliverable</th>
@@ -147,9 +133,6 @@
                 </td>
                 <td>
                     <div class="small text-body-secondary text-nowrap">{{ data.price | currency: 'IDR' : 'symbol' : '1.0-0' : 'id' }}</div>
-                </td>
-                <td class="text-center">
-                    <div class="small text-body-secondary text-nowrap">{{ data.vehicleType }}</div>
                 </td>
                 <td class="text-center">
                     <div class="small text-body-secondary text-nowrap">{{ data.transmission }}</div>

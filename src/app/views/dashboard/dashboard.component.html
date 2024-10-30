@@ -19,7 +19,6 @@
           </th>
           <th class="bg-body-tertiary">Customer</th>
           <th class="bg-body-tertiary text-center">Product</th>
-          <th class="bg-body-tertiary text-center">Type</th>
           <th class="bg-body-tertiary text-center">Order Status</th>
           <th class="bg-body-tertiary text-center">Payment Status</th>
           <th class="bg-body-tertiary text-center">Total Payment</th>
@@ -39,12 +38,9 @@
                 <div class="small text-nowrap"><b>{{ order.productName }}</b></div>
                 <div class="small text-body-secondary text-nowrap">
                   <span>
-                    <c-badge color="secondary">{{ order.duration }}</c-badge> | {{ order.startAt | date : 'MMM dd, yy' }} - {{ order.endAt | date : 'MMM dd, yy' }}
+                    <c-badge color="secondary">{{ order.duration }}</c-badge> | {{ order.startDate | date : 'MMM dd, yy' }} - {{ order.endDate | date : 'MMM dd, yy' }}
                   </span>
                 </div>
-              </td>
-              <td class="text-center">
-                <svg cIcon [name]="getSvgIcon(order.vehicleType)" size="xl"></svg>
               </td>
               <td class="text-center">
                 <c-badge [color]="getOrderStatusColor(order.orderStatus)">{{ order.orderStatus }}</c-badge>
@@ -56,7 +52,7 @@
                 <div class="small text-body-secondary text-nowrap">{{ order.totalPayment | currency: 'IDR' : 'symbol' : '1.0-0' : 'id' }}</div>
               </td>
               <td class="text-center">
-                <div class="small text-body-secondary text-nowrap">{{ order.orderedAt | date : 'MMMM dd, yyyy' }}</div>
+                <div class="small text-body-secondary text-nowrap">{{ order.orderedDate | date : 'MMMM dd, yyyy' }}</div>
               </td>
             </tr>
           }

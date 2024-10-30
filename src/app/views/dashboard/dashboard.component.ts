@@ -31,7 +31,6 @@ import { Utils } from 'src/app/utils/utils';
 import { BalanceReportResponseModel } from 'src/app/model/finance-model';
 import { XSpinnerComponent } from '../../component/x-spinner/x-spinner.component';
 import { OrderHistoryResponseModel } from 'src/app/model/order-model';
-import { VehicleType } from 'src/app/enum/vehicle-type.enum';
 import { PaymentStatus } from 'src/app/enum/payment-status.enum';
 import { OrderStatus } from 'src/app/enum/order-status.enum';
 
@@ -100,10 +99,6 @@ export class DashboardComponent implements OnInit {
         this.loadings.orderHistory = false
       }
     });
-  }
-
-  public getSvgIcon(value: any): string {
-    return value == VehicleType[VehicleType.CAR] ? 'cilCarAlt' : 'cilBike'
   }
 
   getPaymentStatusColor(value: any): string {

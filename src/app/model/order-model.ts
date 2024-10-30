@@ -1,7 +1,6 @@
 import { OrderStatus } from "../enum/order-status.enum"
 import { Transmission } from "../enum/transmission.enum"
 import { VehicleBrand } from "../enum/vehicle-brand.enum"
-import { VehicleType } from "../enum/vehicle-type.enum"
 import { PaymentStatus } from "../enum/payment-status.enum"
 
 export class OrderHistoryResponseModel {
@@ -9,15 +8,14 @@ export class OrderHistoryResponseModel {
     public customerName = ''
     public productName = ''
     public duration = 0
-    public vehicleType = VehicleType.CAR
     public transmission = Transmission.MATIC
     public brand = VehicleBrand.BYD
     public totalPayment = 0
-    public startAt = new Date()
-    public endAt = new Date()
+    public startDate = new Date()
+    public endDate = new Date()
     public orderStatus = OrderStatus.WAITING_PAYMENT
     public paymentStatus = PaymentStatus.WAITING
-    public orderedAt = new Date()
+    public orderedDate = new Date()
 
     getPaymentStatusColor(): string {
         if (this.paymentStatus === PaymentStatus.PAID) {
