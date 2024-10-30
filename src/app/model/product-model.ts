@@ -27,6 +27,8 @@ export class TenantProductListResponseModel {
     public price = 0
     public transmission = Transmission.MATIC
     public brand = VehicleBrand.BYD
+    public engineType = EngineType.GASOLINE
     public deliverable = false
     public status = ProductStatus.AVAILABLE
+    public createdDate = new Date()
 }

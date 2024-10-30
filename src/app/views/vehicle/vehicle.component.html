@@ -1,1 +1,165 @@
-<p>vehicle works!</p>
+<c-row class="mt-4">
+    <c-col xs>
+        <c-card class="mb-4">
+            <c-card-body>
+                <form cForm novalidate class="row g-3">
+                    <c-col [md]="3">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <svg [cIcon]="icons.cilSearch"></svg>
+                            </span>
+                            <input [(ngModel)]="vehicleFilter.id" name="id" autoComplete="id" cFormControl placeholder="ID" />
+                        </c-input-group>
+                    </c-col>
+                    <c-col [md]="3">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <svg [cIcon]="icons.cilSearch"></svg>
+                            </span>
+                            <input [(ngModel)]="vehicleFilter.productId" name="productId" autoComplete="productId" cFormControl placeholder="Product ID" />
+                        </c-input-group>
+                    </c-col>
+                    <c-col [md]="3">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <svg [cIcon]="icons.cilSearch"></svg>
+                            </span>
+                            <input [(ngModel)]="vehicleFilter.name" name="name" autoComplete="name" cFormControl placeholder="Name" />
+                        </c-input-group>
+                    </c-col>
+                    <c-col [md]="3">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <svg [cIcon]="icons.cilSearch"></svg>
+                            </span>
+                            <input [(ngModel)]="vehicleFilter.year" name="year" autoComplete="year" cFormControl placeholder="Year" />
+                        </c-input-group>
+                    </c-col>
+                    <c-col [md]="3">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <svg [cIcon]="icons.cilSearch"></svg>
+                            </span>
+                            <input [(ngModel)]="vehicleFilter.licenseNumber" name="licenseNumber" autoComplete="licenseNumber" cFormControl placeholder="License Number" />
+                        </c-input-group>
+                    </c-col>
+                    <c-col [md]="3">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <svg [cIcon]="icons.cilCog"></svg>
+                            </span>
+                            <select [(ngModel)]="vehicleFilter.transmission" name="transmission" cFormControl cSelect placeholder="Transmission">
+                                <option [value]="null" [defaultSelected]="true">Transmission</option>
+                                @for (item of transmissionEnumList; track $index) {
+                                    <option [value]="item">{{ item }}</option>
+                                }
+                            </select>
+                        </c-input-group>
+                    </c-col>
+                    <c-col [md]="3">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <svg [cIcon]="icons.cilCog"></svg>
+                            </span>
+                            <select [(ngModel)]="vehicleFilter.engineType" name="engineType" cFormControl cSelect placeholder="Engine">
+                                <option [value]="null" [defaultSelected]="true">Engine</option>
+                                @for (item of engineTypeEnumList; track $index) {
+                                    <option [value]="item">{{ item }}</option>
+                                }
+                            </select>
+                        </c-input-group>
+                    </c-col>
+                    <c-col [md]="3">
+                        <c-input-group>
+                            <span cInputGroupText>
+                                <svg [cIcon]="icons.cilDescription"></svg>
+                            </span>
+                            <select [(ngModel)]="vehicleFilter.brand" name="brand" cFormControl cSelect placeholder="Brand">
+                                <option [value]="null" [defaultSelected]="true">Brand</option>
+                                @for (item of vehicleBrandEnumList; track $index) {
+                                    <option [value]="item">{{ item }}</option>
+                                }
+                            </select>
+                        </c-input-group>
+                    </c-col>
+                    
+                    <c-col [md]="12" class="text-end">
+                        <button cButton class="me-1" color="secondary" type="reset" (click)="resetFilter()">
+                            Reset
+                        </button>
+                        <button cButton color="primary" [disabled]="loadings.vehicle" (click)="doGetVehicleList()">
+                            <c-spinner *ngIf="loadings.vehicle" aria-hidden="true" size="sm" variant="grow"></c-spinner>
+                            Filter
+                        </button>
+                    </c-col>
+                </form>
+            </c-card-body>
+        </c-card>
+    </c-col>
+</c-row>
+
+<ng-container *ngIf="!loadings.vehicle; else spinner">
+    <c-row class="mt-4">
+      <c-col xs>
+        <table
+          [hover]="true"
+          [responsive]="true"
+          [striped]="true"
+          align="middle"
+          cTable
+          class="mb-0 border"
+        >
+          <thead class="text-nowrap text-truncate">
+          <tr>
+            <th class="bg-body-tertiary">ID</th>
+            <th class="bg-body-tertiary">Product ID</th>
+            <th class="bg-body-tertiary">Name</th>
+            <th class="bg-body-tertiary text-center">Year</th>
+            <th class="bg-body-tertiary text-center">License Number</th>
+            <th class="bg-body-tertiary text-center">Transmission</th>
+            <th class="bg-body-tertiary text-center">Engine</th>
+            <th class="bg-body-tertiary text-center">Brand</th>
+            <th class="bg-body-tertiary text-center">Create Date</th>
+          </tr>
+          </thead>
+          <tbody>
+            @for (data of vehicleList; track data.id; let i = $index) {
+              <tr>
+                <td>
+                    <div class="small text-body-secondary text-nowrap">{{ data.id }}</div>
+                </td>
+                <td>
+                    <div class="small text-body-secondary text-nowrap">{{ data.productId }}</div>
+                </td>
+                <td>
+                    <div class="small text-body-secondary text-nowrap">{{ data.name }}</div>
+                </td>
+                <td class="text-center">
+                    <div class="small text-body-secondary text-nowrap">{{ data.year }}</div>
+                </td>
+                <td class="text-center">
+                    <div class="small text-body-secondary text-nowrap">{{ data.licenseNumber }}</div>
+                </td>
+                <td class="text-center">
+                    <div class="small text-body-secondary text-nowrap">{{ data.transmission }}</div>
+                </td>
+                <td class="text-center">
+                    <div class="small text-body-secondary text-nowrap">{{ data.engineType }}</div>
+                </td>
+                <td class="text-center">
+                    <div class="small text-body-secondary text-nowrap">{{ data.brand }}</div>
+                </td>
+                <td class="text-center">
+                    <div class="small text-body-secondary text-nowrap">{{ data.createdDate | date : 'MMMM dd, yyyy'  }}</div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </c-col>
+    </c-row>
+</ng-container>
+
+<ng-template #spinner>
+    <app-x-spinner></app-x-spinner>
+</ng-template>
