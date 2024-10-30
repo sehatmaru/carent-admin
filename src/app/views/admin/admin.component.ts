@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RowComponent, ColComponent, CardModule, FormModule, ColDirective, ButtonDirective, TableDirective, AvatarModule, SpinnerModule } from '@coreui/angular';
 import { cilAddressBook, cilUser } from '@coreui/icons';
@@ -18,7 +18,7 @@ import { Utils } from 'src/app/utils/utils';
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss'
 })
-export class AdminComponent {
+export class AdminComponent implements OnInit {
 
   public icons = { cilAddressBook, cilUser };
 

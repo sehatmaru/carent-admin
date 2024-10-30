@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RowComponent, ColComponent, CardModule, FormModule, ColDirective, ButtonDirective, TableDirective, AvatarModule, SpinnerModule } from '@coreui/angular';
 import { cilAddressBook, cilCog, cilDescription, cilOptions, cilSearch, cilUser } from '@coreui/icons';
@@ -20,7 +20,7 @@ import { Utils } from 'src/app/utils/utils';
   templateUrl: './vehicle.component.html',
   styleUrl: './vehicle.component.scss'
 })
-export class VehicleComponent {
+export class VehicleComponent implements OnInit {
 
   public icons = { cilAddressBook, cilUser, cilDescription, cilCog, cilOptions, cilSearch };
 

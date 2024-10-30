@@ -20,7 +20,7 @@ export class ProductSearchRequestModel {
     public status: ProductStatus | null = null
 }
 
-export class TenantProductListResponseModel {
+export class ProductListResponseModel {
     public id = 0
     public seat = 0
     public name = ''
