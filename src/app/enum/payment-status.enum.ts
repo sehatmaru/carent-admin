@@ -6,4 +6,3 @@ export enum PaymentStatus {
   REFUNDED,
   PARTIALLY_PAID,
 }
-  

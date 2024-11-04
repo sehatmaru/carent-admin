@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   baseUrlAdmin: 'http://localhost:8077',
-  baseUrlTenant: 'http://localhost:8009'
-};
+  baseUrlTenant: 'http://localhost:8009',
+}
 
 /*
  * For easier debugging in development mode, you can import the following file

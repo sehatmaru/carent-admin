@@ -3,4 +3,3 @@ export enum EngineType {
   HYBRID,
   ELECTRIC,
 }
-  

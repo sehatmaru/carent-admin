@@ -5,5 +5,5 @@ export enum StatusCode {
   SERVER_ERROR = 500,
   SUCCESS = 200,
   NOT_FOUND = 404,
-  EXIST_CODE = 99
+  EXIST_CODE = 99,
 }

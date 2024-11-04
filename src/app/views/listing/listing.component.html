@@ -1,116 +1,178 @@
 <c-row class="mt-4">
-    <c-col xs>
-        <c-card class="mb-4">
-            <c-card-body>
-                <form cForm novalidate class="row g-3">
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilSearch"></svg>
-                            </span>
-                            <input [(ngModel)]="productFilter.id" name="id" autoComplete="id" cFormControl placeholder="ID" />
-                        </c-input-group>
-                    </c-col>
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilSearch"></svg>
-                            </span>
-                            <input [(ngModel)]="productFilter.name" name="name" autoComplete="name" cFormControl placeholder="Name" />
-                        </c-input-group>
-                    </c-col>
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilSearch"></svg>
-                            </span>
-                            <select [(ngModel)]="productFilter.deliverable" name="deliverable" cFormControl cSelect placeholder="Deliverable">
-                                <option [value]="null" [defaultSelected]="true">Is Deliverable</option>
-                                <option [value]="true">DELIVERABLE</option>
-                                <option [value]="false">NOT DELIVERABLE</option>
-                            </select>
-                        </c-input-group>
-                    </c-col>
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilCog"></svg>
-                            </span>
-                            <select [(ngModel)]="productFilter.transmission" name="transmission" cFormControl cSelect placeholder="Transmission">
-                                <option [value]="null" [defaultSelected]="true">Transmission</option>
-                                @for (item of transmissionEnumList; track $index) {
-                                    <option [value]="item">{{ item }}</option>
-                                }
-                            </select>
-                        </c-input-group>
-                    </c-col>
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilCog"></svg>
-                            </span>
-                            <select [(ngModel)]="productFilter.engineType" name="engineType" cFormControl cSelect placeholder="Engine">
-                                <option [value]="null" [defaultSelected]="true">Engine</option>
-                                @for (item of engineTypeEnumList; track $index) {
-                                    <option [value]="item">{{ item }}</option>
-                                }
-                            </select>
-                        </c-input-group>
-                    </c-col>
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilDescription"></svg>
-                            </span>
-                            <select [(ngModel)]="productFilter.brand" name="brand" cFormControl cSelect placeholder="Brand">
-                                <option [value]="null" [defaultSelected]="true">Brand</option>
-                                @for (item of vehicleBrandEnumList; track $index) {
-                                    <option [value]="item">{{ item }}</option>
-                                }
-                            </select>
-                        </c-input-group>
-                    </c-col>
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilOptions"></svg>
-                            </span>
-                            <select [(ngModel)]="productFilter.status" name="status" cFormControl cSelect placeholder="Status">
-                                <option [value]="null" [defaultSelected]="true">Status</option>
-                                @for (item of productStatusEnumList; track $index) {
-                                    <option [value]="item">{{ item }}</option>
-                                }
-                            </select>
-                        </c-input-group>
-                    </c-col>
-                    
-                    <c-col [md]="12" class="text-end">
-                        <button cButton class="me-1" color="secondary" type="reset" (click)="resetFilter()">
-                            Reset
-                        </button>
-                        <button cButton color="primary" [disabled]="loadings.product" (click)="doGetProductList()">
-                            <c-spinner *ngIf="loadings.product" aria-hidden="true" size="sm" variant="grow"></c-spinner>
-                            Filter
-                        </button>
-                    </c-col>
-                </form>
-            </c-card-body>
-        </c-card>
-    </c-col>
+  <c-col xs>
+    <c-card class="mb-4">
+      <c-card-body>
+        <form cForm novalidate class="row g-3">
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilSearch"></svg>
+              </span>
+              <input
+                [(ngModel)]="productFilter.id"
+                name="id"
+                autoComplete="id"
+                cFormControl
+                placeholder="ID"
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilSearch"></svg>
+              </span>
+              <input
+                [(ngModel)]="productFilter.name"
+                name="name"
+                autoComplete="name"
+                cFormControl
+                placeholder="Name"
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilSearch"></svg>
+              </span>
+              <select
+                [(ngModel)]="productFilter.deliverable"
+                name="deliverable"
+                cFormControl
+                cSelect
+                placeholder="Deliverable"
+              >
+                <option [value]="null" [defaultSelected]="true">
+                  Is Deliverable
+                </option>
+                <option [value]="true">DELIVERABLE</option>
+                <option [value]="false">NOT DELIVERABLE</option>
+              </select>
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilCog"></svg>
+              </span>
+              <select
+                [(ngModel)]="productFilter.transmission"
+                name="transmission"
+                cFormControl
+                cSelect
+                placeholder="Transmission"
+              >
+                <option [value]="null" [defaultSelected]="true">
+                  Transmission
+                </option>
+                @for (item of transmissionEnumList; track $index) {
+                <option [value]="item">{{ item }}</option>
+                }
+              </select>
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilCog"></svg>
+              </span>
+              <select
+                [(ngModel)]="productFilter.engineType"
+                name="engineType"
+                cFormControl
+                cSelect
+                placeholder="Engine"
+              >
+                <option [value]="null" [defaultSelected]="true">Engine</option>
+                @for (item of engineTypeEnumList; track $index) {
+                <option [value]="item">{{ item }}</option>
+                }
+              </select>
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilDescription"></svg>
+              </span>
+              <select
+                [(ngModel)]="productFilter.brand"
+                name="brand"
+                cFormControl
+                cSelect
+                placeholder="Brand"
+              >
+                <option [value]="null" [defaultSelected]="true">Brand</option>
+                @for (item of vehicleBrandEnumList; track $index) {
+                <option [value]="item">{{ item }}</option>
+                }
+              </select>
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilOptions"></svg>
+              </span>
+              <select
+                [(ngModel)]="productFilter.status"
+                name="status"
+                cFormControl
+                cSelect
+                placeholder="Status"
+              >
+                <option [value]="null" [defaultSelected]="true">Status</option>
+                @for (item of productStatusEnumList; track $index) {
+                <option [value]="item">{{ item }}</option>
+                }
+              </select>
+            </c-input-group>
+          </c-col>
+
+          <c-col [md]="12" class="text-end">
+            <button
+              cButton
+              class="me-1"
+              color="secondary"
+              type="reset"
+              (click)="resetFilter()"
+            >
+              Reset
+            </button>
+            <button
+              cButton
+              color="primary"
+              [disabled]="loadings.product"
+              (click)="doGetProductList()"
+            >
+              <c-spinner
+                *ngIf="loadings.product"
+                aria-hidden="true"
+                size="sm"
+                variant="grow"
+              ></c-spinner>
+              Filter
+            </button>
+          </c-col>
+        </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
 </c-row>
 
 <ng-container *ngIf="!loadings.product; else spinner">
-    <c-row class="mt-4">
-      <c-col xs>
-        <table
-          [hover]="true"
-          [responsive]="true"
-          [striped]="true"
-          align="middle"
-          cTable
-          class="mb-0 border"
-        >
-          <thead class="text-nowrap text-truncate">
+  <c-row class="mt-4">
+    <c-col xs>
+      <table
+        [hover]="true"
+        [responsive]="true"
+        [striped]="true"
+        align="middle"
+        cTable
+        class="mb-0 border"
+      >
+        <thead class="text-nowrap text-truncate">
           <tr>
             <th class="bg-body-tertiary">ID</th>
             <th class="bg-body-tertiary">Name</th>
@@ -122,45 +184,63 @@
             <th class="bg-body-tertiary text-center">Brand</th>
             <th class="bg-body-tertiary text-center">Status</th>
           </tr>
-          </thead>
-          <tbody>
-            @for (data of productList; track data.id; let i = $index) {
-              <tr>
-                <td>
-                    <div class="small text-body-secondary text-nowrap">{{ data.id }}</div>
-                </td>
-                <td>
-                    <div class="small text-body-secondary text-nowrap">{{ data.name }}</div>
-                </td>
-                <td>
-                    <div class="small text-body-secondary text-nowrap">{{ data.price | currency: 'IDR' : 'symbol' : '1.0-0' : 'id' }}</div>
-                </td>
-                <td class="text-center">
-                    <div class="small text-body-secondary text-nowrap">{{ data.transmission }}</div>
-                </td>
-                <td class="text-center">
-                    <div class="small text-body-secondary text-nowrap">{{ data.engineType }}</div>
-                </td>
-                <td class="text-center">
-                    <div class="small text-body-secondary text-nowrap">{{ data.seat }}</div>
-                </td>
-                <td class="text-center">
-                    <div class="small text-body-secondary text-nowrap">{{ data.deliverable }}</div>
-                </td>
-                <td class="text-center">
-                    <div class="small text-body-secondary text-nowrap">{{ data.brand }}</div>
-                </td>
-                <td class="text-center">
-                    <div class="small text-body-secondary text-nowrap">{{ data.status }}</div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </c-col>
-    </c-row>
+        </thead>
+        <tbody>
+          @for (data of productList; track data.id; let i = $index) {
+          <tr>
+            <td>
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.id }}
+              </div>
+            </td>
+            <td>
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.name }}
+              </div>
+            </td>
+            <td>
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.price | currency : 'IDR' : 'symbol' : '1.0-0' : 'id' }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.transmission }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.engineType }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.seat }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.deliverable }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.brand }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.status }}
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </c-col>
+  </c-row>
 </ng-container>
 
 <ng-template #spinner>
-    <app-x-spinner></app-x-spinner>
+  <app-x-spinner></app-x-spinner>
 </ng-template>

@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterOutlet } from '@angular/router';
-import { NgScrollbar } from 'ngx-scrollbar';
+import { Component } from '@angular/core'
+import { RouterLink, RouterOutlet } from '@angular/router'
+import { NgScrollbar } from 'ngx-scrollbar'
 
-import { IconDirective } from '@coreui/icons-angular';
+import { IconDirective } from '@coreui/icons-angular'
 import {
   ContainerComponent,
   ShadowOnScrollDirective,
@@ -12,18 +12,23 @@ import {
   SidebarHeaderComponent,
   SidebarNavComponent,
   SidebarToggleDirective,
-  SidebarTogglerDirective
-} from '@coreui/angular';
+  SidebarTogglerDirective,
+} from '@coreui/angular'
 
-import { DefaultFooterComponent, DefaultHeaderComponent } from './';
-import { navItems, adminNavItems, tenantManagerNavItems, tenantAdminNavItems } from './_nav';
-import { StorageService } from 'src/app/service/storage.service';
+import { DefaultFooterComponent, DefaultHeaderComponent } from './'
+import {
+  navItems,
+  adminNavItems,
+  tenantManagerNavItems,
+  tenantAdminNavItems,
+} from './_nav'
+import { StorageService } from 'src/app/service/storage.service'
 
 function isOverflown(element: HTMLElement) {
   return (
     element.scrollHeight > element.clientHeight ||
     element.scrollWidth > element.clientWidth
-  );
+  )
 }
 
 @Component({
@@ -46,16 +51,18 @@ function isOverflown(element: HTMLElement) {
     ShadowOnScrollDirective,
     ContainerComponent,
     RouterOutlet,
-    DefaultFooterComponent
-  ]
+    DefaultFooterComponent,
+  ],
 })
 export class DefaultLayoutComponent {
-  public navItems = navItems;
+  public navItems = navItems
 
-  constructor(
-    private storageService: StorageService
-  ) {
-    this.navItems = this.storageService.isAdmin() ? adminNavItems : this.storageService.isTenantManager() ? tenantManagerNavItems : tenantAdminNavItems;
+  constructor(private storageService: StorageService) {
+    this.navItems = this.storageService.isAdmin()
+      ? adminNavItems
+      : this.storageService.isTenantManager()
+      ? tenantManagerNavItems
+      : tenantAdminNavItems
   }
 
   onScrollbarUpdate($event: any) {

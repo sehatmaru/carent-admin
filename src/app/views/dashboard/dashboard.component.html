@@ -13,48 +13,65 @@
         class="mb-0 border"
       >
         <thead class="text-nowrap text-truncate">
-        <tr>
-          <th class="bg-body-tertiary text-center ">
-            <svg cIcon name="cilPeople"></svg>
-          </th>
-          <th class="bg-body-tertiary">Customer</th>
-          <th class="bg-body-tertiary text-center">Product</th>
-          <th class="bg-body-tertiary text-center">Order Status</th>
-          <th class="bg-body-tertiary text-center">Payment Status</th>
-          <th class="bg-body-tertiary text-center">Total Payment</th>
-          <th class="bg-body-tertiary text-center">Order Date</th>
-        </tr>
+          <tr>
+            <th class="bg-body-tertiary text-center">
+              <svg cIcon name="cilPeople"></svg>
+            </th>
+            <th class="bg-body-tertiary">Customer</th>
+            <th class="bg-body-tertiary text-center">Product</th>
+            <th class="bg-body-tertiary text-center">Order Status</th>
+            <th class="bg-body-tertiary text-center">Payment Status</th>
+            <th class="bg-body-tertiary text-center">Total Payment</th>
+            <th class="bg-body-tertiary text-center">Order Date</th>
+          </tr>
         </thead>
         <tbody>
           @for (order of orderHistoryListData; track order.id; let i = $index) {
-            <tr>
-              <td class="text-center">
-                <c-avatar [size]="'md'" color="primary" textColor="white">{{ order.customerName }}</c-avatar>
-              </td>
-              <td class="text-center">
-                <div class="small text-nowrap">{{ order.customerName }}</div>
-              </td>
-              <td class="text-center">
-                <div class="small text-nowrap"><b>{{ order.productName }}</b></div>
-                <div class="small text-body-secondary text-nowrap">
-                  <span>
-                    <c-badge color="secondary">{{ order.duration }}</c-badge> | {{ order.startDate | date : 'MMM dd, yy' }} - {{ order.endDate | date : 'MMM dd, yy' }}
-                  </span>
-                </div>
-              </td>
-              <td class="text-center">
-                <c-badge [color]="getOrderStatusColor(order.orderStatus)">{{ order.orderStatus }}</c-badge>
-              </td>
-              <td class="text-center">
-                <c-badge [color]="getPaymentStatusColor(order.paymentStatus)">{{ order.paymentStatus }}</c-badge>
-              </td>
-              <td class="text-center">
-                <div class="small text-body-secondary text-nowrap">{{ order.totalPayment | currency: 'IDR' : 'symbol' : '1.0-0' : 'id' }}</div>
-              </td>
-              <td class="text-center">
-                <div class="small text-body-secondary text-nowrap">{{ order.orderedDate | date : 'MMMM dd, yyyy' }}</div>
-              </td>
-            </tr>
+          <tr>
+            <td class="text-center">
+              <c-avatar [size]="'md'" color="primary" textColor="white">{{
+                order.customerName
+              }}</c-avatar>
+            </td>
+            <td class="text-center">
+              <div class="small text-nowrap">{{ order.customerName }}</div>
+            </td>
+            <td class="text-center">
+              <div class="small text-nowrap">
+                <b>{{ order.productName }}</b>
+              </div>
+              <div class="small text-body-secondary text-nowrap">
+                <span>
+                  <c-badge color="secondary">{{ order.duration }}</c-badge> |
+                  {{ order.startDate | date : 'MMM dd, yy' }} -
+                  {{ order.endDate | date : 'MMM dd, yy' }}
+                </span>
+              </div>
+            </td>
+            <td class="text-center">
+              <c-badge [color]="getOrderStatusColor(order.orderStatus)">{{
+                order.orderStatus
+              }}</c-badge>
+            </td>
+            <td class="text-center">
+              <c-badge [color]="getPaymentStatusColor(order.paymentStatus)">{{
+                order.paymentStatus
+              }}</c-badge>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{
+                  order.totalPayment
+                    | currency : 'IDR' : 'symbol' : '1.0-0' : 'id'
+                }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ order.orderedDate | date : 'MMMM dd, yyyy' }}
+              </div>
+            </td>
+          </tr>
           }
         </tbody>
       </table>

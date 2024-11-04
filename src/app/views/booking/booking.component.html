@@ -1,73 +1,113 @@
 <c-row class="mt-4">
-    <c-col xs>
-        <c-card class="mb-4">
-            <c-card-body>
-                <form cForm novalidate class="row g-3">
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilSearch"></svg>
-                            </span>
-                            <input [(ngModel)]="bookingFilter.id" name="id" autoComplete="id" cFormControl placeholder="ID" />
-                        </c-input-group>
-                    </c-col>
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilSearch"></svg>
-                            </span>
-                            <input [(ngModel)]="bookingFilter.customerId" name="customerId" autoComplete="customerId" cFormControl placeholder="Customer ID" />
-                        </c-input-group>
-                    </c-col>
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilSearch"></svg>
-                            </span>
-                            <input [(ngModel)]="bookingFilter.invoiceNumber" name="invoiceNumber" autoComplete="invoiceNumber" cFormControl placeholder="Invoice Number" />
-                        </c-input-group>
-                    </c-col>
-                    <c-col [md]="3">
-                        <c-input-group>
-                            <span cInputGroupText>
-                                <svg [cIcon]="icons.cilCog"></svg>
-                            </span>
-                            <select [(ngModel)]="bookingFilter.pickupType" name="pickupType" cFormControl cSelect placeholder="Pickup">
-                                <option [value]="null" [defaultSelected]="true">Pickup</option>
-                                @for (item of pickupTypeEnumList; track $index) {
-                                    <option [value]="item">{{ item }}</option>
-                                }
-                            </select>
-                        </c-input-group>
-                    </c-col>
+  <c-col xs>
+    <c-card class="mb-4">
+      <c-card-body>
+        <form cForm novalidate class="row g-3">
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilSearch"></svg>
+              </span>
+              <input
+                [(ngModel)]="bookingFilter.id"
+                name="id"
+                autoComplete="id"
+                cFormControl
+                placeholder="ID"
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilSearch"></svg>
+              </span>
+              <input
+                [(ngModel)]="bookingFilter.customerId"
+                name="customerId"
+                autoComplete="customerId"
+                cFormControl
+                placeholder="Customer ID"
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilSearch"></svg>
+              </span>
+              <input
+                [(ngModel)]="bookingFilter.invoiceNumber"
+                name="invoiceNumber"
+                autoComplete="invoiceNumber"
+                cFormControl
+                placeholder="Invoice Number"
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilCog"></svg>
+              </span>
+              <select
+                [(ngModel)]="bookingFilter.pickupType"
+                name="pickupType"
+                cFormControl
+                cSelect
+                placeholder="Pickup"
+              >
+                <option [value]="null" [defaultSelected]="true">Pickup</option>
+                @for (item of pickupTypeEnumList; track $index) {
+                <option [value]="item">{{ item }}</option>
+                }
+              </select>
+            </c-input-group>
+          </c-col>
 
-                    <c-col [md]="12" class="text-end">
-                        <button cButton class="me-1" color="secondary" type="reset" (click)="resetFilter()">
-                            Reset
-                        </button>
-                        <button cButton color="primary" [disabled]="loadings.booking" (click)="doGetBookingList()">
-                            <c-spinner *ngIf="loadings.booking" aria-hidden="true" size="sm" variant="grow"></c-spinner>
-                            Filter
-                        </button>
-                    </c-col>
-                </form>
-            </c-card-body>
-        </c-card>
-    </c-col>
+          <c-col [md]="12" class="text-end">
+            <button
+              cButton
+              class="me-1"
+              color="secondary"
+              type="reset"
+              (click)="resetFilter()"
+            >
+              Reset
+            </button>
+            <button
+              cButton
+              color="primary"
+              [disabled]="loadings.booking"
+              (click)="doGetBookingList()"
+            >
+              <c-spinner
+                *ngIf="loadings.booking"
+                aria-hidden="true"
+                size="sm"
+                variant="grow"
+              ></c-spinner>
+              Filter
+            </button>
+          </c-col>
+        </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
 </c-row>
 
 <ng-container *ngIf="!loadings.booking; else spinner">
-    <c-row class="mt-4">
-      <c-col xs>
-        <table
-          [hover]="true"
-          [responsive]="true"
-          [striped]="true"
-          align="middle"
-          cTable
-          class="mb-0 border"
-        >
-          <thead class="text-nowrap text-truncate">
+  <c-row class="mt-4">
+    <c-col xs>
+      <table
+        [hover]="true"
+        [responsive]="true"
+        [striped]="true"
+        align="middle"
+        cTable
+        class="mb-0 border"
+      >
+        <thead class="text-nowrap text-truncate">
           <tr>
             <th class="bg-body-tertiary">ID</th>
             <th class="bg-body-tertiary">Order ID</th>
@@ -79,50 +119,71 @@
             <th class="bg-body-tertiary">Invoice</th>
             <th class="bg-body-tertiary text-center">Pickup</th>
           </tr>
-          </thead>
-          <tbody>
-            @for (data of bookingList; track data.id; let i = $index) {
-              <tr>
-                <td>
-                    <div class="small text-body-secondary text-nowrap">{{ data.id }}</div>
-                </td>
-                <td>
-                    <div class="small text-body-secondary text-nowrap">{{ data.orderId }}</div>
-                </td>
-                <td>
-                    <div class="small text-body-secondary text-nowrap">{{ data.billId }}</div>
-                </td>
-                <td>
-                    <div class="small text-body-secondary text-nowrap">{{ data.customerId }}</div>
-                </td>
-                <td>
-                    <div class="small text-body-secondary text-nowrap">{{ data.customerName }}</div>
-                </td>
-                <td class="text-center">
-                    <div class="small text-nowrap"><b>{{ data.productName }}</b></div>
-                    <div class="small text-body-secondary text-nowrap">
-                    <span>
-                        <c-badge color="secondary">{{ data.duration }}</c-badge> | {{ data.startDate | date : 'MMM dd, yy' }} - {{ data.endDate | date : 'MMM dd, yy' }}
-                    </span>
-                    </div>
-                </td>
-                <td class="text-center">
-                  <c-badge [color]="getOrderStatusColor(data.orderStatus)">{{ data.orderStatus }}</c-badge>
-                </td>
-                <td>
-                    <div class="small text-body-secondary text-nowrap">{{ data.invoiceNumber }}</div>
-                </td>
-                <td class="text-center">
-                    <div class="small text-body-secondary text-nowrap">{{ data.pickupType }}</div>
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </c-col>
-    </c-row>
+        </thead>
+        <tbody>
+          @for (data of bookingList; track data.id; let i = $index) {
+          <tr>
+            <td>
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.id }}
+              </div>
+            </td>
+            <td>
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.orderId }}
+              </div>
+            </td>
+            <td>
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.billId }}
+              </div>
+            </td>
+            <td>
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.customerId }}
+              </div>
+            </td>
+            <td>
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.customerName }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-nowrap">
+                <b>{{ data.productName }}</b>
+              </div>
+              <div class="small text-body-secondary text-nowrap">
+                <span>
+                  <c-badge color="secondary">{{ data.duration }}</c-badge>
+                  |
+                  {{ data.startDate | date : 'MMM dd, yy' }} -
+                  {{ data.endDate | date : 'MMM dd, yy' }}
+                </span>
+              </div>
+            </td>
+            <td class="text-center">
+              <c-badge [color]="getOrderStatusColor(data.orderStatus)">{{
+                data.orderStatus
+              }}</c-badge>
+            </td>
+            <td>
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.invoiceNumber }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.pickupType }}
+              </div>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </c-col>
+  </c-row>
 </ng-container>
 
 <ng-template #spinner>
-    <app-x-spinner></app-x-spinner>
+  <app-x-spinner></app-x-spinner>
 </ng-template>

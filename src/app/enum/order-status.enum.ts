@@ -5,4 +5,3 @@ export enum OrderStatus {
   COMPLETED,
   CANCELED,
 }
-  

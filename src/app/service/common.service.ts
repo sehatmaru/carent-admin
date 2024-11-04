@@ -1,24 +1,29 @@
-import { HttpHeaders, HttpClient, HttpParams, HttpEvent } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable, catchError, timeout, retry, of } from 'rxjs';
-import { environment } from '../../environments/environment';
-import { Utils } from '../utils/utils';
-import { HandlerResponseService } from './handler-response.service';
-import { StorageService } from './storage.service';
+import {
+  HttpHeaders,
+  HttpClient,
+  HttpParams,
+  HttpEvent,
+} from '@angular/common/http'
+import { Injectable } from '@angular/core'
+import { Observable, catchError, timeout, retry, of } from 'rxjs'
+import { environment } from '../../environments/environment'
+import { Utils } from '../utils/utils'
+import { HandlerResponseService } from './handler-response.service'
+import { StorageService } from './storage.service'
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommonService {
-  headers: HttpHeaders | undefined;
-  bodyUrl: URLSearchParams | undefined;
+  headers: HttpHeaders | undefined
+  bodyUrl: URLSearchParams | undefined
 
   constructor(
     private http: HttpClient,
     private handlerResponseService: HandlerResponseService,
     private storageService: StorageService,
-    private utils: Utils) {
-  }
+    private utils: Utils
+  ) {}
 
   getBaseUrl(): string {
     if (this.storageService.isAdmin()) {
@@ -29,247 +34,229 @@ export class CommonService {
   }
 
   getHeaders(headers?: any): HttpHeaders {
-
     const headerObj: any = {
       Authorization: 'Bearer ' + this.storageService.getToken(),
-      SameSite: 'strict'
-    };
+      SameSite: 'strict',
+    }
     if (headers) {
       headers.forEach((value: string, key: string) => {
-        headerObj[key] = value;
-      });
+        headerObj[key] = value
+      })
     }
 
-    return this.headers = new HttpHeaders(headerObj);
-
+    return (this.headers = new HttpHeaders(headerObj))
   }
 
   getSearchParams(body: any): URLSearchParams {
-
-    const bodyUrl = new Map();
-    const newBody: any = {};
+    const bodyUrl = new Map()
+    const newBody: any = {}
 
     // tslint:disable-next-line: forin
     for (const param in body) {
       if (Array.isArray(body[param])) {
-
         body[param].forEach((value: any, key: number) => {
           // tslint:disable-next-line: forin
           for (const item in value) {
-            const obj = typeof value[item] === 'boolean' ? `${param}[${key}][${item}]` : `${param}[${key}][${item}][value]`;
-            bodyUrl.set(obj, value[item]);
+            const obj =
+              typeof value[item] === 'boolean'
+                ? `${param}[${key}][${item}]`
+                : `${param}[${key}][${item}][value]`
+            bodyUrl.set(obj, value[item])
           }
-        });
-
+        })
       } else {
-        bodyUrl.set(param, body[param]);
+        bodyUrl.set(param, body[param])
       }
     }
 
     bodyUrl.forEach((value: any, key: string) => {
-      newBody[key] = value;
-    });
+      newBody[key] = value
+    })
 
-    return this.bodyUrl = new URLSearchParams(newBody);
-
+    return (this.bodyUrl = new URLSearchParams(newBody))
   }
 
   get(url: string, params?: any, reqOpts?: any): boolean | Observable<any> {
-
     if (this.checkConnection()) {
-
       if (!reqOpts) {
         reqOpts = {
-          params: new HttpParams()
-        };
+          params: new HttpParams(),
+        }
       }
 
       if (params) {
-
-        reqOpts.params = new HttpParams();
+        reqOpts.params = new HttpParams()
 
         // tslint:disable-next-line: forin
         for (const reqParams in params) {
-          reqOpts.params = reqOpts.params.set(reqParams, params[reqParams]);
+          reqOpts.params = reqOpts.params.set(reqParams, params[reqParams])
         }
-
       }
 
       if (this.storageService.getToken()) {
-        reqOpts.headers = this.getHeaders();
+        reqOpts.headers = this.getHeaders()
       }
 
-      reqOpts.withCredentials = true;
+      reqOpts.withCredentials = true
 
-      return this.http.get<any>(this.getBaseUrl() + url, reqOpts)
-        .pipe(
-          catchError(
-            (error: any, caught: Observable<HttpEvent<any>>) => {
-              this.handlerResponseService.failedResponse(error);
-              throw error;
-            }
-          ),
-        );
-
+      return this.http.get<any>(this.getBaseUrl() + url, reqOpts).pipe(
+        catchError((error: any, caught: Observable<HttpEvent<any>>) => {
+          this.handlerResponseService.failedResponse(error)
+          throw error
+        })
+      )
     } else {
-      return false;
+      return false
     }
-
   }
 
   // tslint:disable-next-line: max-line-length
-  post(url: string, body: any, reqOpts?: any, searchParam?: any, isNeedError?: boolean, maxRetry?: number, reqTimeout?: number): boolean | Observable<any> {
-
+  post(
+    url: string,
+    body: any,
+    reqOpts?: any,
+    searchParam?: any,
+    isNeedError?: boolean,
+    maxRetry?: number,
+    reqTimeout?: number
+  ): boolean | Observable<any> {
     if (this.checkConnection()) {
       if (reqOpts) {
-        reqOpts.withCredentials = true;
+        reqOpts.withCredentials = true
       } else {
         reqOpts = {
-          withCredentials: true
-        };
+          withCredentials: true,
+        }
       }
 
       if (this.storageService.getToken()) {
-        reqOpts.headers = this.getHeaders(reqOpts.headers);
+        reqOpts.headers = this.getHeaders(reqOpts.headers)
       }
 
       if (searchParam) {
-        const bodyUrl = this.getSearchParams(searchParam).toString();
-        body = body ? body.concat(bodyUrl) : bodyUrl;
+        const bodyUrl = this.getSearchParams(searchParam).toString()
+        body = body ? body.concat(bodyUrl) : bodyUrl
       }
 
-      return this.http.post<any>(this.getBaseUrl() + url, body, reqOpts)
-        .pipe(
-          timeout(reqTimeout ? reqTimeout : 300000),
-          retry(maxRetry ? maxRetry : 0),
-          catchError(
-            (error: any, caught: Observable<HttpEvent<any>>) => {
-              this.handlerResponseService.failedResponse(error);
-              if (isNeedError) {
-                return of(error);
-              } else {
-                throw error;
-              }
-            }
-          ),
-        );
-
+      return this.http.post<any>(this.getBaseUrl() + url, body, reqOpts).pipe(
+        timeout(reqTimeout ? reqTimeout : 300000),
+        retry(maxRetry ? maxRetry : 0),
+        catchError((error: any, caught: Observable<HttpEvent<any>>) => {
+          this.handlerResponseService.failedResponse(error)
+          if (isNeedError) {
+            return of(error)
+          } else {
+            throw error
+          }
+        })
+      )
     } else {
-      return false;
+      return false
     }
-
   }
 
   // tslint:disable-next-line: max-line-length
-  patch(url: string, body: any, reqOpts?: any, params?: any, isNeedError?: boolean, maxRetry?: number, reqTimeout?: number): boolean | Observable<any> {
-
+  patch(
+    url: string,
+    body: any,
+    reqOpts?: any,
+    params?: any,
+    isNeedError?: boolean,
+    maxRetry?: number,
+    reqTimeout?: number
+  ): boolean | Observable<any> {
     if (this.checkConnection()) {
       if (reqOpts) {
-        reqOpts.withCredentials = true;
+        reqOpts.withCredentials = true
       } else {
         reqOpts = {
-          withCredentials: true
-        };
-      }
-
-      if (this.storageService.getToken()) {
-        reqOpts.headers = this.getHeaders(reqOpts.headers);
-      }
-
-      if (params) {
-        reqOpts.params = new HttpParams();
-        // tslint:disable-next-line: forin
-        for (const reqParams in params) {
-          reqOpts.params = reqOpts.params.set(reqParams, params[reqParams]);
+          withCredentials: true,
         }
       }
 
-      return this.http.patch<any>(this.getBaseUrl() + url, body, reqOpts)
-        .pipe(
-          timeout(reqTimeout ? reqTimeout : 300000),
-          retry(maxRetry ? maxRetry : 0),
-          catchError(
-            (error: any, caught: Observable<HttpEvent<any>>) => {
-              this.handlerResponseService.failedResponse(error);
-              if (isNeedError) {
-                return of(error);
-              } else {
-                throw error;
-              }
-            }
-          ),
-        );
+      if (this.storageService.getToken()) {
+        reqOpts.headers = this.getHeaders(reqOpts.headers)
+      }
 
+      if (params) {
+        reqOpts.params = new HttpParams()
+        // tslint:disable-next-line: forin
+        for (const reqParams in params) {
+          reqOpts.params = reqOpts.params.set(reqParams, params[reqParams])
+        }
+      }
+
+      return this.http.patch<any>(this.getBaseUrl() + url, body, reqOpts).pipe(
+        timeout(reqTimeout ? reqTimeout : 300000),
+        retry(maxRetry ? maxRetry : 0),
+        catchError((error: any, caught: Observable<HttpEvent<any>>) => {
+          this.handlerResponseService.failedResponse(error)
+          if (isNeedError) {
+            return of(error)
+          } else {
+            throw error
+          }
+        })
+      )
     } else {
-      return false;
+      return false
     }
-
   }
 
   put(url: string, body: any, reqOpts?: any): boolean | Observable<any> {
-
     if (this.checkConnection()) {
-
       if (!reqOpts) {
         reqOpts = {
-          params: new HttpParams()
-        };
+          params: new HttpParams(),
+        }
       }
 
       if (this.storageService.getToken()) {
-        reqOpts.headers = this.getHeaders();
+        reqOpts.headers = this.getHeaders()
       }
 
-      return this.http.put<any>(this.getBaseUrl() + url, body, reqOpts)
-        .pipe(
-          catchError(
-            (error: any, caught: Observable<HttpEvent<any>>) => {
-              this.handlerResponseService.failedResponse(error);
-              throw error;
-            }
-          ),
-        );
-
+      return this.http.put<any>(this.getBaseUrl() + url, body, reqOpts).pipe(
+        catchError((error: any, caught: Observable<HttpEvent<any>>) => {
+          this.handlerResponseService.failedResponse(error)
+          throw error
+        })
+      )
     } else {
-      return false;
+      return false
     }
-
   }
 
-  delete(url: string, bodyData?: any, reqOpts?: any): boolean | Observable<any> {
-
+  delete(
+    url: string,
+    bodyData?: any,
+    reqOpts?: any
+  ): boolean | Observable<any> {
     if (this.checkConnection()) {
-
       if (reqOpts) {
-        reqOpts.withCredentials = true;
+        reqOpts.withCredentials = true
       } else {
         reqOpts = {
-          withCredentials: true
-        };
+          withCredentials: true,
+        }
       }
 
       if (this.storageService.getToken()) {
-        reqOpts.body = bodyData;
-        reqOpts.headers = this.getHeaders();
+        reqOpts.body = bodyData
+        reqOpts.headers = this.getHeaders()
       }
 
-      return this.http.delete<any>(this.getBaseUrl() + url, reqOpts)
-        .pipe(
-          catchError(
-            (error: any, caught: Observable<HttpEvent<any>>) => {
-              this.handlerResponseService.failedResponse(error);
-              throw error;
-            }
-          ),
-        );
-
+      return this.http.delete<any>(this.getBaseUrl() + url, reqOpts).pipe(
+        catchError((error: any, caught: Observable<HttpEvent<any>>) => {
+          this.handlerResponseService.failedResponse(error)
+          throw error
+        })
+      )
     } else {
-      return false;
+      return false
     }
   }
 
   checkConnection(): boolean {
-    return navigator.onLine;
+    return navigator.onLine
   }
-
 }

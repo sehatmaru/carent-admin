@@ -3,4 +3,3 @@ export enum PaymentType {
   VIRTUAL_ACCOUNT,
   E_WALLET,
 }
-  

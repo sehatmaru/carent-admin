@@ -11,4 +11,3 @@ export enum VehicleBrand {
   BYD,
   OTHER,
 }
-  
