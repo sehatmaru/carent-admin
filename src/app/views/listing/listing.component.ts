@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common'
-import { Component } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { RouterLink } from '@angular/router'
 import {
   RowComponent,
   ColComponent,
@@ -11,9 +12,16 @@ import {
   TableDirective,
   AvatarModule,
   SpinnerModule,
+  PageItemDirective,
+  PageLinkDirective,
+  PaginationComponent,
 } from '@coreui/angular'
 import {
   cilAddressBook,
+  cilChevronDoubleLeft,
+  cilChevronDoubleRight,
+  cilChevronLeft,
+  cilChevronRight,
   cilCog,
   cilDescription,
   cilOptions,
@@ -27,10 +35,8 @@ import { ProductStatus } from 'src/app/enum/product-status.enum'
 import { StatusCode } from 'src/app/enum/status-code.enum'
 import { Transmission } from 'src/app/enum/transmission.enum'
 import { VehicleBrand } from 'src/app/enum/vehicle-brand.enum'
-import {
-  ProductSearchRequestModel,
-  ProductListResponseModel,
-} from 'src/app/model/product-model'
+import { PaginationRequestModel } from 'src/app/model/pagination-model'
+import { ProductSearchRequestModel } from 'src/app/model/product-model'
 import { ProductService } from 'src/app/service/tenant/product.service'
 import { Utils } from 'src/app/utils/utils'
 
@@ -52,11 +58,15 @@ import { Utils } from 'src/app/utils/utils'
     TableDirective,
     AvatarModule,
     SpinnerModule,
+    PaginationComponent,
+    PageItemDirective,
+    PageLinkDirective,
+    RouterLink,
   ],
   templateUrl: './listing.component.html',
   styleUrl: './listing.component.scss',
 })
-export class ListingComponent {
+export class ListingComponent implements OnInit {
   public icons = {
     cilAddressBook,
     cilUser,
@@ -64,13 +74,18 @@ export class ListingComponent {
     cilCog,
     cilOptions,
     cilSearch,
+    cilChevronDoubleLeft,
+    cilChevronLeft,
+    cilChevronDoubleRight,
+    cilChevronRight,
   }
 
   public loadings = { product: false }
 
+  public pagination = new PaginationRequestModel()
   public productFilter = new ProductSearchRequestModel()
 
-  public productList: ProductListResponseModel[] = []
+  public dataPagination: any = {}
 
   public engineTypeEnumList = Object.values(EngineType).filter(
     (value) => typeof value === 'string'
@@ -94,26 +109,38 @@ export class ListingComponent {
   doGetProductList() {
     this.loadings.product = true
 
-    this.productService.getProductList(this.productFilter).subscribe({
-      next: (resp) => {
-        if (resp.statusCode == StatusCode.SUCCESS) {
-          this.productList = resp.result
-        } else {
-          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
-        }
+    this.productService
+      .getProductList(this.productFilter, this.pagination)
+      .subscribe({
+        next: (resp) => {
+          if (resp.statusCode == StatusCode.SUCCESS) {
+            this.dataPagination = resp.result
+          } else {
+            this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+          }
 
-        this.loadings.product = false
-      },
-      error: (error) => {
-        this.utils.sendErrorToast(error.message)
-        this.loadings.product = false
-      },
-    })
+          this.loadings.product = false
+        },
+        error: (error) => {
+          this.utils.sendErrorToast(error.message)
+          this.loadings.product = false
+        },
+      })
   }
 
   resetFilter() {
     this.productFilter = new ProductSearchRequestModel()
+    this.pagination.reset()
 
+    this.doGetProductList()
+  }
+
+  filter() {
+    this.pagination.reset()
+    this.doGetProductList()
+  }
+
+  pageChange() {
     this.doGetProductList()
   }
 }
