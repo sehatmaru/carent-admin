@@ -30,10 +30,10 @@
                 placeholder="Deliverable"
               >
                 <option [value]="null" [defaultSelected]="true">
-                  Is Deliverable
+                  Deliverable
                 </option>
-                <option [value]="true">DELIVERABLE</option>
-                <option [value]="false">NOT DELIVERABLE</option>
+                <option [value]="true">YES</option>
+                <option [value]="false">NO</option>
               </select>
             </c-input-group>
           </c-col>
@@ -147,167 +147,178 @@
   </c-col>
 </c-row>
 
-<ng-container *ngIf="!loadings.product; else spinner">
-  <c-row>
-    <c-col xs>
-      <c-row>
-        <table
-          [hover]="true"
-          [responsive]="true"
-          [striped]="true"
-          align="middle"
-          cTable
-          class="mb-4 border"
-        >
-          <thead class="text-nowrap text-truncate">
-            <tr>
-              <th class="bg-body-tertiary">Name</th>
-              <th class="bg-body-tertiary">Price</th>
-              <th class="bg-body-tertiary text-center">Transmission</th>
-              <th class="bg-body-tertiary text-center">Engine</th>
-              <th class="bg-body-tertiary text-center">Seat</th>
-              <th class="bg-body-tertiary text-center">Deliverable</th>
-              <th class="bg-body-tertiary text-center">Brand</th>
-              <th class="bg-body-tertiary text-center">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (data of dataPagination.list; track data.id) {
-            <tr class="pointer">
-              <td>
-                <div class="text-nowrap">
-                  {{ data.name }}
-                </div>
-              </td>
-              <td>
-                <div class="small text-body-secondary text-nowrap">
-                  {{
-                    data.price | currency : 'IDR' : 'symbol' : '1.0-0' : 'id'
-                  }}
-                </div>
-              </td>
-              <td class="text-center">
-                <div class="small text-body-secondary text-nowrap">
-                  {{ data.transmission }}
-                </div>
-              </td>
-              <td class="text-center">
-                <div class="small text-body-secondary text-nowrap">
-                  {{ data.engineType }}
-                </div>
-              </td>
-              <td class="text-center">
-                <div class="small text-body-secondary text-nowrap">
-                  {{ data.seat }}
-                </div>
-              </td>
-              <td class="text-center">
-                <div class="small text-body-secondary text-nowrap">
-                  {{ data.deliverable ? 'Yes' : 'No' }}
-                </div>
-              </td>
-              <td class="text-center">
-                <div class="small text-body-secondary text-nowrap">
-                  {{ data.brand }}
-                </div>
-              </td>
-              <td class="text-center">
-                <div class="small text-body-secondary text-nowrap">
-                  {{ data.status }}
-                </div>
-              </td>
-            </tr>
-            }
-          </tbody>
-        </table>
-      </c-row>
+<c-row>
+  <c-col xs>
+    <c-row>
+      <table
+        [hover]="true"
+        [responsive]="true"
+        [striped]="true"
+        align="middle"
+        cTable
+        class="mb-4 border"
+      >
+        <thead class="text-nowrap text-truncate">
+          <tr>
+            <th class="bg-body-tertiary">Name</th>
+            <th class="bg-body-tertiary">Price</th>
+            <th class="bg-body-tertiary text-center">Transmission</th>
+            <th class="bg-body-tertiary text-center">Engine</th>
+            <th class="bg-body-tertiary text-center">Seat</th>
+            <th class="bg-body-tertiary text-center">Deliverable</th>
+            <th class="bg-body-tertiary text-center">Brand</th>
+            <th class="bg-body-tertiary text-center">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @if (!loadings.product && dataPagination.list != null &&
+          dataPagination.total > 0) { @for (data of dataPagination.list; track
+          data.id) {
+          <tr class="pointer">
+            <td>
+              <div class="text-nowrap">
+                {{ data.name }}
+              </div>
+            </td>
+            <td>
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.price | currency : 'IDR' : 'symbol' : '1.0-0' : 'id' }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.transmission }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.engineType }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.seat }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.deliverable ? 'Yes' : 'No' }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.brand }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.status }}
+              </div>
+            </td>
+          </tr>
+          } } @else if (!loadings.product && dataPagination.total == 0) {
+          <tr class="pointer">
+            <td class="text-center" colspan="8">
+              <div class="small text-body-secondary text-nowrap">
+                No data record.
+              </div>
+            </td>
+          </tr>
+          } @if (loadings.product) {
+          <tr>
+            <td class="text-center" colspan="8">
+              <c-spinner variant="grow"></c-spinner>
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </c-row>
 
-      <c-row>
-        <c-col [md]="3">
-          <select
-            cFormControl
-            cSelect
-            [(ngModel)]="pagination.pageSize"
-            name="pageSize"
-            sizing="sm"
-            (ngModelChange)="
-              pagination.pageSize = $event;
-              pagination.pageNumber = 1;
+    <c-row>
+      <c-col [md]="3">
+        <select
+          cFormControl
+          cSelect
+          [(ngModel)]="pagination.pageSize"
+          name="pageSize"
+          sizing="sm"
+          (ngModelChange)="
+            pagination.pageSize = $event;
+            pagination.pageNumber = 1;
+            doGetProductList()
+          "
+        >
+          <option [value]="5" [defaultSelected]="true">5 rows/page</option>
+          <option [value]="10">10 rows/page</option>
+          <option [value]="20">20 rows/page</option>
+          <option [value]="50">50 rows/page</option>
+        </select>
+      </c-col>
+
+      <c-col [md]="9">
+        <c-pagination align="end" size="sm">
+          <li
+            cPageItem
+            [disabled]="dataPagination.isFirstPage"
+            (click)="
+              pagination.pageNumber = dataPagination.navigateFirstPage;
               doGetProductList()
             "
           >
-            <option [value]="5" [defaultSelected]="true">5 rows/page</option>
-            <option [value]="10">10 rows/page</option>
-            <option [value]="20">20 rows/page</option>
-            <option [value]="50">50 rows/page</option>
-          </select>
-        </c-col>
-
-        <c-col [md]="9">
-          <c-pagination align="end" size="sm">
-            <li
-              cPageItem
-              [disabled]="dataPagination.isFirstPage"
-              (click)="
-                pagination.pageNumber = dataPagination.navigateFirstPage;
-                doGetProductList()
-              "
-            >
-              <a cPageLink aria-label="First" [routerLink]
-                ><svg [cIcon]="icons.cilChevronDoubleLeft"></svg>
-              </a>
-            </li>
-            <li
-              cPageItem
-              [disabled]="dataPagination.isFirstPage"
-              (click)="
-                pagination.pageNumber = dataPagination.prePage;
-                doGetProductList()
-              "
-            >
-              <a cPageLink aria-label="Previous" [routerLink]
-                ><svg size="sm" [cIcon]="icons.cilChevronLeft"></svg>
-              </a>
-            </li>
-            @for (item of dataPagination.navigatepageNums; track $index) {
-            <li
-              cPageItem
-              [active]="pagination.pageNumber == item"
-              (click)="pagination.pageNumber = item; doGetProductList()"
-            >
-              <a cPageLink [routerLink]>{{ item }}</a>
-            </li>
-            }
-            <li
-              cPageItem
-              [disabled]="dataPagination.isLastPage"
-              (click)="
-                pagination.pageNumber = dataPagination.nextPage;
-                doGetProductList()
-              "
-            >
-              <a cPageLink aria-label="Next" [routerLink]
-                ><svg size="sm" [cIcon]="icons.cilChevronRight"></svg>
-              </a>
-            </li>
-            <li
-              cPageItem
-              [disabled]="dataPagination.isLastPage"
-              (click)="
-                pagination.pageNumber = dataPagination.navigateLastPage;
-                doGetProductList()
-              "
-            >
-              <a cPageLink aria-label="Last" [routerLink]
-                ><svg [cIcon]="icons.cilChevronDoubleRight"></svg>
-              </a>
-            </li>
-          </c-pagination>
-        </c-col>
-      </c-row>
-    </c-col>
-  </c-row>
-</ng-container>
+            <a cPageLink aria-label="First" [routerLink]
+              ><svg [cIcon]="icons.cilChevronDoubleLeft"></svg>
+            </a>
+          </li>
+          <li
+            cPageItem
+            [disabled]="dataPagination.isFirstPage"
+            (click)="
+              pagination.pageNumber = dataPagination.prePage; doGetProductList()
+            "
+          >
+            <a cPageLink aria-label="Previous" [routerLink]
+              ><svg size="sm" [cIcon]="icons.cilChevronLeft"></svg>
+            </a>
+          </li>
+          @for (item of dataPagination.navigatepageNums; track $index) {
+          <li
+            cPageItem
+            [active]="pagination.pageNumber == item"
+            (click)="pagination.pageNumber = item; doGetProductList()"
+          >
+            <a cPageLink [routerLink]>{{ item }}</a>
+          </li>
+          }
+          <li
+            cPageItem
+            [disabled]="dataPagination.isLastPage"
+            (click)="
+              pagination.pageNumber = dataPagination.nextPage;
+              doGetProductList()
+            "
+          >
+            <a cPageLink aria-label="Next" [routerLink]
+              ><svg size="sm" [cIcon]="icons.cilChevronRight"></svg>
+            </a>
+          </li>
+          <li
+            cPageItem
+            [disabled]="dataPagination.isLastPage"
+            (click)="
+              pagination.pageNumber = dataPagination.navigateLastPage;
+              doGetProductList()
+            "
+          >
+            <a cPageLink aria-label="Last" [routerLink]
+              ><svg [cIcon]="icons.cilChevronDoubleRight"></svg>
+            </a>
+          </li>
+        </c-pagination>
+      </c-col>
+    </c-row>
+  </c-col>
+</c-row>
 
 <ng-template #spinner>
   <app-x-spinner></app-x-spinner>
