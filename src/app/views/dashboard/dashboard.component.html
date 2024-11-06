@@ -1,16 +1,16 @@
 <ng-container *ngIf="!loadings.balance; else spinner">
   <app-dashboard-widget [reportData]="balanceReportData"></app-dashboard-widget>
 </ng-container>
-<ng-container *ngIf="!loadings.orderHistory; else spinner">
-  <c-row class="mt-4">
-    <c-col xs>
+<c-row class="mt-4">
+  <c-col xs>
+    <c-row>
       <table
+        cTable
         [hover]="true"
         [responsive]="true"
         [striped]="true"
         align="middle"
-        cTable
-        class="mb-0 border"
+        class="mb-4 border"
       >
         <thead class="text-nowrap text-truncate">
           <tr>
@@ -26,58 +26,78 @@
           </tr>
         </thead>
         <tbody>
-          @for (order of orderHistoryListData; track order.id; let i = $index) {
+          @if (!loadings.orderHistory && dataPagination.list != null &&
+          dataPagination.total > 0) { @for (data of dataPagination.list; track
+          data.id) {
           <tr>
             <td class="text-center">
               <c-avatar [size]="'md'" color="primary" textColor="white">{{
-                order.customerName
+                data.customerName
               }}</c-avatar>
             </td>
             <td class="text-center">
-              <div class="small text-nowrap">{{ order.customerName }}</div>
+              <div class="small text-nowrap">{{ data.customerName }}</div>
             </td>
             <td class="text-center">
               <div class="small text-nowrap">
-                <b>{{ order.productName }}</b>
+                <b>{{ data.productName }}</b>
               </div>
               <div class="small text-body-secondary text-nowrap">
                 <span>
-                  <c-badge color="secondary">{{ order.duration }}</c-badge> |
-                  {{ order.startDate | date : 'MMM dd, yy' }} -
-                  {{ order.endDate | date : 'MMM dd, yy' }}
+                  <c-badge color="secondary">{{ data.duration }}</c-badge> |
+                  {{ data.startDate | date : 'MMM dd, yy' }} -
+                  {{ data.endDate | date : 'MMM dd, yy' }}
                 </span>
               </div>
             </td>
             <td class="text-center">
-              <c-badge [color]="getOrderStatusColor(order.orderStatus)">{{
-                order.orderStatus
+              <c-badge [color]="getOrderStatusColor(data.orderStatus)">{{
+                data.orderStatus
               }}</c-badge>
             </td>
             <td class="text-center">
-              <c-badge [color]="getPaymentStatusColor(order.paymentStatus)">{{
-                order.paymentStatus
+              <c-badge [color]="getPaymentStatusColor(data.paymentStatus)">{{
+                data.paymentStatus
               }}</c-badge>
             </td>
             <td class="text-center">
               <div class="small text-body-secondary text-nowrap">
                 {{
-                  order.totalPayment
+                  data.totalPayment
                     | currency : 'IDR' : 'symbol' : '1.0-0' : 'id'
                 }}
               </div>
             </td>
             <td class="text-center">
               <div class="small text-body-secondary text-nowrap">
-                {{ order.orderedDate | date : 'MMMM dd, yyyy' }}
+                {{ data.orderedDate | date : 'MMMM dd, yyyy' }}
               </div>
+            </td>
+          </tr>
+          } } @else if (!loadings.orderHistory && dataPagination.total == 0) {
+          <tr class="pointer">
+            <td class="text-center" colspan="8">
+              <div class="small text-body-secondary text-nowrap">
+                No data record.
+              </div>
+            </td>
+          </tr>
+          } @if (loadings.orderHistory) {
+          <tr>
+            <td
+              class="text-center"
+              colSpan="8"
+              [style.height]="pagination.pageSize * 2.5 + 'rem'"
+            >
+              <c-spinner variant="grow"></c-spinner>
             </td>
           </tr>
           }
         </tbody>
       </table>
-    </c-col>
-  </c-row>
-</ng-container>
+    </c-row>
+  </c-col>
+</c-row>
 
 <ng-template #spinner>
   <app-x-spinner></app-x-spinner>

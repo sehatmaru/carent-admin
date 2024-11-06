@@ -29,7 +29,7 @@ import {
   cilUser,
 } from '@coreui/icons'
 import { IconDirective } from '@coreui/icons-angular'
-import { XSpinnerComponent } from 'src/app/component/x-spinner/x-spinner.component'
+import { XPaginationComponent } from 'src/app/component/x-pagination/x-pagination.component'
 import { EngineType } from 'src/app/enum/engine-type.enum'
 import { ProductStatus } from 'src/app/enum/product-status.enum'
 import { StatusCode } from 'src/app/enum/status-code.enum'
@@ -44,7 +44,7 @@ import { Utils } from 'src/app/utils/utils'
   selector: 'app-listing',
   standalone: true,
   imports: [
-    XSpinnerComponent,
+    XPaginationComponent,
     RowComponent,
     ColComponent,
     CardModule,
@@ -140,7 +140,8 @@ export class ListingComponent implements OnInit {
     this.doGetProductList()
   }
 
-  pageChange() {
+  paginationChange(event: PaginationRequestModel) {
+    this.pagination = event
     this.doGetProductList()
   }
 }

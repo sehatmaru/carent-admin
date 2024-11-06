@@ -1,6 +1,6 @@
 import { CommonModule, NgStyle } from '@angular/common'
 import { Component, inject, OnInit } from '@angular/core'
-import { ReactiveFormsModule } from '@angular/forms'
+import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
   AvatarComponent,
   BadgeModule,
@@ -11,11 +11,17 @@ import {
   CardFooterComponent,
   CardHeaderComponent,
   ColComponent,
+  ColDirective,
   FormCheckLabelDirective,
+  FormModule,
   GutterDirective,
+  PageItemDirective,
+  PageLinkDirective,
+  PaginationComponent,
   ProgressBarDirective,
   ProgressComponent,
   RowComponent,
+  SpinnerModule,
   TableDirective,
   TextColorDirective,
 } from '@coreui/angular'
@@ -30,9 +36,16 @@ import { StatusCode } from 'src/app/enum/status-code.enum'
 import { Utils } from 'src/app/utils/utils'
 import { BalanceReportResponseModel } from 'src/app/model/finance-model'
 import { XSpinnerComponent } from '../../component/x-spinner/x-spinner.component'
-import { OrderHistoryResponseModel } from 'src/app/model/order-model'
 import { PaymentStatus } from 'src/app/enum/payment-status.enum'
 import { OrderStatus } from 'src/app/enum/order-status.enum'
+import { RouterLink } from '@angular/router'
+import {
+  cilChevronDoubleLeft,
+  cilChevronLeft,
+  cilChevronDoubleRight,
+  cilChevronRight,
+} from '@coreui/icons'
+import { PaginationRequestModel } from 'src/app/model/pagination-model'
 
 @Component({
   templateUrl: 'dashboard.component.html',
@@ -63,13 +76,31 @@ import { OrderStatus } from 'src/app/enum/order-status.enum'
     AvatarComponent,
     CommonModule,
     BadgeModule,
+    PaginationComponent,
+    PageItemDirective,
+    PageLinkDirective,
+    RouterLink,
+    FormsModule,
+    SpinnerModule,
+    FormModule,
+    FormsModule,
+    ColDirective,
   ],
 })
 export class DashboardComponent implements OnInit {
+  public icons = {
+    cilChevronDoubleLeft,
+    cilChevronLeft,
+    cilChevronDoubleRight,
+    cilChevronRight,
+  }
+
   private orderService = inject(OrderService)
 
   public balanceReportData = new BalanceReportResponseModel()
-  public orderHistoryListData: OrderHistoryResponseModel[] = []
+  public pagination = new PaginationRequestModel()
+
+  public dataPagination: any = {}
 
   public loadings = { balance: false, orderHistory: false }
 
@@ -103,10 +134,10 @@ export class DashboardComponent implements OnInit {
   doGetDashboardOrderHistoryList() {
     this.loadings.orderHistory = true
 
-    this.orderService.getDashboardOrderHistory().subscribe({
+    this.orderService.getDashboardOrderHistory(this.pagination).subscribe({
       next: (resp) => {
         if (resp.statusCode == StatusCode.SUCCESS) {
-          this.orderHistoryListData = resp.result
+          this.dataPagination = resp.result
         } else {
           this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
         }

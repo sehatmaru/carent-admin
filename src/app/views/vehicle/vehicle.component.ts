@@ -11,9 +11,16 @@ import {
   TableDirective,
   AvatarModule,
   SpinnerModule,
+  PageItemDirective,
+  PageLinkDirective,
+  PaginationComponent,
 } from '@coreui/angular'
 import {
   cilAddressBook,
+  cilChevronDoubleLeft,
+  cilChevronDoubleRight,
+  cilChevronLeft,
+  cilChevronRight,
   cilCog,
   cilDescription,
   cilOptions,
@@ -26,18 +33,18 @@ import { EngineType } from 'src/app/enum/engine-type.enum'
 import { StatusCode } from 'src/app/enum/status-code.enum'
 import { Transmission } from 'src/app/enum/transmission.enum'
 import { VehicleBrand } from 'src/app/enum/vehicle-brand.enum'
-import {
-  VehicleFilterRequestModel,
-  VehicleResponseModel,
-} from 'src/app/model/vehicle-model'
+import { VehicleFilterRequestModel } from 'src/app/model/vehicle-model'
+import { PaginationRequestModel } from 'src/app/model/pagination-model'
 import { VehicleService } from 'src/app/service/tenant/vehicle.service'
 import { Utils } from 'src/app/utils/utils'
+import { RouterLink } from '@angular/router'
+import { XPaginationComponent } from 'src/app/component/x-pagination/x-pagination.component'
 
 @Component({
   selector: 'app-vehicle',
   standalone: true,
   imports: [
-    XSpinnerComponent,
+    XPaginationComponent,
     RowComponent,
     ColComponent,
     CardModule,
@@ -51,6 +58,10 @@ import { Utils } from 'src/app/utils/utils'
     TableDirective,
     AvatarModule,
     SpinnerModule,
+    PaginationComponent,
+    PageItemDirective,
+    PageLinkDirective,
+    RouterLink,
   ],
   templateUrl: './vehicle.component.html',
   styleUrl: './vehicle.component.scss',
@@ -63,13 +74,18 @@ export class VehicleComponent implements OnInit {
     cilCog,
     cilOptions,
     cilSearch,
+    cilChevronDoubleLeft,
+    cilChevronLeft,
+    cilChevronDoubleRight,
+    cilChevronRight,
   }
 
   public loadings = { vehicle: false }
 
   public vehicleFilter = new VehicleFilterRequestModel()
+  public pagination = new PaginationRequestModel()
 
-  public vehicleList: VehicleResponseModel[] = []
+  public dataPagination: any = {}
 
   public engineTypeEnumList = Object.values(EngineType).filter(
     (value) => typeof value === 'string'
@@ -90,26 +106,33 @@ export class VehicleComponent implements OnInit {
   doGetVehicleList() {
     this.loadings.vehicle = true
 
-    this.vehicleService.getVehicleList(this.vehicleFilter).subscribe({
-      next: (resp) => {
-        if (resp.statusCode == StatusCode.SUCCESS) {
-          this.vehicleList = resp.result
-        } else {
-          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
-        }
+    this.vehicleService
+      .getVehicleList(this.vehicleFilter, this.pagination)
+      .subscribe({
+        next: (resp) => {
+          if (resp.statusCode == StatusCode.SUCCESS) {
+            this.dataPagination = resp.result
+          } else {
+            this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+          }
 
-        this.loadings.vehicle = false
-      },
-      error: (error) => {
-        this.utils.sendErrorToast(error.message)
-        this.loadings.vehicle = false
-      },
-    })
+          this.loadings.vehicle = false
+        },
+        error: (error) => {
+          this.utils.sendErrorToast(error.message)
+          this.loadings.vehicle = false
+        },
+      })
   }
 
   resetFilter() {
     this.vehicleFilter = new VehicleFilterRequestModel()
 
+    this.doGetVehicleList()
+  }
+
+  paginationChange(event: PaginationRequestModel) {
+    this.pagination = event
     this.doGetVehicleList()
   }
 }

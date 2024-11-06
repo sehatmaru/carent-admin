@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { CommonService } from '../common.service'
-import { CommonResponse } from '../../interface/common.interface'
+import { CommonResponse, Page } from '../../interface/common.interface'
 import {
   CustomerFilterRequest,
   TenantCustomerResponse,
 } from '../../model/customer-model'
 import { AdminResponse } from '../../model/admin-model'
+import { PaginationRequestModel } from 'src/app/model/pagination-model'
 
 @Injectable({
   providedIn: 'root',
@@ -17,20 +18,32 @@ export class ManagerService {
   constructor(private commonApi: CommonService) {}
 
   getCustomerList(
-    request: CustomerFilterRequest
-  ): Observable<CommonResponse<TenantCustomerResponse[]>> {
+    request: CustomerFilterRequest,
+    pagination: PaginationRequestModel
+  ): Observable<CommonResponse<Page<TenantCustomerResponse[]>>> {
+    const params = {
+      pageNum: pagination.pageNumber,
+      pageSize: pagination.pageSize,
+    }
+
     return this.commonApi.post(
-      `${this.root}/customer/list`,
+      `${this.root}/customer/list?${this.commonApi.getSearchParams(params)}`,
       request
-    ) as Observable<CommonResponse<TenantCustomerResponse[]>>
+    ) as Observable<CommonResponse<Page<TenantCustomerResponse[]>>>
   }
 
   getAdminList(
-    request: CustomerFilterRequest
-  ): Observable<CommonResponse<AdminResponse[]>> {
+    request: CustomerFilterRequest,
+    pagination: PaginationRequestModel
+  ): Observable<CommonResponse<Page<AdminResponse[]>>> {
+    const params = {
+      pageNum: pagination.pageNumber,
+      pageSize: pagination.pageSize,
+    }
+
     return this.commonApi.post(
-      `${this.root}/admin/list`,
+      `${this.root}/admin/list?${this.commonApi.getSearchParams(params)}`,
       request
-    ) as Observable<CommonResponse<AdminResponse[]>>
+    ) as Observable<CommonResponse<Page<AdminResponse[]>>>
   }
 }

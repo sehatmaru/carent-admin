@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { CommonService } from '../common.service'
-import { CommonResponse } from '../../interface/common.interface'
+import { CommonResponse, Page } from '../../interface/common.interface'
 import {
   VehicleFilterRequestModel,
   VehicleResponseModel,
 } from '../../model/vehicle-model'
+import { PaginationRequestModel } from 'src/app/model/pagination-model'
 
 @Injectable({
   providedIn: 'root',
@@ -16,10 +17,17 @@ export class VehicleService {
   constructor(private commonApi: CommonService) {}
 
   getVehicleList(
-    request: VehicleFilterRequestModel
-  ): Observable<CommonResponse<VehicleResponseModel[]>> {
-    return this.commonApi.post(`${this.root}/list`, request) as Observable<
-      CommonResponse<VehicleResponseModel[]>
-    >
+    request: VehicleFilterRequestModel,
+    pagination: PaginationRequestModel
+  ): Observable<CommonResponse<Page<VehicleResponseModel[]>>> {
+    const params = {
+      pageNum: pagination.pageNumber,
+      pageSize: pagination.pageSize,
+    }
+
+    return this.commonApi.post(
+      `${this.root}/list?${this.commonApi.getSearchParams(params)}`,
+      request
+    ) as Observable<CommonResponse<Page<VehicleResponseModel[]>>>
   }
 }

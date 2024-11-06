@@ -1,0 +1,75 @@
+<c-row>
+  <c-col [md]="3">
+    <select
+      cFormControl
+      cSelect
+      [(ngModel)]="pagination.pageSize"
+      name="pageSize"
+      sizing="sm"
+      (ngModelChange)="
+        pagination.pageSize = $event; pagination.pageNumber = 1; pageChange()
+      "
+    >
+      <option [value]="5" [defaultSelected]="true">5 rows/page</option>
+      <option [value]="10">10 rows/page</option>
+      <option [value]="20">20 rows/page</option>
+      <option [value]="50">50 rows/page</option>
+    </select>
+  </c-col>
+
+  <c-col [md]="9">
+    <c-pagination align="end" size="sm">
+      @if (!dataPagination.isFirstPage) {
+      <li
+        cPageItem
+        [disabled]="dataPagination.isFirstPage"
+        (click)="
+          pagination.pageNumber = dataPagination.navigateFirstPage; pageChange()
+        "
+      >
+        <a cPageLink aria-label="First" [routerLink]
+          ><svg [cIcon]="icons.cilChevronDoubleLeft"></svg>
+        </a>
+      </li>
+      <li
+        cPageItem
+        [disabled]="dataPagination.isFirstPage"
+        (click)="pagination.pageNumber = dataPagination.prePage; pageChange()"
+      >
+        <a cPageLink aria-label="Previous" [routerLink]
+          ><svg size="sm" [cIcon]="icons.cilChevronLeft"></svg>
+        </a>
+      </li>
+      } @for (item of dataPagination.navigatepageNums; track $index) {
+      <li
+        cPageItem
+        [active]="pagination.pageNumber == item"
+        (click)="pagination.pageNumber = item; pageChange()"
+      >
+        <a cPageLink [routerLink]>{{ item }}</a>
+      </li>
+      } @if (!dataPagination.isLastPage) {
+      <li
+        cPageItem
+        [disabled]="dataPagination.isLastPage"
+        (click)="pagination.pageNumber = dataPagination.nextPage; pageChange()"
+      >
+        <a cPageLink aria-label="Next" [routerLink]
+          ><svg size="sm" [cIcon]="icons.cilChevronRight"></svg>
+        </a>
+      </li>
+      <li
+        cPageItem
+        [disabled]="dataPagination.isLastPage"
+        (click)="
+          pagination.pageNumber = dataPagination.navigateLastPage; pageChange()
+        "
+      >
+        <a cPageLink aria-label="Last" [routerLink]
+          ><svg [cIcon]="icons.cilChevronDoubleRight"></svg>
+        </a>
+      </li>
+      }
+    </c-pagination>
+  </c-col>
+</c-row>

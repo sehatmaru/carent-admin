@@ -1,22 +1,8 @@
-<c-row class="mt-4">
+<c-row>
   <c-col xs>
     <c-card class="mb-4">
       <c-card-body>
         <form cForm novalidate class="row g-3">
-          <c-col [md]="3">
-            <c-input-group>
-              <span cInputGroupText>
-                <svg [cIcon]="icons.cilSearch"></svg>
-              </span>
-              <input
-                [(ngModel)]="vehicleFilter.id"
-                name="id"
-                autoComplete="id"
-                cFormControl
-                placeholder="ID"
-              />
-            </c-input-group>
-          </c-col>
           <c-col [md]="3">
             <c-input-group>
               <span cInputGroupText>
@@ -164,20 +150,19 @@
   </c-col>
 </c-row>
 
-<ng-container *ngIf="!loadings.vehicle; else spinner">
-  <c-row class="mt-4">
-    <c-col xs>
+<c-row>
+  <c-col xs>
+    <c-row>
       <table
         [hover]="true"
         [responsive]="true"
         [striped]="true"
         align="middle"
         cTable
-        class="mb-0 border"
+        class="mb-4 border"
       >
         <thead class="text-nowrap text-truncate">
           <tr>
-            <th class="bg-body-tertiary">ID</th>
             <th class="bg-body-tertiary">Product ID</th>
             <th class="bg-body-tertiary">Name</th>
             <th class="bg-body-tertiary text-center">Year</th>
@@ -189,8 +174,10 @@
           </tr>
         </thead>
         <tbody>
-          @for (data of vehicleList; track data.id; let i = $index) {
-          <tr>
+          @if (!loadings.vehicle && dataPagination.list != null &&
+          dataPagination.total > 0) { @for (data of dataPagination.list; track
+          data.id) {
+          <tr class="pointer">
             <td>
               <div class="small text-body-secondary text-nowrap">
                 {{ data.id }}
@@ -237,13 +224,29 @@
               </div>
             </td>
           </tr>
+          } } @else if (!loadings.vehicle && dataPagination.total == 0) {
+          <tr class="pointer">
+            <td class="text-center" colspan="9">
+              <div class="small text-body-secondary text-nowrap">
+                No data record.
+              </div>
+            </td>
+          </tr>
+          } @if (loadings.vehicle) {
+          <tr>
+            <td class="text-center" colspan="8">
+              <c-spinner variant="grow"></c-spinner>
+            </td>
+          </tr>
           }
         </tbody>
       </table>
-    </c-col>
-  </c-row>
-</ng-container>
+    </c-row>
 
-<ng-template #spinner>
-  <app-x-spinner></app-x-spinner>
-</ng-template>
+    <app-x-pagination
+      [pagination]="pagination"
+      [dataPagination]="dataPagination"
+      (paginationChange)="paginationChange($event)"
+    ></app-x-pagination>
+  </c-col>
+</c-row>

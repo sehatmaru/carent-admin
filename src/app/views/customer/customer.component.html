@@ -1,4 +1,4 @@
-<c-row class="mt-4">
+<c-row>
   <c-col xs>
     <c-card class="mb-4">
       <c-card-body>
@@ -77,16 +77,16 @@
   </c-col>
 </c-row>
 
-<ng-container *ngIf="!loadings.customer; else spinner">
-  <c-row class="mt-4">
-    <c-col xs>
+<c-row>
+  <c-col xs>
+    <c-row>
       <table
         [hover]="true"
         [responsive]="true"
         [striped]="true"
         align="middle"
         cTable
-        class="mb-0 border"
+        class="mb-4 border"
       >
         <thead class="text-nowrap text-truncate">
           <tr>
@@ -101,7 +101,9 @@
           </tr>
         </thead>
         <tbody>
-          @for (data of customerList; track data.username; let i = $index) {
+          @if (!loadings.customer && dataPagination.list != null &&
+          dataPagination.total > 0) { @for (data of dataPagination.list; track
+          data.id) {
           <tr>
             <td class="text-center">
               <c-avatar [size]="'md'" color="primary" textColor="white">{{
@@ -134,13 +136,30 @@
               </div>
             </td>
           </tr>
+
+          } } @else if (!loadings.customer && dataPagination.total == 0) {
+          <tr class="pointer">
+            <td class="text-center" colspan="9">
+              <div class="small text-body-secondary text-nowrap">
+                No data record.
+              </div>
+            </td>
+          </tr>
+          } @if (loadings.customer) {
+          <tr>
+            <td class="text-center" colspan="8">
+              <c-spinner variant="grow"></c-spinner>
+            </td>
+          </tr>
           }
         </tbody>
       </table>
-    </c-col>
-  </c-row>
-</ng-container>
+    </c-row>
 
-<ng-template #spinner>
-  <app-x-spinner></app-x-spinner>
-</ng-template>
+    <app-x-pagination
+      [pagination]="pagination"
+      [dataPagination]="dataPagination"
+      (paginationChange)="paginationChange($event)"
+    ></app-x-pagination>
+  </c-col>
+</c-row>

@@ -226,7 +226,11 @@
           </tr>
           } @if (loadings.product) {
           <tr>
-            <td class="text-center" colspan="8">
+            <td
+              class="text-center"
+              colSpan="8"
+              [style.height]="pagination.pageSize * 2.5 + 'rem'"
+            >
               <c-spinner variant="grow"></c-spinner>
             </td>
           </tr>
@@ -235,91 +239,10 @@
       </table>
     </c-row>
 
-    <c-row>
-      <c-col [md]="3">
-        <select
-          cFormControl
-          cSelect
-          [(ngModel)]="pagination.pageSize"
-          name="pageSize"
-          sizing="sm"
-          (ngModelChange)="
-            pagination.pageSize = $event;
-            pagination.pageNumber = 1;
-            doGetProductList()
-          "
-        >
-          <option [value]="5" [defaultSelected]="true">5 rows/page</option>
-          <option [value]="10">10 rows/page</option>
-          <option [value]="20">20 rows/page</option>
-          <option [value]="50">50 rows/page</option>
-        </select>
-      </c-col>
-
-      <c-col [md]="9">
-        <c-pagination align="end" size="sm">
-          <li
-            cPageItem
-            [disabled]="dataPagination.isFirstPage"
-            (click)="
-              pagination.pageNumber = dataPagination.navigateFirstPage;
-              doGetProductList()
-            "
-          >
-            <a cPageLink aria-label="First" [routerLink]
-              ><svg [cIcon]="icons.cilChevronDoubleLeft"></svg>
-            </a>
-          </li>
-          <li
-            cPageItem
-            [disabled]="dataPagination.isFirstPage"
-            (click)="
-              pagination.pageNumber = dataPagination.prePage; doGetProductList()
-            "
-          >
-            <a cPageLink aria-label="Previous" [routerLink]
-              ><svg size="sm" [cIcon]="icons.cilChevronLeft"></svg>
-            </a>
-          </li>
-          @for (item of dataPagination.navigatepageNums; track $index) {
-          <li
-            cPageItem
-            [active]="pagination.pageNumber == item"
-            (click)="pagination.pageNumber = item; doGetProductList()"
-          >
-            <a cPageLink [routerLink]>{{ item }}</a>
-          </li>
-          }
-          <li
-            cPageItem
-            [disabled]="dataPagination.isLastPage"
-            (click)="
-              pagination.pageNumber = dataPagination.nextPage;
-              doGetProductList()
-            "
-          >
-            <a cPageLink aria-label="Next" [routerLink]
-              ><svg size="sm" [cIcon]="icons.cilChevronRight"></svg>
-            </a>
-          </li>
-          <li
-            cPageItem
-            [disabled]="dataPagination.isLastPage"
-            (click)="
-              pagination.pageNumber = dataPagination.navigateLastPage;
-              doGetProductList()
-            "
-          >
-            <a cPageLink aria-label="Last" [routerLink]
-              ><svg [cIcon]="icons.cilChevronDoubleRight"></svg>
-            </a>
-          </li>
-        </c-pagination>
-      </c-col>
-    </c-row>
+    <app-x-pagination
+      [pagination]="pagination"
+      [dataPagination]="dataPagination"
+      (paginationChange)="paginationChange($event)"
+    ></app-x-pagination>
   </c-col>
 </c-row>
-
-<ng-template #spinner>
-  <app-x-spinner></app-x-spinner>
-</ng-template>
