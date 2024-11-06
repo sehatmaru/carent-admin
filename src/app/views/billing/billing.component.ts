@@ -93,21 +93,23 @@ export class BillingComponent implements OnInit {
   doGetBillingList() {
     this.loadings.billing = true
 
-    this.billingService.getBillingList(this.billingFilter).subscribe({
-      next: (resp) => {
-        if (resp.statusCode == StatusCode.SUCCESS) {
-          this.dataPagination = resp.result
-        } else {
-          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
-        }
+    this.billingService
+      .getBillingList(this.billingFilter, this.pagination)
+      .subscribe({
+        next: (resp) => {
+          if (resp.statusCode == StatusCode.SUCCESS) {
+            this.dataPagination = resp.result
+          } else {
+            this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+          }
 
-        this.loadings.billing = false
-      },
-      error: (error) => {
-        this.utils.sendErrorToast(error.message)
-        this.loadings.billing = false
-      },
-    })
+          this.loadings.billing = false
+        },
+        error: (error) => {
+          this.utils.sendErrorToast(error.message)
+          this.loadings.billing = false
+        },
+      })
   }
 
   resetFilter() {
