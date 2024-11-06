@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { RouterLink } from '@angular/router'
 import {
   RowComponent,
   ColComponent,
@@ -12,16 +11,9 @@ import {
   TableDirective,
   AvatarModule,
   SpinnerModule,
-  PageItemDirective,
-  PageLinkDirective,
-  PaginationComponent,
 } from '@coreui/angular'
 import {
   cilAddressBook,
-  cilChevronDoubleLeft,
-  cilChevronDoubleRight,
-  cilChevronLeft,
-  cilChevronRight,
   cilCog,
   cilDescription,
   cilOptions,
@@ -58,15 +50,14 @@ import { Utils } from 'src/app/utils/utils'
     TableDirective,
     AvatarModule,
     SpinnerModule,
-    PaginationComponent,
-    PageItemDirective,
-    PageLinkDirective,
-    RouterLink,
   ],
   templateUrl: './listing.component.html',
   styleUrl: './listing.component.scss',
 })
 export class ListingComponent implements OnInit {
+  private productService = inject(ProductService)
+  private utils = inject(Utils)
+
   public icons = {
     cilAddressBook,
     cilUser,
@@ -74,10 +65,6 @@ export class ListingComponent implements OnInit {
     cilCog,
     cilOptions,
     cilSearch,
-    cilChevronDoubleLeft,
-    cilChevronLeft,
-    cilChevronDoubleRight,
-    cilChevronRight,
   }
 
   public loadings = { product: false }
@@ -99,8 +86,6 @@ export class ListingComponent implements OnInit {
   public productStatusEnumList = Object.values(ProductStatus).filter(
     (value) => typeof value === 'string'
   )
-
-  constructor(private productService: ProductService, private utils: Utils) {}
 
   ngOnInit(): void {
     this.doGetProductList()

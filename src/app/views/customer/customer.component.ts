@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { RouterLink } from '@angular/router'
 import {
   RowComponent,
   ColComponent,
@@ -12,18 +11,8 @@ import {
   TableDirective,
   AvatarModule,
   SpinnerModule,
-  PageItemDirective,
-  PageLinkDirective,
-  PaginationComponent,
 } from '@coreui/angular'
-import {
-  cilUser,
-  cilAddressBook,
-  cilChevronDoubleLeft,
-  cilChevronDoubleRight,
-  cilChevronLeft,
-  cilChevronRight,
-} from '@coreui/icons'
+import { cilUser, cilAddressBook } from '@coreui/icons'
 import { IconDirective } from '@coreui/icons-angular'
 import { XPaginationComponent } from 'src/app/component/x-pagination/x-pagination.component'
 import { StatusCode } from 'src/app/enum/status-code.enum'
@@ -50,22 +39,17 @@ import { Utils } from 'src/app/utils/utils'
     TableDirective,
     AvatarModule,
     SpinnerModule,
-    PaginationComponent,
-    PageItemDirective,
-    PageLinkDirective,
-    RouterLink,
   ],
   templateUrl: './customer.component.html',
   styleUrl: './customer.component.scss',
 })
 export class CustomerComponent implements OnInit {
+  private managerService = inject(ManagerService)
+  private utils = inject(Utils)
+
   public icons = {
     cilAddressBook,
     cilUser,
-    cilChevronDoubleLeft,
-    cilChevronLeft,
-    cilChevronDoubleRight,
-    cilChevronRight,
   }
 
   public loadings = { customer: false }
@@ -74,8 +58,6 @@ export class CustomerComponent implements OnInit {
   public pagination = new PaginationRequestModel()
 
   public dataPagination: any = {}
-
-  constructor(private managerService: ManagerService, private utils: Utils) {}
 
   ngOnInit(): void {
     this.doGetCustomerList()

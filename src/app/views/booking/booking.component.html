@@ -1,4 +1,4 @@
-<c-row class="mt-4">
+<c-row>
   <c-col xs>
     <c-card class="mb-4">
       <c-card-body>
@@ -96,16 +96,16 @@
   </c-col>
 </c-row>
 
-<ng-container *ngIf="!loadings.booking; else spinner">
-  <c-row class="mt-4">
-    <c-col xs>
+<c-row>
+  <c-col xs>
+    <c-row>
       <table
         [hover]="true"
         [responsive]="true"
         [striped]="true"
         align="middle"
         cTable
-        class="mb-0 border"
+        class="mb-4 border"
       >
         <thead class="text-nowrap text-truncate">
           <tr>
@@ -121,7 +121,9 @@
           </tr>
         </thead>
         <tbody>
-          @for (data of bookingList; track data.id; let i = $index) {
+          @if (!loadings.booking && dataPagination.list != null &&
+          dataPagination.total > 0) { @for (data of dataPagination.list; track
+          data.id) {
           <tr>
             <td>
               <div class="small text-body-secondary text-nowrap">
@@ -150,7 +152,7 @@
             </td>
             <td class="text-center">
               <div class="small text-nowrap">
-                <b>{{ data.productName }}</b>
+                <b>{{ data.bookingName }}</b>
               </div>
               <div class="small text-body-secondary text-nowrap">
                 <span>
@@ -177,13 +179,33 @@
               </div>
             </td>
           </tr>
+          } } @else if (!loadings.booking && dataPagination.total == 0) {
+          <tr class="pointer">
+            <td class="text-center" colspan="9">
+              <div class="small text-body-secondary text-nowrap">
+                No data record.
+              </div>
+            </td>
+          </tr>
+          } @if (loadings.booking) {
+          <tr>
+            <td
+              class="text-center"
+              colSpan="9"
+              [style.height]="pagination.pageSize * 2.5 + 'rem'"
+            >
+              <c-spinner variant="grow"></c-spinner>
+            </td>
+          </tr>
           }
         </tbody>
       </table>
-    </c-col>
-  </c-row>
-</ng-container>
+    </c-row>
 
-<ng-template #spinner>
-  <app-x-spinner></app-x-spinner>
-</ng-template>
+    <app-x-pagination
+      [pagination]="pagination"
+      [dataPagination]="dataPagination"
+      (paginationChange)="paginationChange($event)"
+    ></app-x-pagination>
+  </c-col>
+</c-row>

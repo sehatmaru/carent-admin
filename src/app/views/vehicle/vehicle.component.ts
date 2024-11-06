@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
   RowComponent,
@@ -11,16 +11,9 @@ import {
   TableDirective,
   AvatarModule,
   SpinnerModule,
-  PageItemDirective,
-  PageLinkDirective,
-  PaginationComponent,
 } from '@coreui/angular'
 import {
   cilAddressBook,
-  cilChevronDoubleLeft,
-  cilChevronDoubleRight,
-  cilChevronLeft,
-  cilChevronRight,
   cilCog,
   cilDescription,
   cilOptions,
@@ -28,7 +21,6 @@ import {
   cilUser,
 } from '@coreui/icons'
 import { IconDirective } from '@coreui/icons-angular'
-import { XSpinnerComponent } from 'src/app/component/x-spinner/x-spinner.component'
 import { EngineType } from 'src/app/enum/engine-type.enum'
 import { StatusCode } from 'src/app/enum/status-code.enum'
 import { Transmission } from 'src/app/enum/transmission.enum'
@@ -37,7 +29,6 @@ import { VehicleFilterRequestModel } from 'src/app/model/vehicle-model'
 import { PaginationRequestModel } from 'src/app/model/pagination-model'
 import { VehicleService } from 'src/app/service/tenant/vehicle.service'
 import { Utils } from 'src/app/utils/utils'
-import { RouterLink } from '@angular/router'
 import { XPaginationComponent } from 'src/app/component/x-pagination/x-pagination.component'
 
 @Component({
@@ -58,15 +49,14 @@ import { XPaginationComponent } from 'src/app/component/x-pagination/x-paginatio
     TableDirective,
     AvatarModule,
     SpinnerModule,
-    PaginationComponent,
-    PageItemDirective,
-    PageLinkDirective,
-    RouterLink,
   ],
   templateUrl: './vehicle.component.html',
   styleUrl: './vehicle.component.scss',
 })
 export class VehicleComponent implements OnInit {
+  private vehicleService = inject(VehicleService)
+  private utils = inject(Utils)
+
   public icons = {
     cilAddressBook,
     cilUser,
@@ -74,10 +64,6 @@ export class VehicleComponent implements OnInit {
     cilCog,
     cilOptions,
     cilSearch,
-    cilChevronDoubleLeft,
-    cilChevronLeft,
-    cilChevronDoubleRight,
-    cilChevronRight,
   }
 
   public loadings = { vehicle: false }
@@ -96,8 +82,6 @@ export class VehicleComponent implements OnInit {
   public transmissionEnumList = Object.values(Transmission).filter(
     (value) => typeof value === 'string'
   )
-
-  constructor(private vehicleService: VehicleService, private utils: Utils) {}
 
   ngOnInit(): void {
     this.doGetVehicleList()

@@ -76,10 +76,6 @@ import { PaginationRequestModel } from 'src/app/model/pagination-model'
     AvatarComponent,
     CommonModule,
     BadgeModule,
-    PaginationComponent,
-    PageItemDirective,
-    PageLinkDirective,
-    RouterLink,
     FormsModule,
     SpinnerModule,
     FormModule,
@@ -88,14 +84,9 @@ import { PaginationRequestModel } from 'src/app/model/pagination-model'
   ],
 })
 export class DashboardComponent implements OnInit {
-  public icons = {
-    cilChevronDoubleLeft,
-    cilChevronLeft,
-    cilChevronDoubleRight,
-    cilChevronRight,
-  }
-
   private orderService = inject(OrderService)
+  private financeService = inject(FinanceService)
+  private utils = inject(Utils)
 
   public balanceReportData = new BalanceReportResponseModel()
   public pagination = new PaginationRequestModel()
@@ -103,8 +94,6 @@ export class DashboardComponent implements OnInit {
   public dataPagination: any = {}
 
   public loadings = { balance: false, orderHistory: false }
-
-  constructor(private financeService: FinanceService, private utils: Utils) {}
 
   ngOnInit(): void {
     this.doGetBalanceReport()

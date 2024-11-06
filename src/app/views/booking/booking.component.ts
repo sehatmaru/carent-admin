@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
   RowComponent,
@@ -22,22 +22,20 @@ import {
   cilSearch,
 } from '@coreui/icons'
 import { IconDirective } from '@coreui/icons-angular'
-import { XSpinnerComponent } from 'src/app/component/x-spinner/x-spinner.component'
 import { BookingService } from 'src/app/service/tenant/booking.service'
 import { StatusCode } from 'src/app/enum/status-code.enum'
 import { Utils } from 'src/app/utils/utils'
-import {
-  BookingFilterRequestModel,
-  BookingListResponseModel,
-} from 'src/app/model/booking-model'
+import { BookingFilterRequestModel } from 'src/app/model/booking-model'
 import { PickupType } from 'src/app/enum/pickup-type.enum'
 import { OrderStatus } from 'src/app/enum/order-status.enum'
+import { XPaginationComponent } from 'src/app/component/x-pagination/x-pagination.component'
+import { PaginationRequestModel } from 'src/app/model/pagination-model'
 
 @Component({
   selector: 'app-booking',
   standalone: true,
   imports: [
-    XSpinnerComponent,
+    XPaginationComponent,
     RowComponent,
     ColComponent,
     CardModule,
@@ -57,6 +55,9 @@ import { OrderStatus } from 'src/app/enum/order-status.enum'
   styleUrl: './booking.component.scss',
 })
 export class BookingComponent implements OnInit {
+  private bookingService = inject(BookingService)
+  private utils = inject(Utils)
+
   public icons = {
     cilAddressBook,
     cilUser,
@@ -68,15 +69,14 @@ export class BookingComponent implements OnInit {
 
   public loadings = { booking: false }
 
+  public pagination = new PaginationRequestModel()
   public bookingFilter = new BookingFilterRequestModel()
 
-  public bookingList: BookingListResponseModel[] = []
+  public dataPagination: any = {}
 
   public pickupTypeEnumList = Object.values(PickupType).filter(
     (value) => typeof value === 'string'
   )
-
-  constructor(private bookingService: BookingService, private utils: Utils) {}
 
   ngOnInit(): void {
     this.doGetBookingList()
@@ -85,21 +85,23 @@ export class BookingComponent implements OnInit {
   doGetBookingList() {
     this.loadings.booking = true
 
-    this.bookingService.getBookingList(this.bookingFilter).subscribe({
-      next: (resp) => {
-        if (resp.statusCode == StatusCode.SUCCESS) {
-          this.bookingList = resp.result
-        } else {
-          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
-        }
+    this.bookingService
+      .getBookingList(this.bookingFilter, this.pagination)
+      .subscribe({
+        next: (resp) => {
+          if (resp.statusCode == StatusCode.SUCCESS) {
+            this.dataPagination = resp.result
+          } else {
+            this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+          }
 
-        this.loadings.booking = false
-      },
-      error: (error) => {
-        this.utils.sendErrorToast(error.message)
-        this.loadings.booking = false
-      },
-    })
+          this.loadings.booking = false
+        },
+        error: (error) => {
+          this.utils.sendErrorToast(error.message)
+          this.loadings.booking = false
+        },
+      })
   }
 
   resetFilter() {
@@ -120,5 +122,10 @@ export class BookingComponent implements OnInit {
     }
 
     return 'secondary'
+  }
+
+  paginationChange(event: PaginationRequestModel) {
+    this.pagination = event
+    this.doGetBookingList()
   }
 }

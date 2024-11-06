@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, OnInit } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
   RowComponent,
@@ -22,18 +22,14 @@ import {
   cilSearch,
 } from '@coreui/icons'
 import { IconDirective } from '@coreui/icons-angular'
-import { XSpinnerComponent } from 'src/app/component/x-spinner/x-spinner.component'
-import { EngineType } from 'src/app/enum/engine-type.enum'
+import { XPaginationComponent } from 'src/app/component/x-pagination/x-pagination.component'
 
 import { OrderStatus } from 'src/app/enum/order-status.enum'
 import { PaymentStatus } from 'src/app/enum/payment-status.enum'
 import { PaymentType } from 'src/app/enum/payment-type.enum'
 import { StatusCode } from 'src/app/enum/status-code.enum'
-import { Transmission } from 'src/app/enum/transmission.enum'
-import {
-  BillingFilterRequestModel,
-  BillingListResponseModel,
-} from 'src/app/model/billing-model'
+import { BillingFilterRequestModel } from 'src/app/model/billing-model'
+import { PaginationRequestModel } from 'src/app/model/pagination-model'
 import { BillingService } from 'src/app/service/tenant/billing.service'
 import { Utils } from 'src/app/utils/utils'
 
@@ -41,7 +37,7 @@ import { Utils } from 'src/app/utils/utils'
   selector: 'app-billing',
   standalone: true,
   imports: [
-    XSpinnerComponent,
+    XPaginationComponent,
     RowComponent,
     ColComponent,
     CardModule,
@@ -61,6 +57,9 @@ import { Utils } from 'src/app/utils/utils'
   styleUrl: './billing.component.scss',
 })
 export class BillingComponent implements OnInit {
+  private billingService = inject(BillingService)
+  private utils = inject(Utils)
+
   public icons = {
     cilAddressBook,
     cilUser,
@@ -72,9 +71,10 @@ export class BillingComponent implements OnInit {
 
   public loadings = { billing: false }
 
+  public pagination = new PaginationRequestModel()
   public billingFilter = new BillingFilterRequestModel()
 
-  public billingList: BillingListResponseModel[] = []
+  public dataPagination: any = {}
 
   public paymentTypeEnumList = Object.values(PaymentType).filter(
     (value) => typeof value === 'string'
@@ -86,8 +86,6 @@ export class BillingComponent implements OnInit {
     (value) => typeof value === 'string'
   )
 
-  constructor(private billingService: BillingService, private utils: Utils) {}
-
   ngOnInit(): void {
     this.doGetBillingList()
   }
@@ -98,7 +96,7 @@ export class BillingComponent implements OnInit {
     this.billingService.getBillingList(this.billingFilter).subscribe({
       next: (resp) => {
         if (resp.statusCode == StatusCode.SUCCESS) {
-          this.billingList = resp.result
+          this.dataPagination = resp.result
         } else {
           this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
         }
@@ -148,5 +146,10 @@ export class BillingComponent implements OnInit {
     }
 
     return 'secondary'
+  }
+
+  paginationChange(event: PaginationRequestModel) {
+    this.pagination = event
+    this.doGetBillingList()
   }
 }
