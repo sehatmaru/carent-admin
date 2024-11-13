@@ -1,0 +1,115 @@
+<div>
+  <form cForm class="row g-3" novalidate>
+    <c-col [md]="12">
+      <label cLabel for="name">Name</label>
+      <input
+        [(ngModel)]="requestModel.name"
+        [valid]="requestModel.isTextValid(requestModel.name)"
+        name="name"
+        cFormControl
+        type="text"
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="price">Price (IDR)</label>
+      <input
+        [(ngModel)]="requestModel.price"
+        [valid]="requestModel.isPriceValid()"
+        name="price"
+        cFormControl
+        type="number"
+        min="10000"
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="deliverable">Deliverable</label>
+      <select
+        [(ngModel)]="requestModel.deliverable"
+        [valid]="requestModel.isSelectValid(requestModel.deliverable)"
+        name="deliverable"
+        cFormControl
+        cSelect
+      >
+        <option [value]="null" [defaultSelected]="true">Choose</option>
+        <option [value]="true">Yes</option>
+        <option [value]="false">No</option>
+      </select>
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="seat">Seat</label>
+      <input
+        [(ngModel)]="requestModel.seat"
+        [valid]="requestModel.isNumberValid(requestModel.seat)"
+        name="seat"
+        cFormControl
+        type="number"
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="quantity">Quantity</label>
+      <input
+        [(ngModel)]="requestModel.quantity"
+        [valid]="requestModel.isNumberValid(requestModel.quantity)"
+        (ngModelChange)="requestModel.available = requestModel.quantity"
+        name="quantity"
+        cFormControl
+        type="number"
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="available">Available</label>
+      <input
+        [(ngModel)]="requestModel.available"
+        [valid]="requestModel.isNumberValid(requestModel.available)"
+        name="available"
+        cFormControl
+        type="number"
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="brand">Brand</label>
+      <select
+        [(ngModel)]="requestModel.brand"
+        [valid]="requestModel.isSelectValid(requestModel.brand)"
+        name="brand"
+        cFormControl
+        cSelect
+      >
+        <option [value]="null" [defaultSelected]="true">Choose</option>
+        @for (item of vehicleBrandEnumList; track $index) {
+        <option [value]="item">{{ item }}</option>
+        }
+      </select>
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="transmission">Transmission</label>
+      <select
+        [(ngModel)]="requestModel.transmission"
+        [valid]="requestModel.isSelectValid(requestModel.transmission)"
+        name="transmission"
+        cFormControl
+        cSelect
+      >
+        <option [value]="null" [defaultSelected]="true">Choose</option>
+        @for (item of transmissionEnumList; track $index) {
+        <option [value]="item">{{ item }}</option>
+        }
+      </select>
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="engineType">Engine</label>
+      <select
+        [(ngModel)]="requestModel.engineType"
+        [valid]="requestModel.isSelectValid(requestModel.engineType)"
+        name="engineType"
+        cFormControl
+        cSelect
+      >
+        <option [value]="null" [defaultSelected]="true">Choose</option>
+        @for (item of engineTypeEnumList; track $index) {
+        <option [value]="item">{{ item }}</option>
+        }
+      </select>
+    </c-col>
+  </form>
+</div>

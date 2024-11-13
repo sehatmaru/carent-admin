@@ -117,29 +117,42 @@
           </c-col>
 
           <c-col [md]="12" class="text-end">
-            <button
-              cButton
-              class="me-1"
-              color="secondary"
-              type="reset"
-              (click)="resetFilter()"
-            >
-              Reset
-            </button>
-            <button
-              cButton
-              color="primary"
-              [disabled]="loadings.product"
-              (click)="filter()"
-            >
-              <c-spinner
-                *ngIf="loadings.product"
-                aria-hidden="true"
-                size="sm"
-                variant="grow"
-              ></c-spinner>
-              Filter
-            </button>
+            <div class="d-flex justify-content-between">
+              <div>
+                <button
+                  cButton
+                  color="success"
+                  (click)="isAddEditModalVisible = true"
+                >
+                  Add Product
+                </button>
+              </div>
+              <div>
+                <button
+                  cButton
+                  class="me-1"
+                  color="secondary"
+                  type="reset"
+                  (click)="resetFilter()"
+                >
+                  Reset
+                </button>
+                <button
+                  cButton
+                  color="primary"
+                  [disabled]="loadings.product"
+                  (click)="filter()"
+                >
+                  <c-spinner
+                    *ngIf="loadings.product"
+                    aria-hidden="true"
+                    size="sm"
+                    variant="grow"
+                  ></c-spinner>
+                  Filter
+                </button>
+              </div>
+            </div>
           </c-col>
         </form>
       </c-card-body>
@@ -162,6 +175,8 @@
           <tr>
             <th class="bg-body-tertiary">Name</th>
             <th class="bg-body-tertiary">Price</th>
+            <th class="bg-body-tertiary text-center">Quantity</th>
+            <th class="bg-body-tertiary text-center">Available</th>
             <th class="bg-body-tertiary text-center">Transmission</th>
             <th class="bg-body-tertiary text-center">Engine</th>
             <th class="bg-body-tertiary text-center">Seat</th>
@@ -174,7 +189,7 @@
           @if (!loadings.product && dataPagination.list != null &&
           dataPagination.total > 0) { @for (data of dataPagination.list; track
           data.id) {
-          <tr class="pointer">
+          <tr class="pointer" (click)="selectProduct(data)">
             <td>
               <div class="text-nowrap">
                 {{ data.name }}
@@ -183,6 +198,16 @@
             <td>
               <div class="small text-body-secondary text-nowrap">
                 {{ data.price | currency : 'IDR' : 'symbol' : '1.0-0' : 'id' }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.quantity }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.available }}
               </div>
             </td>
             <td class="text-center">
@@ -218,7 +243,7 @@
           </tr>
           } } @else if (!loadings.product && dataPagination.total == 0) {
           <tr class="pointer">
-            <td class="text-center" colspan="8">
+            <td class="text-center" colspan="10">
               <div class="small text-body-secondary text-nowrap">
                 No data record.
               </div>
@@ -228,7 +253,7 @@
           <tr>
             <td
               class="text-center"
-              colSpan="8"
+              colSpan="10"
               [style.height]="pagination.pageSize * 2.5 + 'rem'"
             >
               <c-spinner variant="grow"></c-spinner>
@@ -246,3 +271,42 @@
     ></app-x-pagination>
   </c-col>
 </c-row>
+
+<c-modal
+  #addEditProductModal
+  id="addEditProductModal"
+  scrollable
+  alignment="center"
+  [visible]="isAddEditModalVisible"
+  (visibleChange)="modalVisibleChange($event)"
+>
+  <c-modal-header>
+    <h5 cModalTitle>Add/Edit Product</h5>
+    <button (click)="toogleAddEditModal()" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <ng-container *ngTemplateOutlet="longContent"></ng-container>
+  </c-modal-body>
+  <c-modal-footer>
+    <button (click)="toogleAddEditModal()" cButton color="secondary">
+      Close
+    </button>
+    <button
+      cButton
+      color="primary"
+      (click)="saveProduct()"
+      [disabled]="!addEditRequestModel.isValid() || loadings.productRegister"
+    >
+      @if (loadings.productRegister) {
+      <c-spinner aria-hidden="true" size="sm" variant="grow"></c-spinner>
+      } Save changes
+    </button>
+  </c-modal-footer>
+</c-modal>
+
+<ng-template #longContent>
+  <app-create-edit
+    [requestModel]="addEditRequestModel"
+    (requestChange)="requestChange($event)"
+  ></app-create-edit>
+</ng-template>

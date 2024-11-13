@@ -5,6 +5,7 @@ import { CommonResponse, Page } from '../../interface/common.interface'
 import {
   ProductSearchRequestModel,
   ProductListResponseModel,
+  ProductRegisterRequestModel,
 } from '../../model/product-model'
 import { PaginationRequestModel } from '../../model/pagination-model'
 
@@ -29,5 +30,22 @@ export class ProductService {
       `${this.root}/list?${this.commonApi.getSearchParams(params)}`,
       request
     ) as Observable<CommonResponse<Page<ProductListResponseModel[]>>>
+  }
+
+  registerProduct(
+    request: ProductRegisterRequestModel
+  ): Observable<CommonResponse<any>> {
+    return this.commonApi.post(`${this.root}/register`, request) as Observable<
+      CommonResponse<any>
+    >
+  }
+
+  updateProduct(
+    request: ProductRegisterRequestModel
+  ): Observable<CommonResponse<any>> {
+    return this.commonApi.post(
+      `${this.root}/update/${request.id}`,
+      request
+    ) as Observable<CommonResponse<any>>
   }
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, inject, OnInit, ViewChild } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
   RowComponent,
@@ -11,6 +11,9 @@ import {
   TableDirective,
   AvatarModule,
   SpinnerModule,
+  ModalModule,
+  ButtonModule,
+  ModalComponent,
 } from '@coreui/angular'
 import {
   cilAddressBook,
@@ -22,13 +25,17 @@ import {
 } from '@coreui/icons'
 import { IconDirective } from '@coreui/icons-angular'
 import { XPaginationComponent } from 'src/app/component/x-pagination/x-pagination.component'
+import { CreateEditComponent } from './components/create-edit/create-edit.component'
 import { EngineType } from 'src/app/enum/engine-type.enum'
 import { ProductStatus } from 'src/app/enum/product-status.enum'
 import { StatusCode } from 'src/app/enum/status-code.enum'
 import { Transmission } from 'src/app/enum/transmission.enum'
 import { VehicleBrand } from 'src/app/enum/vehicle-brand.enum'
 import { PaginationRequestModel } from 'src/app/model/pagination-model'
-import { ProductSearchRequestModel } from 'src/app/model/product-model'
+import {
+  ProductRegisterRequestModel,
+  ProductSearchRequestModel,
+} from 'src/app/model/product-model'
 import { ProductService } from 'src/app/service/tenant/product.service'
 import { Utils } from 'src/app/utils/utils'
 
@@ -50,6 +57,9 @@ import { Utils } from 'src/app/utils/utils'
     TableDirective,
     AvatarModule,
     SpinnerModule,
+    CreateEditComponent,
+    ModalModule,
+    ButtonModule,
   ],
   templateUrl: './listing.component.html',
   styleUrl: './listing.component.scss',
@@ -67,12 +77,16 @@ export class ListingComponent implements OnInit {
     cilSearch,
   }
 
-  public loadings = { product: false }
+  public loadings = { product: false, productRegister: false }
 
   public pagination = new PaginationRequestModel()
   public productFilter = new ProductSearchRequestModel()
+  public addEditRequestModel = new ProductRegisterRequestModel()
 
   public dataPagination: any = {}
+  public isAddEditModalVisible = false
+
+  @ViewChild('addEditProductModal') addEditProductModal!: ModalComponent
 
   public engineTypeEnumList = Object.values(EngineType).filter(
     (value) => typeof value === 'string'
@@ -113,6 +127,48 @@ export class ListingComponent implements OnInit {
       })
   }
 
+  doRegisterProduct() {
+    this.loadings.productRegister = true
+
+    this.productService.registerProduct(this.addEditRequestModel).subscribe({
+      next: (resp) => {
+        if (resp.statusCode == StatusCode.SUCCESS) {
+          this.doGetProductList()
+          this.isAddEditModalVisible = false
+        } else {
+          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+        }
+
+        this.loadings.productRegister = false
+      },
+      error: (error) => {
+        this.utils.sendErrorToast(error.message)
+        this.loadings.productRegister = false
+      },
+    })
+  }
+
+  doUpdateProduct() {
+    this.loadings.productRegister = true
+
+    this.productService.updateProduct(this.addEditRequestModel).subscribe({
+      next: (resp) => {
+        if (resp.statusCode == StatusCode.SUCCESS) {
+          this.doGetProductList()
+          this.isAddEditModalVisible = false
+        } else {
+          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+        }
+
+        this.loadings.productRegister = false
+      },
+      error: (error) => {
+        this.utils.sendErrorToast(error.message)
+        this.loadings.productRegister = false
+      },
+    })
+  }
+
   resetFilter() {
     this.productFilter = new ProductSearchRequestModel()
     this.pagination.reset()
@@ -128,5 +184,44 @@ export class ListingComponent implements OnInit {
   paginationChange(event: PaginationRequestModel) {
     this.pagination = event
     this.doGetProductList()
+  }
+
+  requestChange(event: ProductRegisterRequestModel) {
+    this.addEditRequestModel = event
+  }
+
+  toogleAddEditModal() {
+    this.isAddEditModalVisible = !this.isAddEditModalVisible
+  }
+
+  selectProduct(data: ProductRegisterRequestModel) {
+    this.addEditRequestModel.id = data.id
+    this.addEditRequestModel.name = data.name
+    this.addEditRequestModel.price = data.price
+    this.addEditRequestModel.quantity = data.quantity
+    this.addEditRequestModel.available = data.available
+    this.addEditRequestModel.deliverable = data.deliverable
+    this.addEditRequestModel.transmission = data.transmission
+    this.addEditRequestModel.seat = data.seat
+    this.addEditRequestModel.engineType = data.engineType
+    this.addEditRequestModel.brand = data.brand
+
+    this.isAddEditModalVisible = true
+  }
+
+  modalVisibleChange(event: boolean) {
+    this.isAddEditModalVisible = event
+
+    if (!event) {
+      this.addEditRequestModel.reset()
+    }
+  }
+
+  saveProduct() {
+    if (this.addEditRequestModel.id) {
+      this.doUpdateProduct()
+    } else {
+      this.doRegisterProduct()
+    }
   }
 }
