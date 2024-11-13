@@ -13,7 +13,7 @@ import {
   SpinnerModule,
   ModalModule,
   ButtonModule,
-  ModalComponent,
+  PopoverModule,
 } from '@coreui/angular'
 import {
   cilAddressBook,
@@ -21,6 +21,7 @@ import {
   cilDescription,
   cilOptions,
   cilSearch,
+  cilTrash,
   cilUser,
 } from '@coreui/icons'
 import { IconDirective } from '@coreui/icons-angular'
@@ -60,6 +61,7 @@ import { Utils } from 'src/app/utils/utils'
     CreateEditComponent,
     ModalModule,
     ButtonModule,
+    PopoverModule,
   ],
   templateUrl: './listing.component.html',
   styleUrl: './listing.component.scss',
@@ -75,9 +77,14 @@ export class ListingComponent implements OnInit {
     cilCog,
     cilOptions,
     cilSearch,
+    cilTrash,
   }
 
-  public loadings = { product: false, productRegister: false }
+  public loadings = {
+    product: false,
+    productRegister: false,
+    productDeleting: false,
+  }
 
   public pagination = new PaginationRequestModel()
   public productFilter = new ProductSearchRequestModel()
@@ -85,8 +92,6 @@ export class ListingComponent implements OnInit {
 
   public dataPagination: any = {}
   public isAddEditModalVisible = false
-
-  @ViewChild('addEditProductModal') addEditProductModal!: ModalComponent
 
   public engineTypeEnumList = Object.values(EngineType).filter(
     (value) => typeof value === 'string'
@@ -169,6 +174,27 @@ export class ListingComponent implements OnInit {
     })
   }
 
+  doDeleteProduct() {
+    this.loadings.productDeleting = true
+
+    this.productService.deleteProduct(this.addEditRequestModel.id!!).subscribe({
+      next: (resp) => {
+        if (resp.statusCode == StatusCode.SUCCESS) {
+          this.doGetProductList()
+          this.isAddEditModalVisible = false
+        } else {
+          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+        }
+
+        this.loadings.productDeleting = false
+      },
+      error: (error) => {
+        this.utils.sendErrorToast(error.message)
+        this.loadings.productDeleting = false
+      },
+    })
+  }
+
   resetFilter() {
     this.productFilter = new ProductSearchRequestModel()
     this.pagination.reset()
@@ -209,7 +235,7 @@ export class ListingComponent implements OnInit {
     this.isAddEditModalVisible = true
   }
 
-  modalVisibleChange(event: boolean) {
+  addEditModalVisibleChange(event: boolean) {
     this.isAddEditModalVisible = event
 
     if (!event) {

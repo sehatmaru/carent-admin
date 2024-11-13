@@ -48,4 +48,11 @@ export class ProductService {
       request
     ) as Observable<CommonResponse<any>>
   }
+
+  deleteProduct(productId: number): Observable<CommonResponse<any>> {
+    return this.commonApi.post(
+      `${this.root}/delete/${productId}`,
+      null
+    ) as Observable<CommonResponse<any>>
+  }
 }
