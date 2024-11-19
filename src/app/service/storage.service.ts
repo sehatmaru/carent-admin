@@ -40,6 +40,7 @@ export class StorageService {
     localStorage.removeItem(USERNAME)
     localStorage.removeItem(NAME)
     localStorage.removeItem(TOKEN)
+    localStorage.removeItem(ROLE)
   }
 
   public isLogged() {

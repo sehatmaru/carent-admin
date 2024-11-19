@@ -1,15 +1,12 @@
 import { CommonModule } from '@angular/common'
 import { Component, inject, OnInit } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { FormsModule } from '@angular/forms'
 import {
   RowComponent,
   ColComponent,
   CardModule,
   FormModule,
-  ColDirective,
-  ButtonDirective,
   TableDirective,
-  AvatarModule,
   SpinnerModule,
   BadgeModule,
 } from '@coreui/angular'
@@ -45,11 +42,7 @@ import { Utils } from 'src/app/utils/utils'
     FormModule,
     FormsModule,
     IconDirective,
-    ColDirective,
-    ReactiveFormsModule,
-    ButtonDirective,
     TableDirective,
-    AvatarModule,
     SpinnerModule,
     BadgeModule,
   ],

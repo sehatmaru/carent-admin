@@ -1,36 +1,33 @@
-import { NgStyle, NgTemplateOutlet } from '@angular/common'
+import { NgTemplateOutlet } from '@angular/common'
 import { Component, computed, inject, input, ViewChild } from '@angular/core'
-import { RouterLink, RouterLinkActive } from '@angular/router'
+import { Router, RouterLink, RouterLinkActive } from '@angular/router'
 
 import {
   AvatarComponent,
-  BadgeComponent,
   BreadcrumbRouterComponent,
   ButtonDirective,
   ColorModeService,
   ContainerComponent,
   DropdownComponent,
-  DropdownDividerDirective,
   DropdownHeaderDirective,
   DropdownItemDirective,
   DropdownMenuDirective,
   DropdownToggleDirective,
   HeaderComponent,
   HeaderNavComponent,
-  HeaderTogglerDirective,
   NavItemComponent,
   NavLinkDirective,
-  ProgressBarDirective,
-  ProgressComponent,
   SidebarToggleDirective,
-  TextColorDirective,
+  SpinnerModule,
   ThemeDirective,
-  ToastComponent,
   ToasterComponent,
-  ToastModule,
 } from '@coreui/angular'
 
 import { IconDirective } from '@coreui/icons-angular'
+import { StatusCode } from 'src/app/enum/status-code.enum'
+import { AuthService } from 'src/app/service/auth.service'
+import { StorageService } from 'src/app/service/storage.service'
+import { Utils } from 'src/app/utils/utils'
 
 @Component({
   selector: 'app-default-header',
@@ -38,7 +35,6 @@ import { IconDirective } from '@coreui/icons-angular'
   standalone: true,
   imports: [
     ContainerComponent,
-    HeaderTogglerDirective,
     SidebarToggleDirective,
     IconDirective,
     HeaderNavComponent,
@@ -51,22 +47,24 @@ import { IconDirective } from '@coreui/icons-angular'
     ThemeDirective,
     DropdownComponent,
     DropdownToggleDirective,
-    TextColorDirective,
     AvatarComponent,
     DropdownMenuDirective,
     DropdownHeaderDirective,
     DropdownItemDirective,
-    BadgeComponent,
-    DropdownDividerDirective,
-    ProgressBarDirective,
-    ProgressComponent,
-    NgStyle,
     ToasterComponent,
     ButtonDirective,
+    SpinnerModule,
   ],
 })
 export class DefaultHeaderComponent extends HeaderComponent {
   @ViewChild(ToasterComponent) toaster!: ToasterComponent
+
+  private authService = inject(AuthService)
+  private storageService = inject(StorageService)
+  private router = inject(Router)
+  private utils = inject(Utils)
+
+  public loadings = { logout: false }
 
   readonly #colorModeService = inject(ColorModeService)
   readonly colorMode = this.#colorModeService.colorMode
@@ -203,4 +201,25 @@ export class DefaultHeaderComponent extends HeaderComponent {
     { id: 3, title: 'Add new layouts', value: 75, color: 'info' },
     { id: 4, title: 'Angular Version', value: 100, color: 'success' },
   ]
+
+  doLogout() {
+    this.loadings.logout = true
+
+    this.authService.doLogout().subscribe({
+      next: (resp) => {
+        if (resp.statusCode == StatusCode.SUCCESS) {
+          this.storageService.removeLogged()
+          this.router.navigateByUrl('/login')
+        } else {
+          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+        }
+
+        this.loadings.logout = false
+      },
+      error: (error) => {
+        this.utils.sendErrorToast(error.message)
+        this.loadings.logout = false
+      },
+    })
+  }
 }

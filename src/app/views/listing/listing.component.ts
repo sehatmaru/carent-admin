@@ -1,15 +1,13 @@
 import { CommonModule } from '@angular/common'
-import { Component, inject, OnInit, ViewChild } from '@angular/core'
+import { Component, inject, OnInit } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import {
   RowComponent,
   ColComponent,
   CardModule,
   FormModule,
-  ColDirective,
   ButtonDirective,
   TableDirective,
-  AvatarModule,
   SpinnerModule,
   ModalModule,
   ButtonModule,

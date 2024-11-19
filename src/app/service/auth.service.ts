@@ -43,7 +43,7 @@ export class AuthService {
     ) as Observable<CommonResponse<RegisterResponseModel>>
   }
 
-  logout(): Observable<CommonResponse<Boolean>> {
+  doLogout(): Observable<CommonResponse<Boolean>> {
     return this.commonApi.post(
       `${this.root}/logout`,
       null,

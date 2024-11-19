@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import {
   Component,
   EventEmitter,
@@ -6,15 +5,8 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import {
-  ButtonDirective,
-  ColComponent,
-  ColDirective,
-  FormModule,
-  RowComponent,
-} from '@coreui/angular'
-import { IconDirective } from '@coreui/icons-angular'
+import { FormsModule } from '@angular/forms'
+import { ColComponent, FormModule } from '@coreui/angular'
 import { EngineType } from 'src/app/enum/engine-type.enum'
 import { Transmission } from 'src/app/enum/transmission.enum'
 import { VehicleBrand } from 'src/app/enum/vehicle-brand.enum'

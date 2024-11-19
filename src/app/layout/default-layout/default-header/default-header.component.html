@@ -81,10 +81,13 @@
           Profile
         </a>
       </li>
-      <li>
-        <a cDropdownItem routerLink="">
+      <li (click)="doLogout()">
+        <a cDropdownItem routerLink="" [disabled]="loadings.logout">
+          @if (loadings.logout) {
+          <c-spinner aria-hidden="true" size="sm" variant="grow"></c-spinner>
+          } @else {
           <svg cIcon class="me-2" name="cilAccountLogout"></svg>
-          Logout
+          } Logout
         </a>
       </li>
     </ul>
