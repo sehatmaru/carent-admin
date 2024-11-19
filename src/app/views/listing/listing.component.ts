@@ -220,8 +220,6 @@ export class ListingComponent implements OnInit {
     this.addEditRequestModel.id = data.id
     this.addEditRequestModel.name = data.name
     this.addEditRequestModel.price = data.price
-    this.addEditRequestModel.quantity = data.quantity
-    this.addEditRequestModel.available = data.available
     this.addEditRequestModel.deliverable = data.deliverable
     this.addEditRequestModel.transmission = data.transmission
     this.addEditRequestModel.seat = data.seat

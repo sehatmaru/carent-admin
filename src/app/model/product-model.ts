@@ -40,8 +40,6 @@ export class ProductRegisterRequestModel {
   public name: string | null = null
   public price = 0
   public deliverable: boolean | null = null
-  public quantity = 0
-  public available = 0
   public transmission: Transmission | null = null
   public seat = 0
   public engineType: EngineType.GASOLINE | null = null
@@ -52,8 +50,6 @@ export class ProductRegisterRequestModel {
       this.isTextValid(this.name) &&
       this.isPriceValid() &&
       this.isSelectValid(this.deliverable) &&
-      this.isNumberValid(this.quantity) &&
-      this.isNumberValid(this.available) &&
       this.isSelectValid(this.transmission) &&
       this.isNumberValid(this.seat) &&
       this.isSelectValid(this.engineType) &&
@@ -82,8 +78,6 @@ export class ProductRegisterRequestModel {
     this.name = ''
     this.price = 0
     this.deliverable = null
-    this.quantity = 0
-    this.available = 0
     this.transmission = null
     this.seat = 0
     this.engineType = null

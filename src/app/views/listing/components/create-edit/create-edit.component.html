@@ -51,27 +51,6 @@
       />
     </c-col>
     <c-col [md]="6">
-      <label cLabel for="quantity">Quantity</label>
-      <input
-        [(ngModel)]="requestModel.quantity"
-        [valid]="requestModel.isNumberValid(requestModel.quantity)"
-        (ngModelChange)="requestModel.available = requestModel.quantity"
-        name="quantity"
-        cFormControl
-        type="number"
-      />
-    </c-col>
-    <c-col [md]="6">
-      <label cLabel for="available">Available</label>
-      <input
-        [(ngModel)]="requestModel.available"
-        [valid]="requestModel.isNumberValid(requestModel.available)"
-        name="available"
-        cFormControl
-        type="number"
-      />
-    </c-col>
-    <c-col [md]="6">
       <label cLabel for="brand">Brand</label>
       <select
         [(ngModel)]="requestModel.brand"
