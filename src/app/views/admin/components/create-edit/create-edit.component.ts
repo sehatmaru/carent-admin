@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common'
 import {
   Component,
   EventEmitter,
@@ -6,19 +5,12 @@ import {
   Output,
   SimpleChanges,
 } from '@angular/core'
-import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import {
-  ButtonDirective,
-  ColComponent,
-  ColDirective,
-  FormModule,
-  RowComponent,
-} from '@coreui/angular'
-import { IconDirective } from '@coreui/icons-angular'
+import { FormsModule } from '@angular/forms'
+import { ColComponent, FormModule } from '@coreui/angular'
 import { EngineType } from 'src/app/enum/engine-type.enum'
 import { Transmission } from 'src/app/enum/transmission.enum'
 import { VehicleBrand } from 'src/app/enum/vehicle-brand.enum'
-import { ProductRegisterRequestModel } from 'src/app/model/product-model'
+import { AdminRegisterRequestModel } from 'src/app/model/admin-model'
 
 @Component({
   selector: 'app-create-edit',
@@ -30,10 +22,10 @@ import { ProductRegisterRequestModel } from 'src/app/model/product-model'
 export class CreateEditComponent {
   @Input()
   @Output()
-  public requestModel = new ProductRegisterRequestModel()
+  public requestModel = new AdminRegisterRequestModel()
 
   @Output()
-  public requestChange = new EventEmitter<ProductRegisterRequestModel>()
+  public requestChange = new EventEmitter<AdminRegisterRequestModel>()
 
   public engineTypeEnumList = Object.values(EngineType).filter(
     (value) => typeof value === 'string'

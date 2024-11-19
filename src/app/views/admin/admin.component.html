@@ -47,29 +47,42 @@
           </c-col>
 
           <c-col [md]="12" class="text-end">
-            <button
-              cButton
-              class="me-1"
-              color="secondary"
-              type="reset"
-              (click)="resetFilter()"
-            >
-              Reset
-            </button>
-            <button
-              cButton
-              color="primary"
-              [disabled]="loadings.admin"
-              (click)="doGetAdminList()"
-            >
-              <c-spinner
-                *ngIf="loadings.admin"
-                aria-hidden="true"
-                size="sm"
-                variant="grow"
-              ></c-spinner>
-              Filter
-            </button>
+            <div class="d-flex justify-content-between">
+              <div>
+                <button
+                  cButton
+                  color="success"
+                  (click)="isAddEditModalVisible = true"
+                >
+                  Register Admin
+                </button>
+              </div>
+              <div>
+                <button
+                  cButton
+                  class="me-1"
+                  color="secondary"
+                  type="reset"
+                  (click)="resetFilter()"
+                >
+                  Reset
+                </button>
+                <button
+                  cButton
+                  color="primary"
+                  [disabled]="loadings.admin"
+                  (click)="filter()"
+                >
+                  <c-spinner
+                    *ngIf="loadings.admin"
+                    aria-hidden="true"
+                    size="sm"
+                    variant="grow"
+                  ></c-spinner>
+                  Filter
+                </button>
+              </div>
+            </div>
           </c-col>
         </form>
       </c-card-body>
@@ -97,21 +110,21 @@
             <th class="bg-body-tertiary">Username</th>
             <th class="bg-body-tertiary">Mobile</th>
             <th class="bg-body-tertiary text-center">Email</th>
-            <th class="bg-body-tertiary text-center">Join Date</th>
+            <th class="bg-body-tertiary text-center">Register Date</th>
           </tr>
         </thead>
         <tbody>
           @if (!loadings.admin && dataPagination.list != null &&
           dataPagination.total > 0) { @for (data of dataPagination.list; track
           data.id) {
-          <tr>
+          <tr class="pointer" (click)="selectAdmin(data)">
             <td class="text-center">
               <c-avatar [size]="'md'" color="primary" textColor="white">{{
                 data.name
               }}</c-avatar>
             </td>
             <td>
-              <div class="small text-body-secondary text-nowrap">
+              <div class="text-nowrap">
                 {{ data.name }}
               </div>
             </td>
@@ -162,3 +175,81 @@
     ></app-x-pagination>
   </c-col>
 </c-row>
+
+<c-modal
+  #addEditAdminModal
+  id="addEditAdminModal"
+  scrollable
+  alignment="center"
+  [visible]="isAddEditModalVisible"
+  (visibleChange)="addEditModalVisibleChange($event)"
+>
+  <c-modal-header>
+    <h5 cModalTitle>Add/Edit Admin</h5>
+    <button (click)="toogleAddEditModal()" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <app-create-edit
+      [requestModel]="addEditRequestModel"
+      (requestChange)="requestChange($event)"
+    ></app-create-edit>
+  </c-modal-body>
+  <c-modal-footer class="d-flex justify-content-between">
+    <div>
+      @if (addEditRequestModel.id) {
+      <button
+        cButton
+        color="danger"
+        [cPopoverTrigger]="'click'"
+        [cPopover]="deleteConfirmationPopup"
+        [cPopoverOptions]="{ strategy: 'fixed',  }"
+      >
+        @if (loadings.adminDeleting) {
+        <c-spinner aria-hidden="true" size="sm" variant="grow"></c-spinner>
+        } @else {
+        <svg [cIcon]="icons.cilTrash"></svg>
+        } Delete
+      </button>
+      <ng-template #deleteConfirmationPopup>
+        <h3 class="popover-header">Delete Confirmation</h3>
+        <div class="popover-body" id="">
+          <span>
+            Are you sure want to delete this admin? Click confirm to delete.
+          </span>
+          <div class="mt-3 d-flex justify-content-end">
+            <button cButton color="danger" (click)="doDeleteAdmin()">
+              @if (loadings.adminDeleting) {
+              <c-spinner
+                aria-hidden="true"
+                size="sm"
+                variant="grow"
+              ></c-spinner>
+              } Confirm
+            </button>
+          </div>
+        </div>
+      </ng-template>
+      }
+    </div>
+    <div>
+      <button
+        (click)="toogleAddEditModal()"
+        cButton
+        color="secondary"
+        class="mx-3"
+      >
+        Close
+      </button>
+      <button
+        cButton
+        color="primary"
+        (click)="saveAdmin()"
+        [disabled]="!addEditRequestModel.isValid() || loadings.adminRegister"
+      >
+        @if (loadings.adminRegister || loadings.adminDeleting) {
+        <c-spinner aria-hidden="true" size="sm" variant="grow"></c-spinner>
+        } Save changes
+      </button>
+    </div>
+  </c-modal-footer>
+</c-modal>

@@ -6,7 +6,10 @@ import {
   CustomerFilterRequest,
   TenantCustomerResponse,
 } from '../../model/customer-model'
-import { AdminResponse } from '../../model/admin-model'
+import {
+  AdminRegisterRequestModel,
+  AdminResponse,
+} from '../../model/admin-model'
 import { PaginationRequestModel } from 'src/app/model/pagination-model'
 
 @Injectable({
@@ -45,5 +48,30 @@ export class ManagerService {
       `${this.root}/admin/list?${this.commonApi.getSearchParams(params)}`,
       request
     ) as Observable<CommonResponse<Page<AdminResponse[]>>>
+  }
+
+  registerAdmin(
+    request: AdminRegisterRequestModel
+  ): Observable<CommonResponse<any>> {
+    return this.commonApi.post(
+      `${this.root}/admin/register`,
+      request
+    ) as Observable<CommonResponse<any>>
+  }
+
+  updateAdmin(
+    request: AdminRegisterRequestModel
+  ): Observable<CommonResponse<any>> {
+    return this.commonApi.post(
+      `${this.root}/admin/update/${request.id}`,
+      request
+    ) as Observable<CommonResponse<any>>
+  }
+
+  deleteAdmin(productId: number): Observable<CommonResponse<any>> {
+    return this.commonApi.post(
+      `${this.root}/delete/${productId}`,
+      null
+    ) as Observable<CommonResponse<any>>
   }
 }

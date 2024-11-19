@@ -1,0 +1,56 @@
+<div>
+  <form cForm class="row g-3" novalidate>
+    <c-col [md]="12">
+      <label cLabel for="name">Name</label>
+      <input
+        [(ngModel)]="requestModel.fullName"
+        [valid]="requestModel.isTextValid(requestModel.fullName)"
+        name="fullName"
+        cFormControl
+        type="text"
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="price">Username</label>
+      <input
+        [(ngModel)]="requestModel.username"
+        [valid]="requestModel.isTextValid(requestModel.username)"
+        name="username"
+        cFormControl
+        type="text"
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="deliverable">Email</label>
+      <input
+        [(ngModel)]="requestModel.email"
+        [valid]="requestModel.isEmailValid()"
+        name="email"
+        cFormControl
+        type="email"
+      />
+    </c-col>
+    @if (!requestModel.id) {
+    <c-col [md]="6">
+      <label cLabel for="seat">Password</label>
+      <input
+        [(ngModel)]="requestModel.password"
+        [valid]="requestModel.isTextValid(requestModel.password)"
+        name="password"
+        cFormControl
+        type="password"
+      />
+    </c-col>
+    }
+    <c-col [md]="6">
+      <label cLabel for="quantity">Mobile</label>
+      <input
+        [(ngModel)]="requestModel.mobile"
+        [valid]="requestModel.isMobileValid()"
+        name="mobile"
+        cFormControl
+        type="text"
+      />
+    </c-col>
+  </form>
+</div>
