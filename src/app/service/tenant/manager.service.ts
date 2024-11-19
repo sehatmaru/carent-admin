@@ -10,6 +10,10 @@ import {
   AdminRegisterRequestModel,
   AdminResponse,
 } from '../../model/admin-model'
+import {
+  CompanyResponseModel,
+  CompanyUpdateRequestModel,
+} from '../../model/company-model'
 import { PaginationRequestModel } from 'src/app/model/pagination-model'
 
 @Injectable({
@@ -72,6 +76,21 @@ export class ManagerService {
     return this.commonApi.post(
       `${this.root}/delete/${productId}`,
       null
+    ) as Observable<CommonResponse<any>>
+  }
+
+  getCompanyDetail(): Observable<CommonResponse<CompanyResponseModel>> {
+    return this.commonApi.get(`${this.root}/company/detail`) as Observable<
+      CommonResponse<CompanyResponseModel>
+    >
+  }
+
+  updateCompany(
+    request: CompanyUpdateRequestModel
+  ): Observable<CommonResponse<any>> {
+    return this.commonApi.post(
+      `${this.root}/company/update`,
+      request
     ) as Observable<CommonResponse<any>>
   }
 }

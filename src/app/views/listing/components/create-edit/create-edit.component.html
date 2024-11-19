@@ -12,14 +12,19 @@
     </c-col>
     <c-col [md]="6">
       <label cLabel for="price">Price (IDR)</label>
-      <input
-        [(ngModel)]="requestModel.price"
-        [valid]="requestModel.isPriceValid()"
-        name="price"
-        cFormControl
-        type="number"
-        min="10000"
-      />
+      <c-input-group>
+        <span cInputGroupText class="x-label">
+          <label for="aliasName">Rp</label>
+        </span>
+        <input
+          [(ngModel)]="requestModel.price"
+          [valid]="requestModel.isPriceValid()"
+          name="price"
+          cFormControl
+          type="number"
+          min="10000"
+        />
+      </c-input-group>
     </c-col>
     <c-col [md]="6">
       <label cLabel for="deliverable">Deliverable</label>

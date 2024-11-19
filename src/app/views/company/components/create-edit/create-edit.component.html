@@ -1,0 +1,43 @@
+<div>
+  <form cForm class="row g-3" novalidate>
+    <c-col [md]="12">
+      <label cLabel for="firmName">Firm Name</label>
+      <input
+        [(ngModel)]="requestModel.firmName"
+        [valid]="requestModel.isTextValid(requestModel.firmName)"
+        name="firmName"
+        cFormControl
+        type="text"
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="aliasName">Alias Name</label>
+      <input
+        [(ngModel)]="requestModel.aliasName"
+        [valid]="requestModel.isTextValid(requestModel.aliasName)"
+        name="aliasName"
+        cFormControl
+        type="text"
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="mobile">Mobile</label>
+      <input
+        [(ngModel)]="requestModel.mobile"
+        [valid]="requestModel.isMobileValid()"
+        name="mobile"
+        cFormControl
+        type="text"
+      />
+    </c-col>
+    <c-col [md]="12">
+      <label cLabel for="address">Address</label>
+      <textarea
+        [(ngModel)]="requestModel.address"
+        [valid]="requestModel.isTextValid(requestModel.address)"
+        name="address"
+        cFormControl
+      ></textarea>
+    </c-col>
+  </form>
+</div>

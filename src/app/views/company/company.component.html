@@ -1,1 +1,189 @@
-<p>company works!</p>
+<c-row>
+  <c-col xs>
+    <c-card class="mb-4">
+      <c-card-body>
+        <form cForm novalidate class="row g-3">
+          @if (!loadings.company) {
+          <c-col [md]="4">
+            <c-input-group>
+              <span cInputGroupText class="x-label">
+                <label for="firmName">Firm Name</label>
+              </span>
+              @if (loadings.company) {
+              <span cInputGroupText class="x-label">
+                <c-spinner
+                  aria-hidden="true"
+                  size="sm"
+                  variant="grow"
+                ></c-spinner>
+              </span>
+              } @else {
+              <input
+                [(ngModel)]="companyModel.firmName"
+                name="firmName"
+                cFormControl
+                placeholder="Firm Name"
+                disabled
+              />
+              }
+            </c-input-group>
+          </c-col>
+          <c-col [md]="4">
+            <c-input-group>
+              <span cInputGroupText class="x-label">
+                <label for="aliasName">Alias Name</label>
+              </span>
+              <input
+                [(ngModel)]="companyModel.aliasName"
+                name="aliasName"
+                cFormControl
+                placeholder="Alias Name"
+                disabled
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="4">
+            <c-input-group>
+              <span cInputGroupText class="x-label">
+                <label for="mobile">Mobile</label>
+              </span>
+              <input
+                [(ngModel)]="companyModel.mobile"
+                name="mobile"
+                cFormControl
+                placeholder="Mobile"
+                disabled
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="4">
+            <c-input-group>
+              <span cInputGroupText class="x-label">
+                <label for="foundingDate">Founding Date</label>
+              </span>
+              <input
+                [(ngModel)]="companyModel.foundingDateFormatted"
+                name="foundingDate"
+                cFormControl
+                placeholder="Founding Date"
+                disabled
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="4">
+            <c-input-group>
+              <span cInputGroupText class="x-label">
+                <label for="joinDate">Join Date</label>
+              </span>
+              <input
+                [(ngModel)]="companyModel.joinDateFormatted"
+                name="joinDate"
+                cFormControl
+                placeholder="Join Date"
+                disabled
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="4">
+            <c-input-group>
+              <span cInputGroupText class="x-label">
+                <label for="address">Rating</label>
+              </span>
+              <span cInputGroupText class="x-rating">
+                @for (item of getStars(companyModel.rating); track $index) {
+                <svg [cIcon]="icons.cilStar"></svg>
+                } @if (!isInteger(companyModel.rating)) {
+                <svg [cIcon]="icons.cilStarHalf"></svg>
+                }
+              </span>
+            </c-input-group>
+          </c-col>
+          <c-col [md]="4">
+            <c-input-group>
+              <span cInputGroupText class="x-label">
+                <label for="address">Address</label>
+              </span>
+              <textarea
+                [(ngModel)]="companyModel.address"
+                name="address"
+                cFormControl
+                placeholder="Address"
+                disabled
+              ></textarea>
+            </c-input-group>
+          </c-col>
+          } @else {
+          <c-col [md]="12" class="d-flex" style="height: 11rem">
+            <c-spinner
+              aria-hidden="true"
+              size="sm"
+              variant="grow"
+              style="margin: auto"
+            ></c-spinner>
+          </c-col>
+          }
+
+          <c-col [md]="12" class="text-end">
+            <div>
+              <button
+                cButton
+                class="me-1"
+                color="warning"
+                (click)="openUpdateModal()"
+                [disabled]="loadings.company"
+              >
+                @if (loadings.company) {
+                <c-spinner
+                  aria-hidden="true"
+                  size="sm"
+                  variant="grow"
+                ></c-spinner>
+                } Update
+              </button>
+            </div>
+          </c-col>
+        </form>
+      </c-card-body>
+    </c-card>
+  </c-col>
+</c-row>
+
+<c-modal
+  #addEditProductModal
+  id="addEditProductModal"
+  scrollable
+  alignment="center"
+  [visible]="isAddEditModalVisible"
+  (visibleChange)="addEditModalVisibleChange($event)"
+>
+  <c-modal-header>
+    <h5 cModalTitle>Update Company</h5>
+    <button (click)="toogleAddEditModal()" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <app-create-edit
+      [requestModel]="addEditRequestModel"
+      (requestChange)="requestChange($event)"
+    ></app-create-edit>
+  </c-modal-body>
+  <c-modal-footer>
+    <button
+      (click)="toogleAddEditModal()"
+      cButton
+      color="secondary"
+      class="mx-3"
+    >
+      Close
+    </button>
+    <button
+      cButton
+      color="primary"
+      (click)="doUpdateProduct()"
+      [disabled]="!addEditRequestModel.isValid() || loadings.companyUpdate"
+    >
+      @if (loadings.companyUpdate) {
+      <c-spinner aria-hidden="true" size="sm" variant="grow"></c-spinner>
+      } Save changes
+    </button>
+  </c-modal-footer>
+</c-modal>
