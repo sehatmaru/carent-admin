@@ -22,6 +22,50 @@
               <span cInputGroupText>
                 <svg [cIcon]="icons.cilSearch"></svg>
               </span>
+              <input
+                (click)="isCanvasVisible.province = true"
+                [(ngModel)]="productFilter.provinceName"
+                name="provinceName"
+                cFormControl
+                placeholder="Province"
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilSearch"></svg>
+              </span>
+              <input
+                (click)="isCanvasVisible.regency = true"
+                [(ngModel)]="productFilter.regencyName"
+                [disabled]="!productFilter.provinceId"
+                name="regencyName"
+                cFormControl
+                placeholder="Regency"
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilSearch"></svg>
+              </span>
+              <input
+                (click)="isCanvasVisible.district = true"
+                [(ngModel)]="productFilter.districtName"
+                [disabled]="!productFilter.regencyId"
+                name="districtName"
+                cFormControl
+                placeholder="District"
+              />
+            </c-input-group>
+          </c-col>
+          <c-col [md]="3">
+            <c-input-group>
+              <span cInputGroupText>
+                <svg [cIcon]="icons.cilSearch"></svg>
+              </span>
               <select
                 [(ngModel)]="productFilter.deliverable"
                 name="deliverable"
@@ -123,6 +167,7 @@
                   cButton
                   color="success"
                   (click)="isAddEditModalVisible = true"
+                  [hidden]="!utils.isTenantManager()"
                 >
                   Add Product
                 </button>
@@ -180,6 +225,9 @@
             <th class="bg-body-tertiary text-center">Transmission</th>
             <th class="bg-body-tertiary text-center">Engine</th>
             <th class="bg-body-tertiary text-center">Seat</th>
+            <th class="bg-body-tertiary text-center">Province</th>
+            <th class="bg-body-tertiary text-center">Regency</th>
+            <th class="bg-body-tertiary text-center">District</th>
             <th class="bg-body-tertiary text-center">Deliverable</th>
             <th class="bg-body-tertiary text-center">Brand</th>
             <th class="bg-body-tertiary text-center">Status</th>
@@ -227,6 +275,21 @@
             </td>
             <td class="text-center">
               <div class="small text-body-secondary text-nowrap">
+                {{ data.provinceName }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.regencyName }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
+                {{ data.districtName }}
+              </div>
+            </td>
+            <td class="text-center">
+              <div class="small text-body-secondary text-nowrap">
                 {{ data.deliverable ? 'Yes' : 'No' }}
               </div>
             </td>
@@ -243,7 +306,7 @@
           </tr>
           } } @else if (!loadings.product && dataPagination.total == 0) {
           <tr class="pointer">
-            <td class="text-center" colspan="10">
+            <td class="text-center" colspan="13">
               <div class="small text-body-secondary text-nowrap">
                 No data record.
               </div>
@@ -253,7 +316,7 @@
           <tr>
             <td
               class="text-center"
-              colSpan="10"
+              colSpan="13"
               [style.height]="pagination.pageSize * 2.5 + 'rem'"
             >
               <c-spinner variant="grow"></c-spinner>
@@ -277,6 +340,7 @@
   id="addEditProductModal"
   scrollable
   alignment="center"
+  backdrop="static"
   [visible]="isAddEditModalVisible"
   (visibleChange)="addEditModalVisibleChange($event)"
 >
@@ -306,25 +370,6 @@
         <svg [cIcon]="icons.cilTrash"></svg>
         } Delete
       </button>
-      <ng-template #deleteConfirmationPopup>
-        <h3 class="popover-header">Delete Confirmation</h3>
-        <div class="popover-body" id="">
-          <span>
-            Are you sure want to delete this product? Click confirm to delete.
-          </span>
-          <div class="mt-3 d-flex justify-content-end">
-            <button cButton color="danger" (click)="doDeleteProduct()">
-              @if (loadings.productDeleting) {
-              <c-spinner
-                aria-hidden="true"
-                size="sm"
-                variant="grow"
-              ></c-spinner>
-              } Confirm
-            </button>
-          </div>
-        </div>
-      </ng-template>
       }
     </div>
     <div>
@@ -349,3 +394,180 @@
     </div>
   </c-modal-footer>
 </c-modal>
+
+<ng-template #deleteConfirmationPopup>
+  <h3 class="popover-header">Delete Confirmation</h3>
+  <div class="popover-body" id="">
+    <span>
+      Are you sure want to delete this product? Click confirm to delete.
+    </span>
+    <div class="mt-3 d-flex justify-content-end">
+      <button cButton color="danger" (click)="doDeleteProduct()">
+        @if (loadings.productDeleting) {
+        <c-spinner aria-hidden="true" size="sm" variant="grow"></c-spinner>
+        } Confirm
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<c-offcanvas
+  placement="end"
+  [visible]="isCanvasVisible.province"
+  (visibleChange)="isCanvasVisible.province = $event"
+>
+  <c-offcanvas-header>
+    <h5 cOffcanvasTitle>Select Province</h5>
+    <button
+      cButtonClose
+      class="text-reset ms-auto"
+      aria-label="Close"
+      (click)="isCanvasVisible.province = false"
+    ></button>
+  </c-offcanvas-header>
+  <c-offcanvas-body>
+    <form cForm novalidate class="row g-3 mb-4">
+      <c-col [md]="12">
+        <input
+          [(ngModel)]="provinceSearch"
+          name="provinceName"
+          autoComplete="provinceName"
+          cFormControl
+          placeholder="Province"
+          (ngModelChange)="doGetProvinceList()"
+        />
+      </c-col>
+    </form>
+    @if (!loadings.geo && provinceList.length == 0) {
+    <span>No data found.</span>
+    } @if (loadings.geo) {
+    <div class="d-flex x-offcanvas-spinner-div">
+      <c-spinner
+        class="x-offcanvas-spinner"
+        aria-hidden="true"
+        size="sm"
+        variant="grow"
+      ></c-spinner>
+    </div>
+    } @else {
+    <div cListGroup>
+      @for (item of provinceList; track $index) {
+      <a
+        class="pointer"
+        cListGroupItem
+        (click)="selectProvinceSearch(item.id, item.name)"
+      >
+        {{ item.name }}
+      </a>
+      }
+    </div>
+    }
+  </c-offcanvas-body>
+</c-offcanvas>
+
+<c-offcanvas
+  placement="end"
+  [visible]="isCanvasVisible.regency"
+  (visibleChange)="isCanvasVisible.regency = $event"
+>
+  <c-offcanvas-header>
+    <h5 cOffcanvasTitle>Select Regency</h5>
+    <button
+      cButtonClose
+      class="text-reset ms-auto"
+      aria-label="Close"
+      (click)="isCanvasVisible.regency = false"
+    ></button>
+  </c-offcanvas-header>
+  <c-offcanvas-body>
+    <form cForm novalidate class="row g-3 mb-4">
+      <c-col [md]="12">
+        <input
+          [(ngModel)]="regencySearch"
+          name="regencyName"
+          cFormControl
+          placeholder="Regency"
+          (ngModelChange)="doGetRegencyList()"
+        />
+      </c-col>
+    </form>
+    @if (!loadings.geo && provinceList.length == 0) {
+    <span>No data found.</span>
+    } @if (loadings.geo) {
+    <div class="d-flex x-offcanvas-spinner-div">
+      <c-spinner
+        class="x-offcanvas-spinner"
+        aria-hidden="true"
+        size="sm"
+        variant="grow"
+      ></c-spinner>
+    </div>
+    } @else {
+    <div cListGroup>
+      @for (item of regencyList; track $index) {
+      <a
+        class="pointer"
+        cListGroupItem
+        (click)="selectRegencySearch(item.id, item.name)"
+      >
+        {{ item.name }}
+      </a>
+      }
+    </div>
+    }
+  </c-offcanvas-body>
+</c-offcanvas>
+
+<c-offcanvas
+  placement="end"
+  [visible]="isCanvasVisible.district"
+  (visibleChange)="isCanvasVisible.district = $event"
+>
+  <c-offcanvas-header>
+    <h5 cOffcanvasTitle>Select District</h5>
+    <button
+      cButtonClose
+      class="text-reset ms-auto"
+      (click)="isCanvasVisible.district = false"
+      aria-label="Close"
+    ></button>
+  </c-offcanvas-header>
+  <c-offcanvas-body>
+    <form cForm novalidate class="row g-3 mb-4">
+      <c-col [md]="12">
+        <input
+          [(ngModel)]="districtSearch"
+          name="districtName"
+          autoComplete="districtName"
+          cFormControl
+          placeholder="District"
+          (ngModelChange)="doGetDistrictList()"
+        />
+      </c-col>
+    </form>
+    @if (!loadings.geo && provinceList.length == 0) {
+    <span>No data found.</span>
+    } @if (loadings.geo) {
+    <div class="d-flex x-offcanvas-spinner-div">
+      <c-spinner
+        class="x-offcanvas-spinner"
+        aria-hidden="true"
+        size="sm"
+        variant="grow"
+      ></c-spinner>
+    </div>
+    } @else {
+    <div cListGroup>
+      @for (item of districtList; track $index) {
+      <a
+        class="pointer"
+        cListGroupItem
+        (click)="selectDistrictSearch(item.id, item.name)"
+      >
+        {{ item.name }}
+      </a>
+      }
+    </div>
+    }
+  </c-offcanvas-body>
+</c-offcanvas>

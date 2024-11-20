@@ -40,6 +40,42 @@
         <option [value]="false">No</option>
       </select>
     </c-col>
+
+    <c-col [md]="4">
+      <label cLabel for="provinceName">Province</label>
+      <input
+        (click)="isCanvasVisible.province = true"
+        [(ngModel)]="requestModel.provinceName"
+        [valid]="requestModel.isTextValid(requestModel.provinceName)"
+        name="provinceName"
+        cFormControl
+        type="text"
+      />
+    </c-col>
+    <c-col [md]="4">
+      <label cLabel for="regencyName">Regency</label>
+      <input
+        (click)="isCanvasVisible.regency = true"
+        [(ngModel)]="requestModel.regencyName"
+        [valid]="requestModel.isTextValid(requestModel.regencyName)"
+        [disabled]="!requestModel.provinceId"
+        name="regencyName"
+        cFormControl
+        type="text"
+      />
+    </c-col>
+    <c-col [md]="4">
+      <label cLabel for="districtName">District</label>
+      <input
+        (click)="isCanvasVisible.district = true"
+        [(ngModel)]="requestModel.districtName"
+        [valid]="requestModel.isTextValid(requestModel.districtName)"
+        [disabled]="!requestModel.regencyId"
+        name="districtName"
+        cFormControl
+        type="text"
+      />
+    </c-col>
     <c-col [md]="6">
       <label cLabel for="seat">Seat</label>
       <input
@@ -97,3 +133,165 @@
     </c-col>
   </form>
 </div>
+
+<c-offcanvas
+  placement="end"
+  [visible]="isCanvasVisible.province"
+  (visibleChange)="isCanvasVisible.province = $event"
+>
+  <c-offcanvas-header>
+    <h5 cOffcanvasTitle>Select Province</h5>
+    <button
+      cButtonClose
+      class="text-reset ms-auto"
+      (click)="isCanvasVisible.province = false"
+      aria-label="Close"
+    ></button>
+  </c-offcanvas-header>
+  <c-offcanvas-body>
+    <form cForm novalidate class="row g-3 mb-4">
+      <c-col [md]="12">
+        <input
+          [(ngModel)]="provinceSearch"
+          name="provinceName"
+          autoComplete="provinceName"
+          cFormControl
+          placeholder="Province"
+          (ngModelChange)="doGetProvinceList()"
+        />
+      </c-col>
+    </form>
+    @if (!isGeoLoading && provinceList.length == 0) {
+    <span>No data found.</span>
+    } @if (isGeoLoading) {
+    <div class="d-flex x-offcanvas-spinner-div">
+      <c-spinner
+        class="x-offcanvas-spinner"
+        aria-hidden="true"
+        size="sm"
+        variant="grow"
+      ></c-spinner>
+    </div>
+    } @else {
+    <div cListGroup>
+      @for (item of provinceList; track $index) {
+      <a
+        class="pointer"
+        cListGroupItem
+        (click)="selectProvinceSearch(item.id, item.name)"
+      >
+        {{ item.name }}
+      </a>
+      }
+    </div>
+    }
+  </c-offcanvas-body>
+</c-offcanvas>
+
+<c-offcanvas
+  placement="end"
+  [visible]="isCanvasVisible.regency"
+  (visibleChange)="isCanvasVisible.regency = $event"
+>
+  <c-offcanvas-header>
+    <h5 cOffcanvasTitle>Select Regency</h5>
+    <button
+      cButtonClose
+      class="text-reset ms-auto"
+      (click)="isCanvasVisible.regency = false"
+      aria-label="Close"
+    ></button>
+  </c-offcanvas-header>
+  <c-offcanvas-body>
+    <form cForm novalidate class="row g-3 mb-4">
+      <c-col [md]="12">
+        <input
+          [(ngModel)]="regencySearch"
+          name="regencyName"
+          autoComplete="regencyName"
+          cFormControl
+          placeholder="Regency"
+          (ngModelChange)="doGetRegencyList()"
+        />
+      </c-col>
+    </form>
+    @if (!isGeoLoading && regencyList.length == 0) {
+    <span>No data found.</span>
+    } @if (isGeoLoading) {
+    <div class="d-flex x-offcanvas-spinner-div">
+      <c-spinner
+        class="x-offcanvas-spinner"
+        aria-hidden="true"
+        size="sm"
+        variant="grow"
+      ></c-spinner>
+    </div>
+    } @else {
+    <div cListGroup>
+      @for (item of regencyList; track $index) {
+      <a
+        class="pointer"
+        cListGroupItem
+        (click)="selectRegencySearch(item.id, item.name)"
+      >
+        {{ item.name }}
+      </a>
+      }
+    </div>
+    }
+  </c-offcanvas-body>
+</c-offcanvas>
+
+<c-offcanvas
+  placement="end"
+  [visible]="isCanvasVisible.district"
+  (visibleChange)="isCanvasVisible.district = $event"
+>
+  <c-offcanvas-header>
+    <h5 cOffcanvasTitle>Select District</h5>
+    <button
+      cButtonClose
+      class="text-reset ms-auto"
+      (click)="isCanvasVisible.district = false"
+      aria-label="Close"
+    ></button>
+  </c-offcanvas-header>
+  <c-offcanvas-body>
+    <form cForm novalidate class="row g-3 mb-4">
+      <c-col [md]="12">
+        <input
+          [(ngModel)]="districtSearch"
+          name="districtName"
+          autoComplete="districtName"
+          cFormControl
+          placeholder="District"
+          (ngModelChange)="doGetDistrictList()"
+        />
+      </c-col>
+    </form>
+    @if (!isGeoLoading && districtList.length == 0) {
+    <span>No data found.</span>
+    } @if (isGeoLoading) {
+    <div class="d-flex x-offcanvas-spinner-div">
+      <c-spinner
+        class="x-offcanvas-spinner"
+        aria-hidden="true"
+        size="sm"
+        variant="grow"
+      ></c-spinner>
+    </div>
+    } @else {
+    <div cListGroup>
+      @for (item of districtList; track $index) {
+      <a
+        class="pointer"
+        cListGroupItem
+        (click)="selectDistrictSearch(item.id, item.name)"
+      >
+        {{ item.name }}
+      </a>
+      }
+    </div>
+    }
+  </c-offcanvas-body>
+</c-offcanvas>

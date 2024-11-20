@@ -9,6 +9,7 @@ import {
   TableDirective,
   SpinnerModule,
   BadgeModule,
+  ButtonDirective,
 } from '@coreui/angular'
 import {
   cilAddressBook,
@@ -45,6 +46,7 @@ import { Utils } from 'src/app/utils/utils'
     TableDirective,
     SpinnerModule,
     BadgeModule,
+    ButtonDirective,
   ],
   templateUrl: './billing.component.html',
   styleUrl: './billing.component.scss',

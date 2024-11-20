@@ -9,8 +9,11 @@ export class ProductSearchRequestModel {
   public priceStart: number | null = null
   public priceEnd: number | null = null
   public provinceId: number | null = null
+  public provinceName: string | null = null
   public regencyId: number | null = null
+  public regencyName: string | null = null
   public districtId: number | null = null
+  public districtName: string | null = null
   public transmission: Transmission.MATIC | null = null
   public brand: VehicleBrand.BYD | null = null
   public engineType: EngineType | null = null
@@ -18,6 +21,18 @@ export class ProductSearchRequestModel {
   public endDate: Date | null = null
   public deliverable: false | null = null
   public status: ProductStatus | null = null
+
+  resetRegency() {
+    this.regencyId = null
+    this.regencyName = null
+    this.districtId = null
+    this.districtName = null
+  }
+
+  resetDistrict() {
+    this.districtId = null
+    this.districtName = null
+  }
 }
 
 export class ProductListResponseModel {
@@ -27,6 +42,9 @@ export class ProductListResponseModel {
   public price = 0
   public quantity = 0
   public available = 0
+  public provinceName = ''
+  public regencyName = ''
+  public districtName = ''
   public transmission = Transmission.MATIC
   public brand = VehicleBrand.BYD
   public engineType = EngineType.GASOLINE
@@ -39,6 +57,12 @@ export class ProductRegisterRequestModel {
   public id: number | null = null
   public name: string | null = null
   public price = 0
+  public provinceId: number | null = null
+  public provinceName: string | null = null
+  public regencyId: number | null = null
+  public regencyName: string | null = null
+  public districtId: number | null = null
+  public districtName: string | null = null
   public deliverable: boolean | null = null
   public transmission: Transmission | null = null
   public seat = 0
@@ -53,7 +77,10 @@ export class ProductRegisterRequestModel {
       this.isSelectValid(this.transmission) &&
       this.isNumberValid(this.seat) &&
       this.isSelectValid(this.engineType) &&
-      this.isSelectValid(this.brand)
+      this.isSelectValid(this.brand) &&
+      this.isTextValid(this.provinceId) &&
+      this.isTextValid(this.regencyId) &&
+      this.isTextValid(this.districtId)
     )
   }
 
@@ -77,10 +104,25 @@ export class ProductRegisterRequestModel {
     this.id = null
     this.name = ''
     this.price = 0
+    this.provinceId = 0
+    this.regencyId = 0
+    this.districtId = 0
     this.deliverable = null
     this.transmission = null
     this.seat = 0
     this.engineType = null
     this.brand = null
+  }
+
+  resetRegency() {
+    this.regencyId = null
+    this.regencyName = null
+    this.districtId = null
+    this.districtName = null
+  }
+
+  resetDistrict() {
+    this.districtId = null
+    this.districtName = null
   }
 }

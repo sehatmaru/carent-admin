@@ -1,12 +1,15 @@
-import { Injectable } from '@angular/core'
+import { inject, Injectable } from '@angular/core'
 import { ToasterComponent, ToasterPlacement } from '@coreui/angular'
 import { XToasterComponent } from '../component/x-toaster/x-toaster.component'
 import { ToastType } from '../enum/toast-type.enum'
+import { StorageService } from '../service/storage.service'
 
 @Injectable({
   providedIn: 'root',
 })
 export class Utils {
+  private storageService = inject(StorageService)
+
   constant: any
   base64File: any
   dialogRef: any
@@ -258,5 +261,9 @@ export class Utils {
     } else {
       console.error('ToasterComponent reference is not set.')
     }
+  }
+
+  isTenantManager(): boolean {
+    return this.storageService.isTenantManager()
   }
 }
