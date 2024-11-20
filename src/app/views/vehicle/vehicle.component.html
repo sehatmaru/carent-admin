@@ -23,20 +23,6 @@
                 <svg [cIcon]="icons.cilSearch"></svg>
               </span>
               <input
-                [(ngModel)]="vehicleFilter.name"
-                name="name"
-                autoComplete="name"
-                cFormControl
-                placeholder="Name"
-              />
-            </c-input-group>
-          </c-col>
-          <c-col [md]="3">
-            <c-input-group>
-              <span cInputGroupText>
-                <svg [cIcon]="icons.cilSearch"></svg>
-              </span>
-              <input
                 [(ngModel)]="vehicleFilter.year"
                 name="year"
                 autoComplete="year"
@@ -120,29 +106,43 @@
           </c-col>
 
           <c-col [md]="12" class="text-end">
-            <button
-              cButton
-              class="me-1"
-              color="secondary"
-              type="reset"
-              (click)="resetFilter()"
-            >
-              Reset
-            </button>
-            <button
-              cButton
-              color="primary"
-              [disabled]="loadings.vehicle"
-              (click)="doGetVehicleList()"
-            >
-              <c-spinner
-                *ngIf="loadings.vehicle"
-                aria-hidden="true"
-                size="sm"
-                variant="grow"
-              ></c-spinner>
-              Filter
-            </button>
+            <div class="d-flex justify-content-between">
+              <div>
+                <button
+                  cButton
+                  color="success"
+                  (click)="isAddEditModalVisible = true"
+                  [hidden]="!utils.isTenantManager()"
+                >
+                  Add Vehicle
+                </button>
+              </div>
+              <div>
+                <button
+                  cButton
+                  class="me-1"
+                  color="secondary"
+                  type="reset"
+                  (click)="resetFilter()"
+                >
+                  Reset
+                </button>
+                <button
+                  cButton
+                  color="primary"
+                  [disabled]="loadings.vehicle"
+                  (click)="filter()"
+                >
+                  <c-spinner
+                    *ngIf="loadings.vehicle"
+                    aria-hidden="true"
+                    size="sm"
+                    variant="grow"
+                  ></c-spinner>
+                  Filter
+                </button>
+              </div>
+            </div>
           </c-col>
         </form>
       </c-card-body>
@@ -165,24 +165,20 @@
           <tr>
             <th class="bg-body-tertiary">Product ID</th>
             <th class="bg-body-tertiary">Name</th>
+            <th class="bg-body-tertiary text-center">Status</th>
             <th class="bg-body-tertiary text-center">Year</th>
             <th class="bg-body-tertiary text-center">License Number</th>
             <th class="bg-body-tertiary text-center">Transmission</th>
             <th class="bg-body-tertiary text-center">Engine</th>
             <th class="bg-body-tertiary text-center">Brand</th>
-            <th class="bg-body-tertiary text-center">Create Date</th>
+            <th class="bg-body-tertiary text-center">Register Date</th>
           </tr>
         </thead>
         <tbody>
           @if (!loadings.vehicle && dataPagination.list != null &&
           dataPagination.total > 0) { @for (data of dataPagination.list; track
           data.id) {
-          <tr class="pointer">
-            <td>
-              <div class="small text-body-secondary text-nowrap">
-                {{ data.id }}
-              </div>
-            </td>
+          <tr class="pointer" (click)="selectVehicle(data)">
             <td>
               <div class="small text-body-secondary text-nowrap">
                 {{ data.productId }}
@@ -190,8 +186,13 @@
             </td>
             <td>
               <div class="small text-body-secondary text-nowrap">
-                {{ data.name }}
+                {{ data.productName }}
               </div>
+            </td>
+            <td class="text-center">
+              <c-badge [color]="getVehicleStatusColor(data.status)">{{
+                data.status == 'AVAILABLE' ? 'AVAILABLE' : 'NOT AVAILABLE'
+              }}</c-badge>
             </td>
             <td class="text-center">
               <div class="small text-body-secondary text-nowrap">
@@ -226,7 +227,7 @@
           </tr>
           } } @else if (!loadings.vehicle && dataPagination.total == 0) {
           <tr class="pointer">
-            <td class="text-center" colspan="9">
+            <td class="text-center" colspan="10">
               <div class="small text-body-secondary text-nowrap">
                 No data record.
               </div>
@@ -234,7 +235,7 @@
           </tr>
           } @if (loadings.vehicle) {
           <tr>
-            <td class="text-center" colspan="8">
+            <td class="text-center" colspan="10">
               <c-spinner variant="grow"></c-spinner>
             </td>
           </tr>
@@ -250,3 +251,79 @@
     ></app-x-pagination>
   </c-col>
 </c-row>
+
+<c-modal
+  #addEditVehicleModal
+  id="addEditVehicleModal"
+  scrollable
+  alignment="center"
+  backdrop="static"
+  [visible]="isAddEditModalVisible"
+  (visibleChange)="addEditModalVisibleChange($event)"
+>
+  <c-modal-header>
+    <h5 cModalTitle>Add/Edit Vehicle</h5>
+    <button (click)="toogleAddEditModal()" cButtonClose></button>
+  </c-modal-header>
+  <c-modal-body>
+    <app-create-edit
+      [requestModel]="addEditRequestModel"
+      (requestChange)="requestChange($event)"
+    ></app-create-edit>
+  </c-modal-body>
+  <c-modal-footer class="d-flex justify-content-between">
+    <div>
+      @if (addEditRequestModel.id) {
+      <button
+        cButton
+        color="danger"
+        [cPopoverTrigger]="'click'"
+        [cPopover]="deleteConfirmationPopup"
+        [cPopoverOptions]="{ strategy: 'fixed',  }"
+      >
+        @if (loadings.vehicleDeleting) {
+        <c-spinner aria-hidden="true" size="sm" variant="grow"></c-spinner>
+        } @else {
+        <svg [cIcon]="icons.cilTrash"></svg>
+        } Delete
+      </button>
+      }
+    </div>
+    <div>
+      <button
+        (click)="toogleAddEditModal()"
+        cButton
+        color="secondary"
+        class="mx-3"
+      >
+        Close
+      </button>
+      <button
+        cButton
+        color="primary"
+        (click)="saveVehicle()"
+        [disabled]="!addEditRequestModel.isValid() || loadings.vehicleRegister"
+      >
+        @if (loadings.vehicleRegister || loadings.vehicleDeleting) {
+        <c-spinner aria-hidden="true" size="sm" variant="grow"></c-spinner>
+        } Save changes
+      </button>
+    </div>
+  </c-modal-footer>
+</c-modal>
+
+<ng-template #deleteConfirmationPopup>
+  <h3 class="popover-header">Delete Confirmation</h3>
+  <div class="popover-body" id="">
+    <span>
+      Are you sure want to delete this vehicle? Click confirm to delete.
+    </span>
+    <div class="mt-3 d-flex justify-content-end">
+      <button cButton color="danger" (click)="doDeleteVehicle()">
+        @if (loadings.vehicleDeleting) {
+        <c-spinner aria-hidden="true" size="sm" variant="grow"></c-spinner>
+        } Confirm
+      </button>
+    </div>
+  </div>
+</ng-template>

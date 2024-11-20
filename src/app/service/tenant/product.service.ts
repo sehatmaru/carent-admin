@@ -6,6 +6,7 @@ import {
   ProductSearchRequestModel,
   ProductListResponseModel,
   ProductRegisterRequestModel,
+  ProductOptionListResponseModel,
 } from '../../model/product-model'
 import { PaginationRequestModel } from '../../model/pagination-model'
 
@@ -30,6 +31,18 @@ export class ProductService {
       `${this.root}/list?${this.commonApi.getSearchParams(params)}`,
       request
     ) as Observable<CommonResponse<Page<ProductListResponseModel[]>>>
+  }
+
+  getProductOptionList(
+    name: string
+  ): Observable<CommonResponse<ProductOptionListResponseModel[]>> {
+    const params = {
+      name: name,
+    }
+
+    return this.commonApi.get(
+      `${this.root}/list/option?${this.commonApi.getSearchParams(params)}`
+    ) as Observable<CommonResponse<ProductOptionListResponseModel[]>>
   }
 
   registerProduct(

@@ -11,6 +11,10 @@ import {
   TableDirective,
   AvatarModule,
   SpinnerModule,
+  ModalModule,
+  PopoverModule,
+  ButtonCloseDirective,
+  BadgeModule,
 } from '@coreui/angular'
 import {
   cilAddressBook,
@@ -18,6 +22,7 @@ import {
   cilDescription,
   cilOptions,
   cilSearch,
+  cilTrash,
   cilUser,
 } from '@coreui/icons'
 import { IconDirective } from '@coreui/icons-angular'
@@ -25,17 +30,23 @@ import { EngineType } from 'src/app/enum/engine-type.enum'
 import { StatusCode } from 'src/app/enum/status-code.enum'
 import { Transmission } from 'src/app/enum/transmission.enum'
 import { VehicleBrand } from 'src/app/enum/vehicle-brand.enum'
-import { VehicleFilterRequestModel } from 'src/app/model/vehicle-model'
+import {
+  VehicleFilterRequestModel,
+  VehicleRegisterRequestModel,
+} from 'src/app/model/vehicle-model'
 import { PaginationRequestModel } from 'src/app/model/pagination-model'
 import { VehicleService } from 'src/app/service/tenant/vehicle.service'
 import { Utils } from 'src/app/utils/utils'
 import { XPaginationComponent } from 'src/app/component/x-pagination/x-pagination.component'
+import { CreateEditComponent } from './components/create-edit/create-edit.component'
+import { VehicleStatus } from '../../enum/vehicle-status.enum'
 
 @Component({
   selector: 'app-vehicle',
   standalone: true,
   imports: [
     XPaginationComponent,
+    CreateEditComponent,
     RowComponent,
     ColComponent,
     CardModule,
@@ -49,13 +60,17 @@ import { XPaginationComponent } from 'src/app/component/x-pagination/x-paginatio
     TableDirective,
     AvatarModule,
     SpinnerModule,
+    ModalModule,
+    PopoverModule,
+    ButtonCloseDirective,
+    BadgeModule,
   ],
   templateUrl: './vehicle.component.html',
   styleUrl: './vehicle.component.scss',
 })
 export class VehicleComponent implements OnInit {
   private vehicleService = inject(VehicleService)
-  private utils = inject(Utils)
+  public utils = inject(Utils)
 
   public icons = {
     cilAddressBook,
@@ -64,14 +79,21 @@ export class VehicleComponent implements OnInit {
     cilCog,
     cilOptions,
     cilSearch,
+    cilTrash,
   }
 
-  public loadings = { vehicle: false }
+  public loadings = {
+    vehicle: false,
+    vehicleRegister: false,
+    vehicleDeleting: false,
+  }
 
   public vehicleFilter = new VehicleFilterRequestModel()
   public pagination = new PaginationRequestModel()
+  public addEditRequestModel = new VehicleRegisterRequestModel()
 
   public dataPagination: any = {}
+  public isAddEditModalVisible = false
 
   public engineTypeEnumList = Object.values(EngineType).filter(
     (value) => typeof value === 'string'
@@ -109,14 +131,123 @@ export class VehicleComponent implements OnInit {
       })
   }
 
+  doRegisterVehicle() {
+    this.loadings.vehicleRegister = true
+
+    this.vehicleService.registerVehicle(this.addEditRequestModel).subscribe({
+      next: (resp) => {
+        if (resp.statusCode == StatusCode.SUCCESS) {
+          this.doGetVehicleList()
+          this.isAddEditModalVisible = false
+        } else {
+          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+        }
+
+        this.loadings.vehicleRegister = false
+      },
+      error: (error) => {
+        this.utils.sendErrorToast(error.message)
+        this.loadings.vehicleRegister = false
+      },
+    })
+  }
+
+  doUpdateVehicle() {
+    this.loadings.vehicleRegister = true
+
+    this.vehicleService.updateVehicle(this.addEditRequestModel).subscribe({
+      next: (resp) => {
+        if (resp.statusCode == StatusCode.SUCCESS) {
+          this.doGetVehicleList()
+          this.isAddEditModalVisible = false
+        } else {
+          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+        }
+
+        this.loadings.vehicleRegister = false
+      },
+      error: (error) => {
+        this.utils.sendErrorToast(error.message)
+        this.loadings.vehicleRegister = false
+      },
+    })
+  }
+
+  doDeleteVehicle() {
+    this.loadings.vehicleDeleting = true
+
+    this.vehicleService.deleteVehicle(this.addEditRequestModel.id!!).subscribe({
+      next: (resp) => {
+        if (resp.statusCode == StatusCode.SUCCESS) {
+          this.doGetVehicleList()
+          this.isAddEditModalVisible = false
+        } else {
+          this.utils.sendErrorToast(resp.message, resp.statusCode.toString())
+        }
+
+        this.loadings.vehicleDeleting = false
+      },
+      error: (error) => {
+        this.utils.sendErrorToast(error.message)
+        this.loadings.vehicleDeleting = false
+      },
+    })
+  }
+
   resetFilter() {
     this.vehicleFilter = new VehicleFilterRequestModel()
+    this.pagination.reset()
 
+    this.doGetVehicleList()
+  }
+
+  filter() {
+    this.pagination.reset()
     this.doGetVehicleList()
   }
 
   paginationChange(event: PaginationRequestModel) {
     this.pagination = event
     this.doGetVehicleList()
+  }
+
+  requestChange(event: VehicleRegisterRequestModel) {
+    this.addEditRequestModel = event
+  }
+
+  toogleAddEditModal() {
+    this.isAddEditModalVisible = !this.isAddEditModalVisible
+  }
+
+  selectVehicle(data: VehicleRegisterRequestModel) {
+    this.addEditRequestModel.id = data.id
+    this.addEditRequestModel.productId = data.productId
+    this.addEditRequestModel.productName = data.productName
+    this.addEditRequestModel.licenseNumber = data.licenseNumber
+    this.addEditRequestModel.year = data.year
+
+    this.isAddEditModalVisible = true
+  }
+
+  addEditModalVisibleChange(event: boolean) {
+    this.isAddEditModalVisible = event
+
+    if (!event) {
+      this.addEditRequestModel.reset()
+    }
+  }
+
+  saveVehicle() {
+    if (this.addEditRequestModel.id) {
+      this.doUpdateVehicle()
+    } else {
+      this.doRegisterVehicle()
+    }
+  }
+
+  getVehicleStatusColor(value: any): string {
+    return value == VehicleStatus[VehicleStatus.AVAILABLE]
+      ? 'success'
+      : 'danger'
   }
 }

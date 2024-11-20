@@ -14,6 +14,7 @@ import {
   PopoverModule,
   ListGroupModule,
   OffcanvasModule,
+  BadgeModule,
 } from '@coreui/angular'
 import {
   cilAddressBook,
@@ -64,6 +65,7 @@ import { GeoService } from '../../service/tenant/geo.service'
     PopoverModule,
     ListGroupModule,
     OffcanvasModule,
+    BadgeModule,
   ],
   templateUrl: './listing.component.html',
   styleUrl: './listing.component.scss',
@@ -328,14 +330,6 @@ export class ListingComponent implements OnInit {
     }
   }
 
-  canvasVisibleChange(event: boolean) {
-    this.isAddEditModalVisible = event
-
-    if (!event) {
-      this.addEditRequestModel.reset()
-    }
-  }
-
   saveProduct() {
     if (this.addEditRequestModel.id) {
       this.doUpdateProduct()
@@ -369,5 +363,11 @@ export class ListingComponent implements OnInit {
     this.productFilter.districtName = name
 
     this.isCanvasVisible.district = false
+  }
+
+  getProductStatusColor(value: any): string {
+    return value == ProductStatus[ProductStatus.AVAILABLE]
+      ? 'success'
+      : 'danger'
   }
 }

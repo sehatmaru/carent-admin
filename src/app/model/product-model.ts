@@ -35,6 +35,11 @@ export class ProductSearchRequestModel {
   }
 }
 
+export class ProductOptionListResponseModel {
+  public id = 0
+  public name = ''
+}
+
 export class ProductListResponseModel {
   public id = 0
   public seat = 0

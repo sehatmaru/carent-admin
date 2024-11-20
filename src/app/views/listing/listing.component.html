@@ -220,6 +220,7 @@
           <tr>
             <th class="bg-body-tertiary">Name</th>
             <th class="bg-body-tertiary">Price</th>
+            <th class="bg-body-tertiary text-center">Status</th>
             <th class="bg-body-tertiary text-center">Quantity</th>
             <th class="bg-body-tertiary text-center">Available</th>
             <th class="bg-body-tertiary text-center">Transmission</th>
@@ -230,7 +231,6 @@
             <th class="bg-body-tertiary text-center">District</th>
             <th class="bg-body-tertiary text-center">Deliverable</th>
             <th class="bg-body-tertiary text-center">Brand</th>
-            <th class="bg-body-tertiary text-center">Status</th>
           </tr>
         </thead>
         <tbody>
@@ -247,6 +247,11 @@
               <div class="small text-body-secondary text-nowrap">
                 {{ data.price | currency : 'IDR' : 'symbol' : '1.0-0' : 'id' }}
               </div>
+            </td>
+            <td class="text-center">
+              <c-badge [color]="getProductStatusColor(data.status)">{{
+                data.status == 'AVAILABLE' ? 'AVAILABLE' : 'NOT AVAILABLE'
+              }}</c-badge>
             </td>
             <td class="text-center">
               <div class="small text-body-secondary text-nowrap">
@@ -296,11 +301,6 @@
             <td class="text-center">
               <div class="small text-body-secondary text-nowrap">
                 {{ data.brand }}
-              </div>
-            </td>
-            <td class="text-center">
-              <div class="small text-body-secondary text-nowrap">
-                {{ data.status }}
               </div>
             </td>
           </tr>

@@ -1,0 +1,91 @@
+<div>
+  <form cForm class="row g-3" novalidate>
+    <c-col [md]="12">
+      <label cLabel for="productName">Product</label>
+      <input
+        (click)="isProductCanvasVisible = true"
+        [(ngModel)]="requestModel.productName"
+        [valid]="requestModel.isTextValid(requestModel.productName)"
+        name="productName"
+        cFormControl
+        type="text"
+        readonly
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="licenseNumber">License Number</label>
+      <input
+        [(ngModel)]="requestModel.licenseNumber"
+        [valid]="requestModel.isLicenseValid()"
+        name="licenseNumber"
+        cFormControl
+        type="text"
+        placeholder="B 5000 TT"
+      />
+    </c-col>
+    <c-col [md]="6">
+      <label cLabel for="year">Year</label>
+      <input
+        [(ngModel)]="requestModel.year"
+        [valid]="requestModel.isTextValid(requestModel.year)"
+        name="year"
+        cFormControl
+        type="text"
+      />
+    </c-col>
+  </form>
+</div>
+
+<c-offcanvas
+  placement="end"
+  [visible]="isProductCanvasVisible"
+  (visibleChange)="isProductCanvasVisible = $event"
+>
+  <c-offcanvas-header>
+    <h5 cOffcanvasTitle>Select Product</h5>
+    <button
+      cButtonClose
+      class="text-reset ms-auto"
+      (click)="isProductCanvasVisible = false"
+      aria-label="Close"
+    ></button>
+  </c-offcanvas-header>
+  <c-offcanvas-body>
+    <form cForm novalidate class="row g-3 mb-4">
+      <c-col [md]="12">
+        <input
+          [(ngModel)]="productSearch"
+          name="productName"
+          autoComplete="productName"
+          cFormControl
+          placeholder="Product"
+          (ngModelChange)="doGetProductList()"
+        />
+      </c-col>
+    </form>
+    @if (!isProductLoading && productList.length == 0) {
+    <span>No data found.</span>
+    } @if (isProductLoading) {
+    <div class="d-flex x-offcanvas-spinner-div">
+      <c-spinner
+        class="x-offcanvas-spinner"
+        aria-hidden="true"
+        size="sm"
+        variant="grow"
+      ></c-spinner>
+    </div>
+    } @else {
+    <div cListGroup>
+      @for (item of productList; track $index) {
+      <a
+        class="pointer"
+        cListGroupItem
+        (click)="selectProductSearch(item.id, item.name)"
+      >
+        {{ item.name }}
+      </a>
+      }
+    </div>
+    }
+  </c-offcanvas-body>
+</c-offcanvas>
