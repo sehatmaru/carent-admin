@@ -4,8 +4,8 @@
 
 export const environment = {
   production: true,
-  baseUrlAdmin: 'http://localhost:8077',
-  baseUrlTenant: 'http://localhost:8009/',
+  baseUrlAdmin: 'https://api.admin.carent.xcodeid.uk/',
+  baseUrlTenant: 'https://api.tenant.carent.xcodeid.uk/',
 }
 
 /*
