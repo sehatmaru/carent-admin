@@ -4,8 +4,8 @@
 
 export const environment = {
   production: true,
-  baseUrlAdmin: 'https://api.admin.carent.xcodeid.uk/',
-  baseUrlTenant: 'https://api.tenant.carent.xcodeid.uk/',
+  baseUrlAdmin: 'https://api.admin.carent.xcodeid.uk',
+  baseUrlTenant: 'https://api.tenant.carent.xcodeid.uk',
 }
 
 /*
